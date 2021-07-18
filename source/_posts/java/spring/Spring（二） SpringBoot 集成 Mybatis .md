@@ -16,6 +16,8 @@ tags:
 
 在 [使用 Mybatis 简化 JDBC 操作](../post/f251f1b.html) 中，简单描述了 Mybatis 的使用。这一篇主要记录下如何集成 Spring boot
 
+<!-- more -->
+
 ---
 
 # Spring Boot 集成 Mybatis 简明过程
