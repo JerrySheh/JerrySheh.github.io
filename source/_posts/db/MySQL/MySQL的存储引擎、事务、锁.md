@@ -125,37 +125,7 @@ select * from information_schema.innodb_trx where TIME_TO_SEC(timediff(now(),trx
 
 它通过强制事务串行执行，避免了前面说的幻读的问题。该级别用得较少。
 
-### 改变事务的隔离级别
-
-```sql
-SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
-```
-
-### 如何修改 MySQL 隔离级别
-
-1. 查看当前会话隔离级别
-
-```sql
-select @@tx_isolation;
-```
-
-2. 查看系统当前隔离级别
-
-```sql
-select @@global.tx_isolation;
-```
-
-3. 设置当前会话隔离级别
-
-```sql
-set session transaction isolatin level repeatable read;
-```
-
-4. 设置系统当前隔离级别
-
-```sql
-set global transaction isolation level repeatable read;
-```
+> [如何改变事务的隔离级别](/post/9faffbfd.html#改变事务的隔离级别)
 
 ---
 
@@ -257,6 +227,24 @@ set global transaction isolation level repeatable read;
 
 ---
 
+# MySQL binlog 和 redo log
+
+## redo log
+
+物理日志，是 InnoDB 引擎特有的，记录的是“在某个数据页上做了什么修改”这样的操作。
+
+使用了 `WAL(Write-Ahead Logging)` 技术，即先写日志，再写磁盘。所以能支持崩溃修复（crash-safe）。`redo log` 是循环写的，重复利用空间。
+
+## binlog
+
+逻辑日志，是 Server 层日志，存储引擎无关，记录的是“给ID=2这一行的c字段加1”这样的操作。
+
+`binlog`是追加写的，适合归档保存，通常也用来恢复误删的数据。
+
+MySQL事务有`两阶段提交`，即一个 update 语句，需要依次经过 redo log prepare、binlog、 redo log commit 三个步骤，保证两份日志的一致性。
+
+---
+
 # 多版本并发控制（MVCC）
 
 MVCC 是行锁的变种，使用非阻塞读操作避免加锁，写操作也只锁定必要的行，因而开销更低。
@@ -278,6 +266,6 @@ MVCC 只在提交读（READ COMMITTED）和可重复读（REPEATABLE READ）两�
 
 ---
 
-# MySQL 的大小写敏感
+参考：
 
-MySQL 使用文件系统的目录和文件来保存数据库和表的定义，因此大小写敏感与平台相关。在 Windows 下大小写不敏感，而类Unix系统则是敏感的。
+- 《高性能MySQL》

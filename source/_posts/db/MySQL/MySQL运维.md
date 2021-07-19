@@ -8,6 +8,12 @@ abbrlink: 9faffbfd
 date: 2018-03-22 21:00:00
 ---
 
+# MySQL 的大小写敏感
+
+MySQL 使用文件系统的目录和文件来保存数据库和表的定义，因此大小写敏感与平台相关。在 Windows 下大小写不敏感，而类Unix系统则是敏感的。
+
+---
+
 
 # Ubuntu 18.04 安装 Mysql 5.7
 
@@ -167,3 +173,40 @@ ALTER DATABASE db_name CHARACTER SET utf8mb4;
 ALTER TABLE db_name DEFAULT CHARACTER SET utf8mb4;
 ALTER TABLE db_name CONVERT TO CHARACTER SET utf8mb4;
 ```
+
+---
+
+# 改变事务的隔离级别
+
+```sql
+SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
+```
+
+### 如何修改 MySQL 隔离级别
+
+1. 查看当前会话隔离级别
+
+```sql
+select @@tx_isolation;
+```
+
+2. 查看系统当前隔离级别
+
+```sql
+select @@global.tx_isolation;
+```
+
+3. 设置当前会话隔离级别
+
+```sql
+set session transaction isolatin level repeatable read;
+```
+
+4. 设置系统当前隔离级别
+
+```sql
+set global transaction isolation level repeatable read;
+```
+
+---
+
