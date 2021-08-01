@@ -1,6 +1,5 @@
 ---
 title: C/C++语言中的指针
-comments: true
 categories: C/C++
 tags: C/C++
 abbrlink: 82d9a37c
