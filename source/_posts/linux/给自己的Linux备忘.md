@@ -139,7 +139,7 @@ Linux 通配表达式 与 正则表达式 相类似，但语法有所不同。
 $rm * .txt
 ```
 
-***
+---
 
 # 文件权限相关
 
@@ -173,7 +173,7 @@ Linux中，每个文件都有 9 位读写执行的权限。分为三组，三位
  w | 写
  x | 可执行
 
-***
+---
 
 # 快捷操作
 
@@ -183,7 +183,7 @@ ctrl+a	|定位到命令开头
 ctrl+e	|定位到命令结尾
 ctrl+ ←	|定位到上一个单词
 
-***
+---
 
 # 标准输入，标准输出，标准错误，管道与重新定向
 
@@ -236,28 +236,57 @@ echo /etc/nano | xargs -i cp {} /tmp/dir
 
 将echo的输出作为参数，填入 cp 中的{}
 
-***
+---
 
-# 使用 grep 和 cut 过滤信息
+# 使用 grep、cut、awk 过滤信息
 
-`ls --help | grep "  -l"`: 查看 ls 命令的 -l 参数用途
+## 1. 查看 ls 命令的 -l 参数用途
 
-`mkdir --help| grep “  -p”`：查看 mkdir 命令的 -p 参数用途
+```bash
+ls --help | grep " -l"
+```
 
-`grep -inr "int printf" /usr/include >> /tmp/out.txt`: 搜索/usr/include目录下，含有 int printf 的文件内容，输出到 /tmp/out.txt 上
+## 2. 查看 mkdir 命令的 -p 参数用途
 
+```bash
+mkdir --help | grep " -p"
+```
+
+## 3. 搜索 /usr/include 目录下，含有 int printf 的文件内容，输出到 /tmp/out.txt 上
+
+```bash
+grep -inr "int printf" /usr/include >> /tmp/out.txt
+```
+
+grep参数
 - -i  忽略大小写
 - -n  打印行号
 - -r  包含子目录
 
-`grep -inr "int printf" /usr/include | cut -d : -f 1`: 搜索/usr/include目录下，含有 int printf 的文件内容，用 cut 剪切每个搜索结果以冒号分隔的第一片
+## 4. 搜索 /usr/include 目录下，含有 int printf 的文件内容，用 cut 剪切每个搜索结果以冒号分隔的第一片
 
-cut
+
+```bash
+grep -inr "int printf" /usr/include | cut -d : -f 1
+```
+
+cut 参数：
 - -d 分割
 - -f 第几片
 
+## 5. 搜索 acc 日志，过滤出 `/product/queryList` 接口响应大于 0.5 秒的请求
 
-***
+
+```
+cat access_log.acc | awk -F" " '$3>0.5{print $0}' | grep "/product/queryList"
+```
+
+awk 参数：
+- `-F" "`：以空格为分隔符
+- `$3>0.5`：分隔后的第三列（响应时间所在的列）数值大于 0.5 
+- `{print $0}`：打印整行
+
+---
 
 # vim
 

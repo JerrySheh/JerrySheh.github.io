@@ -1,8 +1,9 @@
 ---
 title: Crash Course Computer Science（1-10）
-comments: true
 date: 2019-07-27 10:43:59
-categories: 计算机科学速成课
+categories: 
+- Crash Course
+- 计算机科学速成课
 abbrlink: 7a4edbf1
 tags: 计算机科学
 ---
@@ -10,6 +11,10 @@ tags: 计算机科学
 在 B站 发现了一门好课《Crash Course Computer Science》（计算机科学速成课），虽然讲“速成”有点急功近利的意思，但这门课从计算机的历史开始讲起，几乎涵盖了从布尔逻辑到二进制、从硬件到软件、从编译原理到操作系统、从计算机网络到信息安全等等计算机科学的知识，作为一种科普，扩充知识面还是相当不错的。
 
 - 课程地址：https://www.bilibili.com/video/av21376839/
+
+<!-- more -->
+
+--- 
 
 # P1 计算机的早期历史
 
@@ -20,8 +25,6 @@ tags: 计算机科学
 步进计算器发明者 Gottfried Leibniz：
 
 > 让优秀的人浪费时间算数简直是侮辱尊严，农民用机器能算得一样准。
-
-<!-- more -->
 
 ---
 

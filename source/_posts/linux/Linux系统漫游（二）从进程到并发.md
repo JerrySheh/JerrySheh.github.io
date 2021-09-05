@@ -11,6 +11,9 @@ tags: Linux
 
 [上一篇](https://jerrysheh.github.io/post/4f4dc2a9.html)：
 
+
+<!-- more -->
+
 * Linux简介与版本
 * 从开机到启动
 * 文件系统
@@ -27,7 +30,6 @@ tags: Linux
 * 进程间通信
 * 并发与同步
 
-<!-- more -->
 
 注：本文提取总结自[Vamei的博客](http://www.cnblogs.com/vamei/tag/Linux/default.html?page=2)
 

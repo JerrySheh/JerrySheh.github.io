@@ -1,7 +1,8 @@
 ---
 title: Crash Course Computer Science（31-40）
-comments: true
-categories: 计算机科学速成课
+categories: 
+- Crash Course
+- 计算机科学速成课
 tags: 计算机科学
 abbrlink: 5d95362f
 date: 2019-08-25 22:40:13

@@ -9,6 +9,8 @@ date: 2018-02-09 18:11:46
 
 用了好久的 Linux 系统了，然而却没有从头开始好好系统地认识过 Linux，这两篇，就从以下几个方面，漫游式地重新梳理一下关于 Linux 的知识。
 
+<!-- more -->
+
 本篇：
 
 * Linux简介与版本
@@ -29,7 +31,7 @@ date: 2018-02-09 18:11:46
 
 注：本文提取总结自[Vamei的博客](http://www.cnblogs.com/vamei/tag/Linux/default.html?page=2)
 
-<!-- more -->
+
 
 ---
 
