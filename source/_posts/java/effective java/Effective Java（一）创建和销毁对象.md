@@ -22,7 +22,7 @@ date: 2019-09-09 23:35:58
 - [Effective Java（七）方法](../post/387fb533.html)
 - [Effective Java（八）General Programming](../post/7d5810ff.html)
 - [Effective Java（九）异常](../post/4e34dae4.html)
-- Effective Java（十）并发
+- [Effective Java（十）并发](../post/15ac17ad.html)
 
 <!-- more -->
 
@@ -70,7 +70,7 @@ Student jerry = Student.newInstance("jerry", 18);
 
 1. 有名字，构造方法有多个时容易搞混，静态工厂方法就不会；
 2. **静态工厂方法不要求每次都返回一个新对象，可以用来做单例（singleton）和不可实例化保证；**
-3. 静态工厂方法可以返回一个对象的子类作为返回类型，而构造器不行，如 java.util.Collections；
+3. 静态工厂方法可以返回一个对象的子类作为返回类型，而构造器不行，如 `java.util.Collections`；
 4. 静态工厂方法返回对象的类可以根据输入参数的不同而不同；
 5. 在编写包含该方法的类时，返回的对象的类不需要存在；
 
@@ -255,6 +255,24 @@ public enum Elvis {
 
 用这种方式无需担心序列化问题和反射攻击，但是如果单例类需要继承除 enum 外的其他父类，就不能使用这种方法。
 
+如果要让单例做到线程安全，使用静态内部类：
+
+```java
+public class Elvis{
+
+  private static class Holder{
+    private static Elvis elvis = new Elvis();
+  }
+
+  private Elvis();
+
+  public static Elvis get(){
+    return Holder.elvis;
+  }
+
+}
+```
+
 ---
 
 # Item 4 使用私有构造器实现不可实例化（Noninstantiable）
@@ -431,6 +449,20 @@ public Object pop() {
 
 > 请注意，清空对象引用应该是例外而不是规范。当一个类自己管理内存时，程序员才应该警惕内存泄漏问题。
 
+如果你用的是 `ArrayList` 而不是数组，那么直接使用 `array.clear()` 来清空一个列表是好的选择，其时间复杂度是 `O(n)`。
+
+```java
+public void clear() {
+    modCount++;
+
+    // Let gc do its work
+    for (int i = 0; i < size; i++)
+        elementData[i] = null;
+
+    size = 0;
+}
+```
+
 ---
 
 # Item 8 避免使用 Finalizer 和 Cleaner 机制
@@ -478,5 +510,23 @@ static void copy(String src, String dst) throws IOException {
         while ((n = in.read(buf)) >= 0)
             out.write(buf, 0, n);
     }
+}
+```
+
+在 java 9 中， 对象不必在 try 块里面声明，更友好，且不必声明为 `Final`，因为默认就是 `Final` 的。
+
+```java
+static void copy(String src, String dst) throws IOException {
+
+    InputStream in = new FileInputStream(src);
+    OutputStream out = new FileOutputStream(dst);
+
+    try (in ; out) {
+        byte[] buf = new byte[BUFFER_SIZE];
+        int n;
+        while ((n = in.read(buf)) >= 0)
+            out.write(buf, 0, n);
+    }
+
 }
 ```

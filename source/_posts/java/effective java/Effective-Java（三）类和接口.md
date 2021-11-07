@@ -13,6 +13,8 @@ date: 2019-10-13 16:58:42
 
 一个设计良好的组件，应该隐藏其内部细节，将 API 与它的实现分离开来，外界只与 API 通信。这也是软件设计的基本原则。
 
+<!-- more -->
+
 Java中的四种访问级别：
 - **private** —— 该成员只能在声明它的顶级类内访问。
 - **package-private** —— 成员可以从被声明的包中的任何类中访问。从技术上讲，如果没有指定访问修饰符（接口除外，它默认是公共的），这是默认访问级别。
@@ -20,8 +22,6 @@ Java中的四种访问级别：
 - **public** —— 该成员可以从任何地方被访问。
 
 能用 private 的，绝不用 protected，能用 protected 的，绝不用 public。
-
-<!-- more -->
 
 如果子类方法重写父类方法，子类方法不能有比父类方法更大的访问级别，但可以更小。但如果是实现接口，则实现类方法必须只能是 public。
 
@@ -215,3 +215,18 @@ class Rectangle extends Figure {
 # Item 25 一个.java源文件只定义一个顶级类
 
 永远不要将多个顶级类或接口放在一个源文件中。 遵循这个规则保证在编译时不能有多个定义。 这又保证了编译生成的类文件以及生成的程序的行为与源文件传递给编译器的顺序无关。
+
+---
+
+系列目录：
+
+- [Effective Java（一）创建和销毁对象](../post/39fc1edf.html)
+- [Effective Java（二）对象通用的方法](../post/f754c291.html)
+- [Effective Java（三）类和接口](../post/20ef17da.html)
+- [Effective Java（四）泛型](../post/53a4cf82.html)
+- [Effective Java（五）枚举和注解](../post/acf36022.html)
+- [Effective Java（六）Lambdas and Streams](../post/cc85a16e.html)
+- [Effective Java（七）方法](../post/387fb533.html)
+- [Effective Java（八）General Programming](../post/7d5810ff.html)
+- [Effective Java（九）异常](../post/4e34dae4.html)
+- [Effective Java（十）并发](../post/15ac17ad.html)

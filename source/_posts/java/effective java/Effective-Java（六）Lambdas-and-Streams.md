@@ -13,15 +13,13 @@ date: 2019-11-19 22:39:14
 
 Java 的 Lambda 表达式本质上就是一个匿名类。而什么是匿名类？就是在使用的时候现场 new 并实现的类。
 
-只有一个方法的接口称为 **函数式接口（functioning interface）**，Lambda 表达式本质上就是对这样子的接口做现场实现。可以参考我之前写的：[Java简明笔记（八）Lambda和函数式编程](../post/68278ec8.html)
+只有一个方法的接口称为 **函数式接口（functioning interface）**，Lambda 表达式本质上就是对这样子的接口做现场实现。<!-- more --> 可以参考我之前写的：[Java简明笔记（八）Lambda和函数式编程](../post/68278ec8.html)
 
 然而 lambda 也不是万能的，它只对函数是接口有用，如果一个接口有多个方法需要重写，那只能用匿名类。this 关键字在 lambda 中引用封闭实例，在匿名类中引用匿名类实例。如果你需要从其内部访问函数对象，则必须使用匿名类。
 
 Lambdas 与匿名类都无法可靠地序列化和反序列化。因此，尽量少去 (如果有的话) 序列化一个 lambda (或一个匿名类实例)。如果有一个想要进行序列化的函数对象，比如一个 Comparator，那么使用一个私有静态嵌套类的实例（见 Item 24 ）。
 
 作者建议：一行代码对于 lambda 说是理想的，三行代码是合理的最大值。 如果违反这一规定，可能会严重损害程序的可读性。
-
-<!-- more -->
 
 ---
 
@@ -139,3 +137,18 @@ public static <E> Stream<E> streamOf(Iterable<E> iterable) {
 通常，并行在 ArrayList、HashMap、HashSet 和 ConcurrentHashMap 实例、数组、int 类型和 long 类型的流上性能提升是最好的。因为它们都可以精确而廉价地分割成任意大小的子程序。
 
 Java 8 的 parallel 本质上是 fork-join 的封装，适合用少量线程执行大量任务的情况。本质上，是通过分治归并实现并行的。但这并不适合所有情况。只有在充分测试确实没有安全隐患和性能问题时，才考虑使用 parallel 。
+
+---
+
+系列目录：
+
+- [Effective Java（一）创建和销毁对象](../post/39fc1edf.html)
+- [Effective Java（二）对象通用的方法](../post/f754c291.html)
+- [Effective Java（三）类和接口](../post/20ef17da.html)
+- [Effective Java（四）泛型](../post/53a4cf82.html)
+- [Effective Java（五）枚举和注解](../post/acf36022.html)
+- [Effective Java（六）Lambdas and Streams](../post/cc85a16e.html)
+- [Effective Java（七）方法](../post/387fb533.html)
+- [Effective Java（八）General Programming](../post/7d5810ff.html)
+- [Effective Java（九）异常](../post/4e34dae4.html)
+- [Effective Java（十）并发](../post/15ac17ad.html)

@@ -11,6 +11,8 @@ date: 2019-10-10 22:59:15
 
 对象通用的方法，指的是 Object 类下的方法，即 toString、equals、hashCode 等等，合理地使用跟重写它们，可以避免很多坑。
 
+<!-- more -->
+
 # Item 10 重写 equals 时请遵守约定
 
 重写 equals 很容易犯错，最好不要去重写，比如下面的情形：
@@ -18,8 +20,6 @@ date: 2019-10-10 22:59:15
 1. 类的每个实例都是唯一的。显而易见，像 Thread 这样表示活动而不是值的类来说，每个实例都是不一样的。
 2. 类不需要「逻辑相等（logical equality）」
 3. 父类已经重写了 equals 方法，除非有必要，否则子类就不用再去重写了。例如，大多数 List 从 AbstractList 继承了 equals 实现，Map 从 AbstractMap 的 Map 继承了 equals 实现。
-
-<!-- more -->
 
 如果你不想这个类的 equals 方法被调用，可以给它抛异常
 
@@ -30,7 +30,7 @@ public boolean equals(Object o) {
 }
 ```
 
-那什么时候需要重写 equals 方法呢？如果一个类需要逻辑相等，而不是引用相同的对象，那么需要重写 equals ，重写 equals 请遵守以下5个规则：
+那什么时候需要重写 equals 方法呢？**如果一个类需要逻辑相等，而不是引用相同的对象，那么需要重写 equals。** 重写 equals 请遵守以下5个规则：
 
 - **自反性**： 对于任何非空引用 x，`x.equals(x)` 必须返回 true。
 - **对称性**： 对于任何非空引用 x 和 y，如果且仅当 `y.equals(x)` 返回 true 时 `x.equals(y)` 必须返回 true。
@@ -81,6 +81,8 @@ public boolean equals(Object anObject) {
 }
 ```
 
+---
+
 # Item 11 重写 equals ，必须重写 hashCode
 
 重写 hashCode 的规范如下：
@@ -94,18 +96,23 @@ public boolean equals(Object anObject) {
 
 一个建议是不要试图从哈希码计算中排除重要的属性来提高性能，因为这样哈希质量会降低。
 
+---
+
 # Item 12 始终重写 toString 方法
 
 toString 方法应该返回对象中包含的所有需要关注的信息。而 Object 类的 toString 却只返回 类名@十六进制数。因此我们最好重写它。例如当你把一个字符串放进 Map 里，输出时会 toString 方法会自动被调用， 输出 {Jenny=707-867-5309} 总比 {Jenny=PhoneNumber@163b91} 好吧？
 
 附上阿里巴巴Java开发规范
 
-【强制】关于 hashCode 和 equals 的处理，遵循如下规则：
+> 【强制】关于 hashCode 和 equals 的处理，遵循如下规则：
+> 
+> 1. 只要重写 equals ，就必须重写 hashCode 。
+> 2. 因为 Set 存储的是不重复的对象，依据 hashCode 和 equals 进行判断，所以 Set 存储的对象必须重写这两个方法。
+> 3. 如果自定义对象作为 Map 的键，那么必须重写 hashCode 和 equals 。
 
-1. 只要重写 equals ，就必须重写 hashCode 。
-2. 因为 Set 存储的是不重复的对象，依据 hashCode 和 equals 进行判断，所以 Set 存储的对象必须重写这两个方法。
-3. 如果自定义对象作为 Map 的键，那么必须重写 hashCode 和 equals 。
-- 说明： String 重写了 hashCode 和 equals 方法，所以我们可以非常愉快地使用 String 对象作为 key 来使用。
+String 重写了 hashCode 和 equals 方法，所以我们可以非常愉快地使用 String 对象作为 key 来使用。
+
+---
 
 # Item 13 谨慎地重写 clone 方法
 
@@ -114,6 +121,8 @@ Cloneable 接口是一个标记接口，只有实现该接口才可以调用 clo
 clone的规范为： `x.clone() != x`，并且 `x.clone().getClass() == x.getClass()` ，通常情况下 `x.clone().equals(x)`。
 
 但是请注意，clone() 是浅复制。也就是说只会复制对象本身，而对象引用的其他对象并不会被复制。考虑一个栈里面的元素，clone()出来的栈和原始栈引用的是相同的元素，因此改变克隆栈的某个元素，原始栈也会跟着改变，这是一个坑。要解决这个问题，要使用深复制，简而言之就是重写 clone() ，使对象中对其引用对象再使用clone()。
+
+---
 
 # Item 14 考虑实现 Comparable 接口
 
@@ -155,3 +164,18 @@ public int compareTo(PhoneNumber pn) {
 ```
 
 第三版中的建议是，比较 compareTo 方法的实现中的字段值时，请避免使用「<」和「>」运算符。相反，使用包装类中的静态 compare 方法或 Comparator 接口中的构建方法。
+
+---
+
+系列目录：
+
+- [Effective Java（一）创建和销毁对象](../post/39fc1edf.html)
+- [Effective Java（二）对象通用的方法](../post/f754c291.html)
+- [Effective Java（三）类和接口](../post/20ef17da.html)
+- [Effective Java（四）泛型](../post/53a4cf82.html)
+- [Effective Java（五）枚举和注解](../post/acf36022.html)
+- [Effective Java（六）Lambdas and Streams](../post/cc85a16e.html)
+- [Effective Java（七）方法](../post/387fb533.html)
+- [Effective Java（八）General Programming](../post/7d5810ff.html)
+- [Effective Java（九）异常](../post/4e34dae4.html)
+- [Effective Java（十）并发](../post/15ac17ad.html)
