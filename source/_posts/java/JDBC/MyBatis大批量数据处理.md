@@ -33,6 +33,17 @@ abbrlink: 7969a482
 
 JDBC 返回的数据类型是 `ResultSet`，这个玩意特别有意思，它是动态的。意思就是说，在你发起查询时，客户端与数据库的连接会一直保持打开，之后我们通过 `while(rs.next())` 逐条操作 `ResultSet` 里的每一条记录。 等缓存的数据量都遍历完了， 数据库会通过 TCP 连接发送下一批次的数据放到 `ResultSet` 里。全程对我们无感，我们要做的，只是不断地 `rs.next()` 就行了。
 
+```java
+PreparedStatement ps = c.prepareStatement(sql);
+ps.setFetchSize(500);
+ResultSet rs = ps.executeQuery(sql);
+
+while(rs.next()){
+    // 业务逻辑处理
+    // ..
+}
+```
+
 但是，不同的数据库产品对 `fetchsize` 的支持不一样。像 Oracle 这种标准的商业数据库，对 `fetchsize` 的支持就比较好，无脑使用即可。而 MySQL 和 PostgreSQL 就没那么简单了。
 
 ## MySQL 流查询

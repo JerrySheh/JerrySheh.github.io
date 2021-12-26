@@ -80,6 +80,56 @@ public class StopThread {
 
 ---
 
+# Item 80 executor、task 和 stream 优先于线程
+
+Java 的 `Executors` 框架提供了强大的线程池支持，只需要一行代码，即可以创建合适的任务执行器（单线程任务、多线程任务、固定线程数任务等）。当这些内置的执行器不适用你的场景时，才考虑使用 `ThreadPoolExecutor` 本身来构造你自己的线程池。
+
+```java
+// 创建一个单线程任务
+ExecutorService exec = Executors.newSingleThreadExecutor();
+
+// 缓存线程池（不适合大负载的服务器，因为当任务过多，线程池没有足够的空闲线程，会无限的增加线程数，有一定风险）
+ExecutorService exec = Executors.newCachedThreadPool();
+
+// 固定个数线程池
+ExecutorService exec = Executors.newFixedThreadPool();
+
+// 启动/关闭线程池
+exec.execute(runnable);
+exec.shutdown();
+```
+
+在 Java 7 中，`Executor` 框架还支持 fork-join 任务，在 Java 8 中，Parallel streams （Item 48）是在 fork join 池上编写的，我们不费什么力气就能享受到它们的性能优势，前提是它们正好适用于我们手边的任务。
+
+作者忠告：不仅应该尽量不要编写自己的工作队列，而且还应该尽量不直接使用线程。
+
+---
+
+# Item 81 并发工具优于 wait 和 notify
+
+
+`java.util.concurrent` 包含三类有用的工具，分别是 Executor Framework 、并发集合（ConcurrentCollection）以及同步器（Synchronizer）。
+
+并发集合包含 `ConcurrentHashMap`、`CopyOnWriteArrayList`、`BlockingQueue` 等，同步器包含 `CountDownLatch`、 `Semaphore` 和 `CyclicBarrier` 等。
+
+没有理由在新代码中使用 wait 方法和 notify 方法。如果你不得不维护老旧代码继续使用 wait 和 notify，那么遵守一个原则：始终应该使用 wait 循环模式来调用 wait 方法；永远不要在循环之外调用 wait 方法。一般情况下，应该优先使用 notifyAll 方法，而不是使用 notify 方法。
+
+---
+
+# Item 82 文档应包含线程安全属性
+
+当你编写了一个类，在文档中应该尽可能包含其线程安全属性，常见的安全属性有以下几类：
+
+- **不可变对象**： 这个类的实例看起来是常量，不需要外部同步，如 `String`、`Long` 和 `BigInteger`。
+- **无条件线程安全**： 该类的实例是可变的，但是该类具有足够的内部同步，因此无需任何外部同步即可并发地使用该类的实例。如 `AtomicLong` 和 `ConcurrentHashMap`。
+- **有条件的线程安全**: 与无条件线程安全类似，只是有些方法需要外部同步才能安全并发使用。如 Collections.synchronized 包装器返回的集合，其迭代器需要外部同步。
+- **非线程安全**： 该类的实例是可变的。要并发地使用它们，客户端必须使用外部同步来包围每个方法调用（或调用序列），如大部分通用的集合实现， `ArrayList` 和 `HashMap` 等。
+-- **线程对立**： 即使每个方法调用都被外部同步包围，该类对于并发使用也是不安全的。线程对立通常是由于在不同步的情况下修改静态数据而导致的。没有人故意编写线程对立类；此类通常是由于没有考虑并发性而导致。当发现类或方法与线程不相容时，通常将其修复或弃用。
+
+此外，当我们使用显式私有锁时，Lock 字段应该始终声明为 final，以防无意中地改变它。但是，私有锁对象用法只能在无条件的线程安全类上使用。有条件的线程安全类不能使用这种用法。
+
+---
+
 系列目录：
 
 - [Effective Java（一）创建和销毁对象](../post/39fc1edf.html)

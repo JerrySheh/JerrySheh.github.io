@@ -140,7 +140,7 @@ Executor exec3 = Executors.newScheduledThreadPool(10);
 
 因此，`ExecutorService` 继承了 `Executor` ，再添加几个方法，包括两部分：
 
-1. 获取异步任务的状态的
+1. 获取异步任务的状态
 2. 管理 Executor 的生命周期（见下面生命周期部分）
 
 ### 获取异步任务的状态的
