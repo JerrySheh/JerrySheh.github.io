@@ -111,15 +111,13 @@ productMapper.query( resultContext -> {
 transactionTemplate.execute( status -> {
 
     productMapper.query( resultContext -> {
-    Product p = (Product) resultContext.getResultObject()
-    // 处理单条记录
-    // ...
-  });
-
+        Product p = (Product) resultContext.getResultObject()
+        // 处理单条记录
+        // ...
+    });
 
   return null;
-} )
-
+})
 ```
 
 这下查询就搞定了！
