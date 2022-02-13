@@ -1,0 +1,91 @@
+title: J.e
+subtitle: 车顶上绑着飞机发动机
+description: 车顶上绑着飞机发动机的小车也许真的能开，只要你不尝试急转弯
+keywords: null
+author: Jerry
+language: zh-CN
+timezone: ''
+url: https://jerrysheh.com
+permalink: post/:abbrlink.html
+abbrlink:
+  alg: crc32
+  rep: hex
+permalink_defaults: null
+pretty_urls:
+  trailing_index: true
+  trailing_html: true
+source_dir: source
+public_dir: public
+tag_dir: tags
+archive_dir: archives
+category_dir: categories
+code_dir: downloads/code
+i18n_dir: ':lang'
+skip_render: null
+new_post_name: ':title.md'
+default_layout: post
+titlecase: false
+external_link:
+  enable: true
+  field: site
+  exclude: ''
+filename_case: 0
+render_drafts: false
+post_asset_folder: false
+relative_link: false
+future: true
+highlight:
+  enable: true
+  line_number: true
+  auto_detect: false
+  tab_replace: ''
+  wrap: true
+  hljs: false
+prismjs:
+  enable: false
+  preprocess: true
+  line_number: true
+  tab_replace: ''
+index_generator:
+  path: ''
+  per_page: 8
+  order_by: '-date'
+index2_include_index: true
+index2_generator:
+  - per_page: 8
+    layout: index
+    path: ''
+    index: true
+    order_by: '-date'
+    exclude:
+      - path sentences
+  - per_page: 100
+    layout: archives
+    path: /archives
+    index: true
+    order_by: '-date'
+    exclude:
+      - path sentences
+  - per_page: 3
+    layout: index
+    path: /sentences
+    order_by: '-date'
+    include:
+      - path sentences
+default_category: uncategorized
+category_map: null
+tag_map: null
+meta_generator: true
+date_format: YYYY-MM-DD
+time_format: HH:mm:ss
+updated_option: mtime
+per_page: 10
+pagination_dir: page
+include: null
+exclude: null
+ignore: null
+theme: icarus
+deploy:
+  type: git
+  repo: git@github.com:jerrysheh/jerrysheh.github.io.git
+  branch: master
