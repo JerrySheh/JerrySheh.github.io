@@ -3,6 +3,12 @@ title: 链表题思路
 comments: false
 ---
 
+链表操作的两个技巧：
+
+1. 尽量处理当前节点的下一个节点而非当前节点本身
+2. 建立一个虚拟节点 (dummy node)，使其指向当前链表的头节点，这样即使原链表，所有节点全被删除，也会有一个 dummy 存在，返回 dummy->next 即可
+
+---
 
 ## 1. 反转链表
 
@@ -36,6 +42,8 @@ private static ListNode reverseByRecursion(ListNode head){
 }
 ```
 
+---
+
 ## 2. 从尾到头打印链表
 
 > 《剑指offer》题目6
@@ -58,6 +66,8 @@ private static void reversePrint(ListNode node){
 }
 ```
 
+---
+
 ## 3. 删除链表的节点
 
 > 《剑指offer》题目18
@@ -67,7 +77,7 @@ private static void reversePrint(ListNode node){
 - 方法一: 遍历到 i 的前一个节点 h，将 h 指向 i 的下一个节点 j，然后删除 i
 - 方法二：把节点 j 的内容复制到 i，将 i.next 指向 j 的下一节点 k，然后删除 j
 
-
+---
 
 ## 4. 链表中倒数第 k 个节点
 
@@ -84,6 +94,7 @@ private static void reversePrint(ListNode node){
                    ↑（B）    ↑（A）
 ```
 
+---
 
 ## 5. 链表中环的入口节点
 
@@ -93,6 +104,7 @@ private static void reversePrint(ListNode node){
 
 相遇节点就是入口节点。
 
+---
 
 ## 6. 合并两个有序的链表
 
@@ -130,4 +142,52 @@ private static ListNode mergeByIteration(ListNode a, ListNode b){
 
         return temp.next;
     }
+```
+
+---
+
+## 7. 给定一个矩阵，交换每个相邻的一对节点
+
+> leetcode 24[medium]
+
+```
+        1 2         2 1
+        3 4         4 3
+       before      after 
+
+Input:  1 -> 2 -> 3 -> 4
+Output: 2 -> 1 -> 4 -> 3
+```
+
+定义一个 dummy 结点，指向表头，以防交换后表头找不到了 
+
+```java
+    /**
+     *    1  ->  2  ->  3  -> 4  ->  5  -> 6
+     *    i     next   temp
+     *   last   dummy
+     *
+     *    2  ->  1  ->  3  -> 4  ->  5  -> 6
+     *   next    i     temp
+     *   dummy   last
+     *
+     *    2  ->  1  ->  3  -> 4  ->  5  -> 6
+     *   dummy   last   i    next   temp
+     */
+private static ListNode swapPairsByIteration(ListNode head){
+
+    ListNode dummyHead = head.next;
+    ListNode last = head;
+
+    for (ListNode i = head; i != null ; i = i.next) {
+        ListNode next = i.next;
+        ListNode temp = next.next;
+        next.next = i;
+        last.next = next;
+        i.next = temp;
+        last = i;
+    }
+
+    return dummyHead;
+}
 ```

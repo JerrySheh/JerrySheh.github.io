@@ -15,7 +15,7 @@ date: 2019-06-05 00:25:54
 
 <!-- more -->
 
-# 最简单的异步任务执行
+# 一、最简单的异步任务执行
 
 ## Runnable
 
@@ -44,7 +44,7 @@ public interface Callable<V> {
 
 ## 一个简易Web服务器例子
 
-无论是 Runnable 还是 Callable，想要放到独立的线程中去运行，都是需要借助 Thread 类的。
+无论是 Runnable 还是 Callable，想要放到独立的线程中去运行，都需要借助 Thread 类。
 
 ```java
 new Thread(runnable).start();
@@ -77,9 +77,9 @@ private static void handleRequest(Socket conn){
 
 ---
 
-# Executor 接口
+# 二、Executor 接口
 
-`Executor` 接口用来执行一个 Runnable：
+`Executor` 用来执行一个 Runnable：
 
 ```java
 public interface Executor {
@@ -143,7 +143,7 @@ Executor exec3 = Executors.newScheduledThreadPool(10);
 1. 获取异步任务的状态
 2. 管理 Executor 的生命周期（见下面生命周期部分）
 
-### 获取异步任务的状态的
+### 获取异步任务的状态
 
 这部分主要是 `submit` 方法，用于向线程提交异步任务，然后返回一个 Future，我们再用 Future 来判断异步任务结束没有，或者获取结果。
 
@@ -158,9 +158,33 @@ public interface ExecutorService extends Executor {
 
 ExecutorService 接口的默认实现是 `ThreadPoolExecutor`，用于启动一个线程池，另一个实现是 Fork/Join 框架（JDK1.7）。
 
-#### submit 和 execute 的区别
+### submit 和 execute 的区别
 
-`execute()` 是 Executor 接口的方法，表示执行一个 Runnable， `submit()` 是 `ExecutorService` 接口的方法，内部调用了 `execute()` ，但还会返回一个异步计算结果 `Future` 对象（也意味着可以做异常处理）。
+1. `execute()` 是 Executor 接口的方法，表示执行一个 Runnable
+2. `submit()` 是 `ExecutorService` 接口的方法，内部调用了 `execute()` ，但还会返回一个异步计算结果 `Future` 对象（也意味着可以做异常处理）。
+
+## ExecutorService 的默认实现：ThreadPoolExecutor
+
+其中一个构造方法如下，可以看到有以下几个参数：
+
+1. `corePoolSize`：核心线程数
+2. `maximumPoolSize`：最大线程数
+3. `keepAliveTime`：非核心线程最大空闲等待时间（超过最大时间就会被销毁），时间单位为参数 `TimeUnit`
+4. `workQueue`：工作队列，执行的异步任务会丢在这个队列里
+5. `threadFactory`：用于创建线程
+6. `handler`：当线程池满时的拒绝策略
+
+```java
+public ThreadPoolExecutor(int corePoolSize,
+                            int maximumPoolSize,
+                            long keepAliveTime,
+                            TimeUnit unit,
+                            BlockingQueue<Runnable> workQueue,
+                            ThreadFactory threadFactory,
+                            RejectedExecutionHandler handler)
+```
+
+> 提示：Doug Lea在JDK文档中建议程序员应该尽量使用Executors工具类来创建线程池，非必要不自己 new ThreadPoolExecutor
 
 ## ScheduledExecutorService 接口
 
@@ -173,9 +197,16 @@ public <V> ScheduledFuture<V> schedule(Callable<V> callable, long delay, TimeUni
 
 ScheduledExecutorService 的功能和 Timer/TimerTask 类似，解决那些需要任务重复执行的问题。这包括延迟时间一次性执行、延迟时间周期性执行以及固定延迟时间周期性执行等。
 
+## 小结
+
+1. `Executor` 接口帮助我们执行异步任务
+2. `ExecutorService` 接口帮助我们获取异步任务的状态和管理`Executor`本身，`ThreadPoolExecutor` 是 `ExecutorService` 的默认实现，即线程池
+3. `Executors` 工具类帮助我们创建 Executor
+4. `ScheduledExecutorService` 接口帮助我们执行周期性任务
+
 ---
 
-# Executor 生命周期
+# 三、Executor 的生命周期
 
 既然 ThreadPoolExecutor 是 ExecutorService 的实现，而 ExecutorService 又继承 Executor 接口。所以，线程池的生命周期即是 Executor 的生命周期啦。
 
@@ -216,7 +247,7 @@ public interface ExecutorService extends Executor {
 
 ---
 
-# Future
+# 四、Future
 
 Callable 的 `call()` 方法可以执行一个异步任务并获取一个返回值，但假设异步任务要执行很久，调用方就会阻塞。这就失去了异步的意义。
 
@@ -309,7 +340,7 @@ try{
 
 ---
 
-# CompletableFuture
+# 五、CompletableFuture
 
 Future 其实还不够好，因为主线程迟早要主动去调用 `future.get()` 来获取结果的。我们希望异步任务结束后，主动回调，而不是主线程去`isDone()`或`get()` 。
 
@@ -400,7 +431,7 @@ f3.thenAccept( r -> System.out.println(String.format("%s去搬砖", r)));
 
 ---
 
-# Fork/Join
+# 六、Fork/Join
 
 前面提到 `ExecutorService` 接口的默认实现是 `ThreadPoolExecutor`，用于启动一个线程池，另一个实现是 Fork/Join ，Fork/Join 用来将一个大的任务分解成多个小的任务，并行执行。其原理跟排序算法的归并排序类似。
 
