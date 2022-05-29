@@ -7,21 +7,24 @@ abbrlink: 1707ee78
 date: 2018-03-08 11:54:26
 ---
 
-参考书籍：《计算机网络：自顶向下方法》
-
 # HTTP简介
 
-一个 Web 应用程序，首先接触的是应用层协议是 **超文本传输协议（HyperText Transfer Protocol，HTTP）**，HTTP由两个程序实现：一个客户端、一个服务器。其连接模型大概为：客户端向服务器发起 **请求（request）** ，服务器收到请求后，进行 **响应（response）**，返回客户端需要的内容。
+一个 Web 应用程序，首先接触的应用层协议是 **超文本传输协议（HyperText Transfer Protocol，HTTP）**。
 
-![http](../../../../images/networking/http_model.png)
+HTTP由两个程序实现：一个客户端、一个服务器。其连接模型大致为：
+
+1. 客户端向服务器发起 **请求（request）** 
+2. 服务器收到请求后，进行 **响应（response）**，返回客户端需要的内容
 
 <!-- more -->
+
+![http](../../../../images/networking/http_model.png)
 
 ---
 
 # 与 HTTP 有关的概念
 
-## web 对象
+## 1. web 对象
 
 一般来说，一个 Web page（页面）是由很多对象组成的。对象可以是 html、图片、视频，甚至是Java程序。例如，当我们访问 https://www.google.com ，这个 Web page 是由 Google 提供的一个基本 html 页面和搜索框上面大大的 logo 图片(以及其他对象)组成。
 
@@ -33,13 +36,15 @@ date: 2018-03-08 11:54:26
 实际上对象一般都可以通过 URL 寻址，比如谷歌首页的Logo图片，其URL地址是
 https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png
 
-HTTP 定义了客户端如何向服务器请求 Web page。HTTP使用 TCP 作为支撑运输协议，所以不用担心请求的过程数据在中途丢失或出错的问题。
+**HTTP 定义了客户端如何向服务器请求 Web page。**
 
-## 无状态协议
+HTTP 使用 TCP 作为支撑运输协议，所以不用担心请求的过程数据在中途丢失或出错的问题。
 
-我们可能注意到，我们使用浏览器打开Google.com，然后新建一个标签页又打开一次，Google 的页面还是会又一次地显示出来，不存在服务器之前已经给你发过了所以不再发这种事。因此我们说 HTTP 是 **无状态协议(stateless protocol)**。
+## 2. 无状态协议
 
-## 非持续连接和持续连接
+我们可能注意到，我们使用浏览器打开Google.com，然后新建一个标签页又打开一次，Google 的页面还是会又一次地显示出来，不存在服务器之前已经给你发过了所以不再发这种事。因此我们说 HTTP 是 **无状态协议(stateless protocol)** 。
+
+## 3. 非持续连接和持续连接
 
 如果一个客户与服务器的 每一个 **请求/响应对**，分别由单独的 TCP 连接发送，这样的 Web 应用程序称为 **非持续连接（non-persistent connection）**。假设在一个由 1 个 index.html 和 10 张 jpg 图片组成的 Web page 中传输，则会建立 11 个 TCP 连接。
 
@@ -49,9 +54,7 @@ HTTP/1.0 协议使用非持久连接，即在非持久连接下，一个tcp连�
 
 ---
 
-# HTTP报文
-
-## request报文
+# HTTP request 报文
 
 HTTP request报文结构如下：
 
@@ -67,7 +70,7 @@ Connection: close
 User-Agent:Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36
 ```
 
-### 请求行
+## 请求行
 
 ```
 GET /www.zsc.edu.cn/index.html HTTP /1.1
@@ -79,7 +82,7 @@ GET 说明采用了 GET 方法， HTTP协议中，有GET、POST、HEAD、PUT、D
 
 > 不是向服务器提交表单就一定要用 POST，比如我们在某网站的表单的name填 hello ， age 填 18，然后点击确定，浏览器可能会构造一个类似于 www.somesite.com/select?name=hello&age=18 这样的URL传递给服务器。服务器解析这种 URL 就知道你填的是什么了。当然，这种情况不适合输入账号和密码。
 
-### 首部行
+## 首部行
 
 ```
 Accept-Language:zh-CN,zh;q=0.9,en;q=0.8,zh-TW;q=0.7
@@ -90,7 +93,7 @@ User-Agent:Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, 
 
 请求行后面的几行称为 **首部行（header line）**，用来提供一些额外的信息。
 
-#### request常见首部
+### request常见首部
 
 | 首部     | 解释     |
 | :------------- | :------------- |
@@ -102,9 +105,10 @@ User-Agent:Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, 
 | Host | 请求的主机域名（HTTP1.1中唯一一个必须包含的请求首部） |
 | Connection | 是否需要持久连接。如果是close，表明客户端希望在本次连接后就断掉 TCP 连接
 | User-Agent | 客户端的浏览器类型 |
-| Referer |包含一个URL，用户从该URL代表的页面出发访问当前请求的页面
-|Content-Length|请求消息正文的长度
-|Pragma|指定“no-cache”值表示服务器必须返回一个刷新后的文档，即使它是代理服务器而且已经有了页面的本地拷贝
+| Referer |包含一个URL，用户从该URL代表的页面出发访问当前请求的页面 | 
+|Content-Type|实际发送的数据类型 |
+|Content-Length|请求消息正文的长度 | 
+|Pragma|指定“no-cache”值表示服务器必须返回一个刷新后的文档，即使它是代理服务器而且已经有了页面的本地拷贝 |
 
 
 > 一个简单的例子是，当我们访问 https://developer.android.com/studio/index.html 想要下载 Android Studio软件时，如果我们用的是Windows 系统的浏览器，页面则会默认显示Windows版本的Android Studio软件下载，反正如果我们用的是 Mac 系统，则会默认显示 Mac 版本。这就是因为服务器根据我们的 User-Agent判断我们是当前什么系统。
@@ -115,9 +119,60 @@ User-Agent:Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, 
 accept-language: zh-CN,zh;q=0.9,en;q=0.8,zh-TW;q=0.7
 ```
 
-如果是 POST 方法，在 首部行 后面会有一个空行，紧接着是 **请求包体**。包括了表单中提交的内容。
+如果是 POST 方法，在 首部行 后面会有一个空行，紧接着是 **请求包体（request body）**，包括了表单中提交的内容。 Content-Type 指定了请求的数据类型。
 
-## response报文
+## 示例：不同 Content-Type 的请求
+
+### application/x-www-form-urlencoded （表单提交）
+
+```
+POST /foo HTTP/1.1
+Content-Length: 68137
+Content-Type: application/x-www-form-urlencoded
+
+account=123&name=jerry
+```
+
+### multipart/form-data（表单提交或文件上传）
+
+```
+POST /foo HTTP/1.1
+Content-Length: 68137
+Content-Type: multipart/form-data; boundary=---------------------------974767299852498929531610575
+
+---------------------------974767299852498929531610575
+Content-Disposition: form-data; name="description"
+
+some text
+---------------------------974767299852498929531610575
+Content-Disposition: form-data; name="myFile"; filename="foo.txt"
+Content-Type: text/plain
+
+(content of the uploaded file foo.txt)
+---------------------------974767299852498929531610575
+```
+
+### application/json
+
+```
+POST http://www.example.com HTTP1.1
+Content-Type: application/json;charset=utf-8
+
+{"name":"jerry","sub":[1,2,3]}
+```
+
+
+### text/xml 
+
+xml文本
+
+### text/plain
+
+纯文本
+
+---
+
+# http response 报文
 
 ![http](../../../../images/networking/http2.jpg)
 
@@ -135,7 +190,7 @@ X-Powered-By:PHP/5.3.3
 (data)
 ```
 
-### 状态行
+## 状态行
 
 第一行称为 **状态行（status line）**，这一行包括了协议和状态码。常见的状态码有：
 
@@ -145,7 +200,7 @@ X-Powered-By:PHP/5.3.3
 * **404 Not Found**： 请求的对象在服务器上找不到
 * **500 Internal Server Error**：服务器已收到请求，但服务器内部出错导致无法响应
 
-### 首部行
+## 首部行
 
 第一行后面几行称为 **首部行（header line）**，内容与 request 的首部行大同小异。
 
@@ -239,3 +294,7 @@ HTTP参数实际上可以认为是一种用户的输入，根据不同的用户�
 如果要说 http 和 socket 有什么区别，那就是 http 是一种规定好的连接模型，而 socket 我们可以自由编程控制什么时候保持连接，什么时候断开，但他们两者本质上传输的都是底层tcp连接所建立的数据。
 
 比较形象的描述：HTTP是轿车，提供了封装或者显示数据的具体形式；Socket是发动机，提供了网络通信的能力。
+
+---
+
+- 参考书籍：《计算机网络：自顶向下方法》
