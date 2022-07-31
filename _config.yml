@@ -61,14 +61,14 @@ index2_generator:
       - path sentences
   - per_page: 100
     layout: archives
-    path: /archives
+    path: 'archives'
     index: true
     order_by: '-date'
     exclude:
       - path sentences
   - per_page: 3
     layout: index
-    path: /sentences
+    path: 'sentences'
     order_by: '-date'
     include:
       - path sentences
