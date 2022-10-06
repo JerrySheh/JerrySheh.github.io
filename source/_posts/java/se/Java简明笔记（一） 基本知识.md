@@ -177,8 +177,8 @@ List<Integer> list = new ArrayList<Integer>();
 
 # equals() 和 "=="
 
-- **equals()**：比较的是两个对象的值（内容）是否相同。
-- **==**：比较的是两个引用所指的对象（或者说内存地址）是否相同，<font color="red">也用来比较两个基本数据类型的变量值是否相等。</font>
+- **equals()** ：比较的是两个对象的值（内容）是否相同。
+- **==** ：比较的是两个引用所指的对象（或者说内存地址）是否相同，<font color="red">也用来比较两个基本数据类型的变量值是否相等。</font>
 
 ```java
 public static void main(String[] args) {
