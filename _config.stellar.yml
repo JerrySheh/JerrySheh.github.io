@@ -1,0 +1,10 @@
+# sidebar:
+#   logo:
+#     title: '[<img no-lazy height="32px" src="/images/blog/logo.png"/>](/)'
+
+sidebar:
+  menu:
+    post: '[btn.blog](/)'
+    wiki: '[](/anpu/)'
+    sentences: '[醍醐灌顶](/sentences/)'
+    # more: '[更多](/more/)'
