@@ -9,7 +9,7 @@ abbrlink: 7c6dd7fa
 date: 2018-07-06 11:35:48
 ---
 
-![thy](https://raw.githubusercontent.com/thymeleaf/thymeleaf-dist/master/src/artwork/thymeleaf%202016/thymeleaf_logo_white.png)
+![thy](https://www.thymeleaf.org/images/thymeleaf.png)
 
 # 什么是 Thymeleaf
 
