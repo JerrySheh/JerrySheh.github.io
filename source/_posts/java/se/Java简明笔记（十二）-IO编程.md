@@ -265,7 +265,7 @@ public class randomDoubleNumber {
 
 test.java
 
-```
+```java
 import java.io.*;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
