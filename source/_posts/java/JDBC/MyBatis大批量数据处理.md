@@ -21,7 +21,7 @@ abbrlink: 7969a482
 - [搞定SpringBoot多数据源(2)：动态数据源](https://mianshenglee.github.io/2020/01/16/multi-datasource-2.html)
 - [搞定SpringBoot多数据源(3)：参数化变更源](https://mianshenglee.github.io/2020/01/21/multi-datasource-3.html)
 
-至于使用 Mybatis 做大批量数据读取和插入，先前也是阅读了大量的参考资料和文档。总体思想跟 JDBC 是一致的，即：**流式查询、批量插入**。但在讲 Mybatis 之前，先回顾一下 JDBC 时代是怎么做的吧。
+至于使用 Mybatis 做大批量数据读取和插入，先前也是阅读了大量的参考资料和文档。总体思想跟 JDBC 是一致的，即：**流式查询、批次插入**。但在讲 Mybatis 之前，先回顾一下 JDBC 时代是怎么做的吧。
 
 <!-- more -->
 
@@ -31,7 +31,7 @@ abbrlink: 7969a482
 
 以前写 JDBC 时，通常是通过设置 `fetchsize` 来控制每次读取的数据量。`fetchsize` 并不是分页查询，而是数据库一次缓存到客户端的数量。所以在查询大量数据时，并不需要在SQL里手动写 `limit n offset m` 这样的分页语法。
 
-JDBC 返回的数据类型是 `ResultSet`，这个玩意特别有意思，它是动态的。意思就是说，在你发起查询时，客户端与数据库的连接会一直保持打开，之后我们通过 `while(rs.next())` 逐条操作 `ResultSet` 里的每一条记录。 等缓存的数据量都遍历完了， 数据库会通过 TCP 连接发送下一批次的数据放到 `ResultSet` 里。全程对我们无感，我们要做的，只是不断地 `rs.next()` 就行了。
+JDBC 返回的数据类型是 `ResultSet`，这个玩意特别有意思，它是动态的。就是说，在你发起查询时，客户端与数据库的连接会一直保持打开，之后我们通过 `while(rs.next())` 逐条操作 `ResultSet` 里的每一条记录。 等缓存的数据量都遍历完了， 数据库会通过 TCP 连接发送下一批次的数据放到 `ResultSet` 里。全程对我们无感，我们要做的，只是不断地 `rs.next()` 就行了。
 
 ```java
 PreparedStatement ps = c.prepareStatement(sql);
@@ -68,7 +68,7 @@ MySQL 默认情况下，创建 `prepareStatement` 时，就已经是 `ResultSet.
 
 ## PostgreSQL 流查询
 
-PostgreSQL 默认情况下， `fetchsize`也是无效的。[官方文档](https://jdbc.postgresql.org/documentation/head/query.html#fetchsize-example)里提到，要让 `fetchsize` 生效，**连接必须是非自动提交** 。即：
+PostgreSQL 默认情况下， `fetchsize`也是无效的。[官方文档](https://jdbc.postgresql.org/documentation/query/#fetchsize-example)里提到，要让 `fetchsize` 生效，**连接必须是非自动提交** 。即：
 
 ```java
 conn.setAutoCommit(false);
