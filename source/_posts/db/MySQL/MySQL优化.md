@@ -8,13 +8,13 @@ abbrlink: 2bb1b1ab
 date: 2018-9-18 20:37:38
 ---
 
-这一篇主要从以下三个角度谈谈MySQL的优化：
+这一篇主要从以下几个角度谈谈 MySQL 的优化：
 
 1. 使用恰当的数据类型
 2. 高效索引
 3. 高效查询
 4. 大表优化（含分库分表）
-5. explain
+5. 执行计划
 
 <!-- more -->
 
@@ -109,7 +109,7 @@ INSERT INTO enum_test(e) VALUES ('fish', 'dog', 'apple');
 
 - MySQL 把 bit 当作字符串，而不是数字
 - MySQL 内部使用整数存储 ENUM 和 SET 类型，比较时再转换成字符串
-- 应该用无符号整数（unsigned int）存储IP地址，MySQL提供 `INET_ATON()`（字符串转整数） 和 `INET_NTOA()`（整数转字符串）
+- 应该用无符号整数（unsigned int）存储IP地址，MySQL提供 `INET_ATON()`（字符串转整数） 和 `INET_NTOA()`（整数转字符串） 函数
 
 ---
 
@@ -126,7 +126,7 @@ SELECT actor_id FROM sakila.actor WHERE actor_id + 1 = 5;
 SELECT ... WHERE TO_DAYS(CURRENT_DATE) - TO_DAYS(DATE_COL) <= 10;
 ```
 
-应该养成简化 WHERE 条件的习惯，**始终将索引列放在比较符号的一侧**。
+**应该养成简化 WHERE 条件的习惯，始终将索引列放在比较符号的一侧**。
 
 ## 前缀索引
 
@@ -181,13 +181,13 @@ ALTER TABLE city_demo ADD KEY (city(5));
 SELECT * FROM payment WHERE staff_id = 2 AND customer_id = 584;
 ```
 
-创建索引时，是应该创建 (staff_id, customer_id) 还是 (customer_id,staff_id) ？这取决于哪一列的选择性更高。但这也不是绝对的，还要考虑WHERE 子句中的排序、分组、范围条件等其他因素。
+创建索引时，是应该创建 (staff_id, customer_id) 还是 (customer_id,staff_id) ？这取决于哪一列的选择性更高。但这也不是绝对的，还要考虑 WHERE 子句中的排序、分组、范围条件等其他因素。
 
 ## 聚簇索引
 
-聚簇的意思是：数据行和相邻的键值紧凑地存储在一起。当表有聚簇索引时，数据行本身存放在索引的叶子页。InnoDB的实现是，通过主键聚集数据，被索引的列就是主键列。如果没有主键，InnoDB会选择一个非空索引代替，如果没有这样的索引，就隐式创建一个。
+聚簇的意思是：数据行和相邻的键值紧凑地存储在一起。当表有聚簇索引时，数据行本身存放在索引的叶子页。**InnoDB的实现是，通过主键聚集数据**，被索引的列就是主键列。如果没有主键，InnoDB会选择一个非空索引代替，如果没有这样的索引，就隐式创建一个。
 
-InnoDB支持聚簇索引，而MyISAM不支持，使用了聚簇索引和非聚簇索引的存储方式区别可参考 [数据库（二）MySQL必知必会概念](../post/4c81d70.html#%E7%B4%A2%E5%BC%95%E7%9A%84%E5%BA%95%E5%B1%82%E5%AE%9E%E7%8E%B0)
+InnoDB 支持聚簇索引，而 MyISAM 不支持，使用了聚簇索引和非聚簇索引的存储方式区别可参考 [数据库（二）MySQL必知必会概念](../post/4c81d70.html#%E7%B4%A2%E5%BC%95%E7%9A%84%E5%BA%95%E5%B1%82%E5%AE%9E%E7%8E%B0)
 
 聚簇索引优点：
 
@@ -216,10 +216,10 @@ InnoDB支持聚簇索引，而MyISAM不支持，使用了聚簇索引和非聚�
 
 ## 查询慢的原因
 
-1. **查询了不需要的记录**。一个典型的错误是先 SELECT 查出所有结果集，然后获取前面的 N 行后关闭结果。这样 N 行后面的数据就是不需要的数据，MySQL会把时间浪费在这上面。最好的解决办法是用 limit N，这样MySQL只会去找 N 行而不是所有。
-2. **多表关联时返回全部列**。比如 `SELECT * FROM xxx join yyy ON ...`，其实可以用 `SELECT sakila.actor.* FROM sakila join yyy ON ... `，只取关键的列。
-3. **总是取出全部列**。`SELECT *`的做法在数据库的角度是不考虑周全的，但是有时候从开发的角度看却能简化开发，因为能提高相同代码片段的复用性。
-4. **重复查询相同的数据**。需要多次重复查询的数据，最好第一次查询后缓存起来，可以使用 redis 等。
+1. **查询了不需要的记录**：一个典型的错误是先 SELECT 查出所有结果集，然后获取前面的 N 行后关闭结果。这样 N 行后面的数据就是不需要的数据，MySQL会把时间浪费在这上面。最好的解决办法是用 limit N，这样MySQL只会去找 N 行而不是所有。
+2. **多表关联时返回全部列**：比如 `SELECT * FROM xxx join yyy ON ...`，其实可以用 `SELECT sakila.actor.* FROM sakila join yyy ON ... `，只取关键的列。
+3. **总是取出全部列**：`SELECT *`的做法在数据库的角度是不考虑周全的，但是有时候从开发的角度看却能简化开发，因为能提高相同代码片段的复用性。
+4. **重复查询相同的数据**：需要多次重复查询的数据，最好第一次查询后缓存起来，可以使用 redis 等。
 
 ## 重构查询的两种方法
 
@@ -338,7 +338,10 @@ LIMIT 5
 先快速定位需要获取的 id 段，然后再关联。
 
 ```sql
-SELECT a.* FROM 表 1 a, (select id from 表 1 where 条件 LIMIT 100000,20 ) b
+SELECT a.* 
+FROM 
+  表 1 a, 
+  (select id from 表 1 where 条件 LIMIT 100000,20 ) b
 where a.id=b.id
 ```
 
@@ -352,7 +355,7 @@ MySQL 总是通过创建并填充临时表的方式来执行 UNION。除非确�
 
 # 大表优化
 
-MySQL单表数据量超过500万时，性能就开始急剧下降。
+MySQL单表数据量超过500万时，性能就开始急剧下降。（非绝对，如果是固态硬盘，则好很多）
 
 ## 限定数据的范围
 
@@ -382,9 +385,9 @@ MySQL单表数据量超过500万时，性能就开始急剧下降。
 
 ---
 
-# explain
+# 执行计划（explain）
 
-在一条 SQL 前面加上 `explain` 执行，即可查看执行计划。
+在一条 SQL 前面加上 `explain` 执行，即可查看执行计划。MySQL 官方对 explain 的输出有非常详细的解释，建议参阅 [EXPLAIN Output Format](https://dev.mysql.com/doc/refman/5.7/en/explain-output.html)。
 
 
 id|select_type|table|type|possible_key|key|key_len|ref|rows|Extra
@@ -435,7 +438,9 @@ join type，指出这张表是用何种方式 JOIN 的：
 
 ## filtered
 
-过滤百分比，例如 rows 是 1000， filtered 是 50.00（50%），那么会有 1000 × 50% = 500 条数据会被 JOIN
+过滤百分比，该值越小越好，最大值100，表示没有过滤行
+
+例如 rows 是 1000， filtered 是 50.00（50%），那么会有 1000 × 50% = 500 条数据会被 JOIN（估计值）
 
 ## Extra
 
@@ -445,7 +450,7 @@ join type，指出这张表是用何种方式 JOIN 的：
 ---
 
 参考：
-- 《高性能MySQL》
+- 《高性能MySQL》第三版/第四版
 - 《阿里巴巴Java开发手册》
 - [MySQL官方文档](https://dev.mysql.com/doc/refman/5.7/en/explain-output.html)
 - https://github.com/Snailclimb/JavaGuide/blob/master/docs/database/MySQL.md
