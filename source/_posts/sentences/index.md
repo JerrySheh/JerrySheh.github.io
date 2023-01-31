@@ -1,8 +1,5 @@
 ---
 title: 醍醐灌顶
-type: about
-article:
-  - readtime: false
 abbrlink: dd2a840f
 date: 1999-12-31 00:23:42
 ---
