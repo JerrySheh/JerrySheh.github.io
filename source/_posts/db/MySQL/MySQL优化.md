@@ -408,17 +408,21 @@ id|select_type|table|type|possible_key|key|key_len|ref|rows|Extra
 
 ## type
 
-join type，指出这张表是用何种方式 JOIN 的：
+join type，指出这张表是用何种方式 JOIN 的（从上往下，性能从好到差）：
 
-- system：系统表或该表只有一行数据（const的特例）
-- const：常数级，表示该表最多有一个匹配行，这是最快的。通常情况下，查询条件带主键或唯一索引就是 const
-- eq_ref：两张表互相一次匹配，通常在两张表主键或唯一索引 = 操作查询一条记录时
-- ref：两张表按某一列关联
-- range：范围查找
-- index：全扫描覆盖索引，或全表扫描
-- all：全表扫描
+- `system`：系统表或该表只有一行数据（const的特例）
+- `const`：常数级，表示该表最多有一个匹配行，这是最快的。通常情况下，查询条件带主键或唯一索引就是 const
+- `eq_ref`：两张表互相一次匹配，通常在两张表主键或唯一索引 = 操作查询一条记录时
+- `ref`：两张表按某一列关联
+- `ref_or_null`：类似于ref，但会额外搜索包含NULL值的行
+- `index_merge`：索引合并优化，查询使用了两个以上的索引
+- `unique_subquery`：类似于eq_ref，条件用了in子查询
+- `index_subquery`：区别于unique_subquery，用于非唯一索引，可以返回重复值
+- `range`：范围查找，如 `between ... and` 或 `in` 
+- `index`：全扫描覆盖索引，或全表扫描
+- `all`：全表扫描
 
-还有几种不常见的可参阅 [MySQL官方文档](https://dev.mysql.com/doc/refman/5.7/en/explain-output.html)，讲得非常详细了。
+具体描述可参阅 [MySQL官方文档](https://dev.mysql.com/doc/refman/5.7/en/explain-output.html)
 
 ## possible_keys
 
@@ -444,8 +448,15 @@ join type，指出这张表是用何种方式 JOIN 的：
 
 ## Extra
 
-其他信息，如 `Using Where`、`Using Index`
+其他信息，如：
 
+- `Using filesort`：按文件排序，一般是在指定的排序和索引排序不一致的情况才会出现。一般见于order by语句。
+- `Using Where`：使用 where 条件过滤
+- `Using Index`：只检索索引树，而无需回表（覆盖索引）
+- `Using temporary`: 使用了临时表，性能差，需关注优化。一般多见于`group by` 或 `union`
+- `Using index condition`：MySQL5.6之后新增的索引下推。在存储引擎层进行数据过滤，而不是在服务层过滤，利用索引现有的数据减少回表的数据。
+- `Range checked for each record (index map: N)`：没找到合适的索引，但是当关联的表的列值已知后，某些索引可能可用，MySQL会对每一行组合的数据寻找合适的索引，这不是很快，但比全表扫描快
+- `Select tables optimized away`：查询最多只返回一行，在优化器阶段就能找到记录，而无需实际执行查询（如覆盖索引），表示已经是最优化了
 
 ---
 
@@ -454,3 +465,4 @@ join type，指出这张表是用何种方式 JOIN 的：
 - 《阿里巴巴Java开发手册》
 - [MySQL官方文档](https://dev.mysql.com/doc/refman/5.7/en/explain-output.html)
 - https://github.com/Snailclimb/JavaGuide/blob/master/docs/database/MySQL.md
+- [MySQL 索引 15 连问](https://mp.weixin.qq.com/s/FQULojwuBvC3659ysRhAFQ)
