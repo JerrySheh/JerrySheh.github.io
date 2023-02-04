@@ -502,7 +502,22 @@ mysql> OPTIMIZE TABLE foo;
 注意点：
 1. 不需要经常执行 `OPTIMIZE TABLE`，每月一次即可，或只在有大量delete操作后
 2. 对于 InnoDB ，MySQL 5.6 以上支持 online ddl，即只在开始和结束时，短暂锁表，中间过程仍能正常查询和操作数据（如果表有 FULLTEXT 索引，则不支持 online ddl ）
+3. 分区表不适用（见下）
 
+## 针对分区表
+
+对于 InnoDB 分区表，上述命令不生效，应使用下面的命令（参见 [MySQL官方文档-partitioning-maintenance](https://dev.mysql.com/doc/refman/5.7/en/partitioning-maintenance.html)）
+
+```sql
+--- 可以使用下面命令重建分区，等于先 drop 再 insert
+ALTER TABLE t1 REBUILD PARTITION p0, p1;
+
+--- 或者使用下面命令进行碎片整理
+ALTER TABLE t1 OPTIMIZE PARTITION p0, p1;
+
+--- 清空分区数据
+ALTER TABLE t1 TRUNCATE PARTITION p0, p1;
+```
 
 ---
 
