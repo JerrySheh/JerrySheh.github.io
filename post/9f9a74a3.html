@@ -19,11 +19,11 @@
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git add .</span><br></pre></td></tr></table></figure>
 
 <h3 id="三个-add-的区别"><a href="#三个-add-的区别" class="headerlink" title="三个 add 的区别"></a>三个 add 的区别</h3><ul>
-<li><p><code>git add . </code><br> 他会监控工作区的状态树，使用它会把工作时的所有变化提交到暂存区，包括文件内容修改(modified)以及新文件(new)，但不包括被删除的文件。</p>
+<li><p><code>git add . </code><br> 监控工作区的状态树，将所有变化提交到暂存区，包括 modified 以及 new ，但不包括被删除的文件</p>
 </li>
-<li><p><code>git add -u </code><br> 他仅监控已经被add的文件（即tracked file），他会将被修改的文件提交到暂存区。add -u 不会提交新文件（untracked file）。（git add –update的缩写）</p>
+<li><p><code>git add -u </code><br> 仅监控已经被 add 的文件（即tracked file），不会提交新文件（untracked file）。（git add –update的缩写）</p>
 </li>
-<li><p><code>git add -A </code><br>是上面两个功能的合集（git add –all的缩写）</p>
+<li><p><code>git add -A </code><br>上面两个功能的合集（git add –all的缩写）</p>
 </li>
 </ul>
 <h2 id="commit-提交到仓库"><a href="#commit-提交到仓库" class="headerlink" title="commit 提交到仓库"></a>commit 提交到仓库</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git commit -m &quot;modified&quot;</span><br></pre></td></tr></table></figure>
