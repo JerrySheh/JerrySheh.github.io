@@ -172,8 +172,8 @@ MySQL 默认的事务隔离是第 3 级别，可重复读。
 
 # 19. binlog 和 redo log 的区别？
 
-- `redo log` 是物理日志，是 InnoDB 引擎特有的，记录的是“在某个数据页上做了什么修改”这样的操作。使用了 `WAL(Write-Ahead Logging)` 技术，即先写日志，再写磁盘。所以能支持崩溃修复（crash-safe）。`redo log` 是循环写的，重复利用空间。
-- `binlog` 是逻辑日志，是 Server 层日志，存储引擎无关，记录的是“给ID=2这一行的c字段加1”这样的操作。`binlog`是追加写的，适合归档保存，通常也用来恢复误删的数据。
+- `redo log` 是物理日志，是 InnoDB 引擎特有的，记录的是“在某个数据页上做了什么修改”这样的操作。使用了 `WAL(Write-Ahead Logging)` 技术，即先写日志，再写磁盘。所以能支持崩溃修复（crash-safe）。`redo log` 是循环写的，重复利用空间。之所以要有 redo log，是为了性能考虑，一个事务完成后，只写 redo log 就行了，后续将多个事务的变更刷到磁盘进去。
+- `binlog` 是逻辑日志，是 Server 层日志，存储引擎无关，记录的是“给ID=2这一行的c字段加1”这样的写操作。`binlog`是追加写的，适合归档保存，通常也用来恢复误删的数据，还有主从复制。
 
 MySQL事务有`两阶段提交`，即一个 update 语句，需要依次经过 redo log prepare、binlog、 redo log commit 三个步骤，保证两份日志的一致性。
 
@@ -186,3 +186,19 @@ MySQL事务有`两阶段提交`，即一个 update 语句，需要依次经过 r
 解决办法：在alter table语句里面设定等待时间，如果在这个指定的等待时间里面能够拿到MDL写锁最好，拿不到也不要阻塞后面的业务语句，先放弃。之后开发人员或者DBA再通过重试命令重复这个过程。
 
 但是 MySQL 5.6+ 提供了 Online DDL 功能，可以避免这个问题。
+
+# 21. 慢SQL如何优化？ 
+
+先看执行计划：
+
+1. 关注 `type` 列，有 `all`（全表扫描）、`index`（全索引扫描）、`range`（范围查找）说明性能差
+2. 看 `possible_keys` 和 `key` 列，看是否使用了索引，没有索引是否能建合适的索引？
+3. 看 `rows` 列， mysql 扫描了多少行， `filterd` 列看过滤性
+4. 看 `extra` 列，是否有 `Using temporary`(临时表)、`Using Where`（条件过滤）、`Using filesort`（文件排序），能否消除？
+
+通常，大部分的慢SQL都能通过建立合适的索引来优化：
+
+1. 业务SQL中，Where 条件和 Order by 排序用到的字段，通常可以建索引
+2. 是否用了 OR 等导致索引失效，能否改写SQL，拆分SQL
+3. 是否可以建多字段的组合索引，实现覆盖索引
+
