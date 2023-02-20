@@ -158,11 +158,31 @@ pd = &x;   // ok，但是不能通过pd去改变 x 的值
 
 注意下面的定义
 
-```
+```C
 int i = 6;
 int *const p1 = &i;  //常量指针，不能改变p1所指的对象
 const int *p2 = &i  
 ```
+
+## 常见的定义
+
+```C++
+int x;
+
+// 指针可以被修改，值也可以被修改
+int * p1 = &x; 
+
+// 指针可以被修改，值不可以被修改（const int）
+const int * p2 = &x; 
+
+// 指针不可以被修改（* const），值可以被修改
+int * const p3 = &x; 
+
+// 指针不可以被修改，值也不可以被修改
+const int * const p4 = &x;
+```
+
+摘自 [《Leetcode 101》](https://github.com/changgyhub/leetcode_101)
 
 ---
 
