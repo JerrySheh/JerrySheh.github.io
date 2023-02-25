@@ -144,7 +144,7 @@ article:
     # Whether to show estimated article reading time
     readtime: false
     # Whether to show updated time. For "auto", shows article update time only when page.updated is set and it is different from page.date
-    update_time: false
+    update_time: true
     # Article licensing block
     # licenses:
     #     Creative Commons:
@@ -348,7 +348,7 @@ plugins:
         # Whether the popup should stay static regardless of the page scrolls
         static: false
         # Where on the screen the consent popup should display
-        position: bottom-left
+        position: bottom-right
         # URL to your site's cookie policy
         policyLink: https://www.cookiesandyou.com/
     # Enable the lightGallery and Justified Gallery plugins
