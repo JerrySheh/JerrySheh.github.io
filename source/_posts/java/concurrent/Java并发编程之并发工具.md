@@ -11,14 +11,26 @@ abbrlink: a23f9c20
 date: 2018-10-30 15:08:26
 ---
 
-Java自带的平台类库（java.util.concurrent）里面包含了很多有用的工具，来帮助我们更好地处理并发问题。这一篇主要介绍一下几类工具：
+# 前言
+
+《On Java 8》一书中，作者 Bruce Eckel 提出了并发编程的 5 个步骤：
+
+1. 不要使用它。想一些其他方法来使你写的程序变的更快。
+2. 如果你必须使用它，请使用在 并发编程 - parallel Streams and CompletableFutures 中展示的现代高级工具。
+3. 不要在任务间共享变量，在任务之间必须传递的任何信息都应该使用 Java.util.concurrent 库中的并发数据结构。
+4. 如果必须在任务之间共享变量，请使用 java.util.concurrent.atomic 里面其中一种类型，或在任何直接或间接访问这些变量的方法上应用 synchronized。当你不这样做时，很容易被愚弄，以为你已经把所有东西都包括在内。说真的，尝试使用步骤 3。
+5. 如果步骤 4 产生的结果太慢，你可以尝试使用 volatile 或其他技术来调整代码，但是如果你正在阅读本书并认为你已经准备好尝试这些方法，那么你就超出了你的深度。返回步骤 1 。
+
+看了以上的描述，是不是觉得，即使是 Java 并发编程的大佬，也一再劝我们避免编写并发代码。
+
+<!-- more -->
+
+当我们不得不面对它时，最好只使用现代高级工具和JDK自带的并发数据结构。Java自带的平台类库（java.util.concurrent，JUC）里面包含了很多有用的工具，来帮助我们更好地处理并发问题。这一篇就来介绍一下JUC里面的几类工具：
 
 1. **atomic原子类**：AtomicLong
 2. **同步容器类**：Vector、Hashtable
 3. **并发容器类**：concurrentHashMap、ConcurrentLinkedQueue、BlockingQueue（阻塞队列）
 4. **并发工具类**：闭锁（Latch）、栅栏（Barrier）、信号量（Semaphore）
-
-<!-- more -->
 
 # atomic原子类
 
