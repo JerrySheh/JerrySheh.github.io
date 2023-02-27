@@ -47,7 +47,7 @@ User user = JSON.parseObject(u, User.class);
 
 ## list
 
-list 是双端链表，类似于 Java 的 `LinkedList<String>`。提供了 `rpush`、`lpush`、`lpop`、`rpop` 等操作方式，可用作队列或栈。可以发现，操作 List 时，第一个字母 `l` 或 `r` 指定了要从左边还是右边开始读取。
+list 是双端链表，类似于 Java 的 `LinkedList<String>`。提供了 `rpush`、`lpush`、`lpop`、`rpop` 等操作方式，可用作队列或栈。操作 List 时，第一个字母 `l` 或 `r` 指定了要从左边还是右边开始读取。
 
 ![books](../../../images/middleware/redis-list.png)
 

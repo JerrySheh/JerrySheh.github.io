@@ -488,7 +488,7 @@ order by data_length desc, index_length desc;
 mysql> OPTIMIZE TABLE foo;
 ```
 
-对于 InnoDB 表，输入如下，表示虽然不支持 optimize ，但是 MySQL 已经帮我们执行了 recreate + analyze 代替，能达到同样的效果。所以看到这个提示不用紧张，已经成功了。
+对于 InnoDB 表，输出如下，表示虽然不支持 optimize ，但是 MySQL 已经帮我们执行了 recreate + analyze 代替，能达到同样的效果。所以看到这个提示不用紧张，已经成功了。
 
 ```
 +----------+----------+----------+-------------------------------------------------------------------+
