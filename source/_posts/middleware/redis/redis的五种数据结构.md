@@ -110,7 +110,7 @@ Java HashMap 的 rehash 需要一次完成， map 很大时比较耗时，而 Re
 
 set 类似于 Java 的 `HashSet<String>`，同样也是只能存储 string，set保证了里面存储的内容没有重复。内部实现相当于一个特殊的 hash，只不过只有 key，所有 value 都是 null。
 
-## zset
+## zset（sorted sets）
 
 zset 类似于 Java 的 `SortSet<String>` 和 `HashMap<String,String>` 的结合体，其本质是一个 set， 但同时还为 set 里的每一个元素维护了一个 score 权重值，用来排序。底层是用 `跳跃表` 的数据结构实现。zset 就是一种有权重的 set 。
 
