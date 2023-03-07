@@ -12,13 +12,7 @@ tags:
 
 <!-- more -->
 
-## Teach Yourself Programming in Ten Years
-
-如果想从事编程这个行业，所有人都应该好好读一读 Peter Norvig 的这篇文章《[Teach Yourself Programming in Ten Years](http://norvig.com/21-days.html)》。
-
-## 成为一名程序员
-
-最近在回顾《On Java 8》，这本书是《Thinking in Java》作者 Bruce Eckel 的新作，书后有一篇题为《成为一名程序员》的附录，回顾了作者从大学到码农生涯跟计算机打交道的路程。摘录几句在这里，以提醒自己保持学习。
+如果想从事编程这个行业，所有人都应该好好读一读 Peter Norvig 的这篇文章《[Teach Yourself Programming in Ten Years](http://norvig.com/21-days.html)》。刚好最近在回顾《On Java 8》，这本书是《Thinking in Java》作者 Bruce Eckel 的新作，书后有一篇题为《成为一名程序员》的附录，回顾了作者从大学到码农生涯跟计算机打交道的路程。摘录几句在这里，以提醒自己保持学习。
 
 > 当人们学习计算机时，他们往往会对自己抱有不切实际的期望，通常是他们听说学计算机编程的好处，就希望在几周内找到一份高薪的工作。但是，最好的学习过程是先对计算机感兴趣，随着时间的推移，学习的越来越多，自然的就开始自学。
 
