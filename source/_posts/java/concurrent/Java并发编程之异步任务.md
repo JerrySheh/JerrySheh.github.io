@@ -375,6 +375,13 @@ myTaskFuture.exceptionally( e -> {
 
 使用 CompletableFuture 的好处是异步任务结束或异常时，会自动回调某个对象的方法，且主线程设置好回调后，不再关心异步任务的执行。
 
+## CompletableFuture 执行的线程从哪来？
+
+当我们提交 `supplyAsync` 时，异步任务已经开始了。不像 `FutureTask` 需要我们手动 `new Thread().start()` 或指定某个线程 `executor.submit()`，实际上 CompletableFuture 默认使用的线程池是 `ForkJoinPool.commonPool()`，其线程数默认为 CPU 数量减1，在双核及以下机器上，默认线程池又会退化为为每个任务创建一个线程，相当于没有线程池。
+
+建议使用 CompletableFuture 还是自己指定线程池。
+
+
 ## 多个 CompletableFuture 串行执行
 
 ```java
@@ -415,6 +422,15 @@ f3.thenAccept( r -> System.out.println(String.format("%s去搬砖", r)));
 
 // 主线程可以做其他事
 // ..
+```
+
+获取 `allOf()` 的结果
+
+```java
+CompletableFuture.allOf(p1, p2).thenAccept(it -> {
+    Person person1 = p1.join();
+    Person person2 = p2.join();
+});
 ```
 
 ## CompletableFuture 方法概览
