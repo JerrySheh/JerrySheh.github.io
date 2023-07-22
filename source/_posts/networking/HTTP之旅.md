@@ -297,4 +297,17 @@ HTTP参数实际上可以认为是一种用户的输入，根据不同的用户�
 
 ---
 
+# 安全的 http 协议： https 
+
+http 协议及承载它的 TCP/IP 协议，在设计之初没有考虑到安全问题，Request 和 Response 的报文全部都是明文传输的，然而互联网江湖险恶，一来一回之间，内容可能被第三方看到，导致信息泄露，内容被伪造篡改等问题。
+
+Netscape公司发明了 SSL（安全套接层，Secure Socket Layer）协议，在 TCP/IP 和 HTTP 中间加了一个安全加密层，后来互联网标准化组织 IETF 在 SSL 3.0 的基础上重新优化设计，使其不仅仅可以加密 HTTP，还可以加密其他应用层协议（甚至是 IP ），命名为 TLS (安全传输层，Transport Layer Security)，目前最近的版本是2018年发布的 TLS 1.3。
+
+于是乎，目前我们将用 TLS 安全保护的 HTTP 通信，称为 HTTPS 
+
+---
+
+# 参考
+
 - 参考书籍：《计算机网络：自顶向下方法》
+- [如何看待 HTTP/3 ？ - 车小胖的回答 - 知乎](https://www.zhihu.com/question/302412059/answer/533223530)
