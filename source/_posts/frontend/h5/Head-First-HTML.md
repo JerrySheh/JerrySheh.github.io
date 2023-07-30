@@ -1,6 +1,8 @@
 ---
 title: Head First HTML
-categories: 前端
+categories: 
+- 前端
+- HTML
 tags:
   - HTML
   - Web

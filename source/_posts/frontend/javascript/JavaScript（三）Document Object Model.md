@@ -2,7 +2,9 @@
 title: JavaScript（三）Document Object Model
 abbrlink: f75e92e9
 date: 2018-04-16 12:22:19
-categories: 前端
+categories: 
+- 前端
+- JavaScript
 tags:
  - Java Web
  - 前端

@@ -1,7 +1,9 @@
 ---
 title: JavaScript（一）基础语法
 comments: true
-categories: 前端
+categories: 
+- 前端
+- JavaScript
 tags:
   - JavaScript
   - Web
@@ -47,7 +49,9 @@ JavaScript 必须写在 `<script>` 里
 
 ## 变量
 
-用 var 声明变量，关键字`var` 也可以省略。但省略就是全局变量，所以不建议省略。
+用 var 或 let 声明变量，关键字`var` 也可以省略。但省略就是全局变量，所以不建议省略。
+
+在函数中声明 var 变量，变量在整个函数中都可见（即使是声明语句之前），建议使用 let 。
 
 ```html
 <script>
@@ -318,3 +322,9 @@ getDate:function (strDate) {
     return d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate() + ' ' + d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds();
 }
 ```
+
+---
+
+参考：
+
+- [JavaScript教程](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript)

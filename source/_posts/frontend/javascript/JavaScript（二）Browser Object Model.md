@@ -1,6 +1,8 @@
 ---
 title: JavaScript（二）Browser Object Model
-categories: 前端
+categories: 
+- 前端
+- JavaScript
 tags:
   - JavaScript
   - Web
