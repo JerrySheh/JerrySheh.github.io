@@ -420,5 +420,12 @@ def
 
 ---
 
+# HTML页面调试
+
+1. Chrome F12 开发者选项
+2. 上传你的HTML页面到 https://validator.w3.org/ 
+
+---
+
 
 - 参考：[Basic HTML Codes for Beginners](https://www.websiteplanet.com/blog/html-guide-beginners/)
