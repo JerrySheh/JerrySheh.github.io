@@ -45,7 +45,7 @@ spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
 
 ```java
 Map<String, Object> resultMap = dao.getSomething(param);
-Date d = resultMap.get("time");
+Date d = (Date) resultMap.get("time");
 ```
 
 此时会抛出一个异常
@@ -59,7 +59,7 @@ java.time.LocalDateTime cannot be cast to java.util.Date
 解决办法是应用程序使用 LocalDateTime 来接收：
 
 ```java
-LocalDateTime d = resultMap.get("time");
+LocalDateTime d = (LocalDateTime) resultMap.get("time");
 ```
 
 或者在 Mybatis 的 xml 中配置 resultMap ，将指定字段映射为 Date 类型
@@ -89,7 +89,7 @@ LocalDateTime d = resultMap.get("time");
 
 > CST 可以表示好多种时间，例如中国标准时间、美国中部时间、古巴标准时间、澳大利亚中部时间
 
-MySQL Connector/J 在 (8.0.23)[https://dev.mysql.com/doc/relnotes/connector-j/8.0/en/news-8-0-23.html] 版本中修复了这个问题，所以我们直接用高于 8.0.22 版本的驱动即可避免。
+MySQL Connector/J 在 [8.0.23](https://dev.mysql.com/doc/relnotes/connector-j/8.0/en/news-8-0-23.html) 版本中修复了这个问题，所以我们直接用高于 8.0.22 版本的驱动即可避免。
 
 ---
 
