@@ -217,7 +217,7 @@ Bryce's grandfather says about Juli, "Some of us get dipped in flat, some in sat
 
  做一份真正有用的工作，然后休息、享受自然、读书、音乐、爱周围的人。这就是我对幸福的诠释。
 
-> 句子出自列夫托尔斯泰的《家挺与幸福》，在电影《荒野求生》（Into the wild）中被引用。
+> 句子出自列夫托尔斯泰的《家庭与幸福》，在电影《荒野求生》（Into the wild）中被引用。
 
 
 ---
