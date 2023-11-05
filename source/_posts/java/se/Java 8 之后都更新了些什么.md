@@ -10,7 +10,7 @@ abbrlink: 131b8819
 
 ## 前言
 
-我最开始学 Java 是在 2017 年，那时候距离 Java 8 正式发布（2014年）已经过去3年了，因此我是直接从 Java 8 开始学习的。然而时至今日（2023年），我在网上仍然可以看到不少文章在介绍 “Java 新特性 - Stream、Lambda表达式”，拜托，那些都是快10年前的东西了，但还是有好多固执地认为这些就是 Java 的最新特性。
+我最开始学 Java 是在 2017 年，那时候距离 Java 8 正式发布（2014年）已经过去3年了，因此我是直接从 Java 8 开始学习的。然而时至今日（2023年），我在网上仍然可以看到不少文章在介绍 “Java 新特性 - Stream、Lambda表达式”，拜托，那些都是快10年前的东西了，但还是有好多人固执地认为这些就是 Java 的最新特性。
 
 这几年在公司里也见到不少项目仍然使用 Java 6，到了不得不升的时刻，也只敢升到 Java 8，而不敢进一步往上升了。很多程序员依然遵循着「你发任你发，我用Java 8」的原则。看来大家对 Java 8 真是爱之入骨。
 
@@ -222,9 +222,11 @@ if (person instanceof Student) {
 if (person instanceof Student student) {
     student.say();
 }
+```
 
 后面可拼 `&&` 联合判断：
 
+```java
 if (person instanceof Student student && "jerry".equals(student.getName())) {
     student.say();
 }
