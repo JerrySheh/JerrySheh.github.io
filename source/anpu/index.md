@@ -3,8 +3,6 @@ title: 安溥 - 與你握手
 comments: false
 ---
 
-[安溥 anpu - 官方網站](https://www.anpu-oystermusic.com/)
-
 
 ![](../../../../images/anpu_somnolence.jpg)
 
