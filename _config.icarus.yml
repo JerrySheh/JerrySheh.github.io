@@ -66,7 +66,7 @@ article:
         clipboard: true
         fold: unfolded
     readtime: false
-    update_time: true
+    update_time: false
 search:
     type: insight
 sidebar:
