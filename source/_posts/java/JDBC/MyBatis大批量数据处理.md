@@ -48,7 +48,7 @@ while(rs.next()){
 
 ## MySQL 流查询
 
-查阅 MySQL 的[官方文档](https://dev.mysql.com/doc/connector-j/5.1/en/connector-j-reference-implementation-notes.html)，里面提到：
+查阅 MySQL 的[官方文档](https://dev.mysql.com/doc/connector-j/en/connector-j-reference-implementation-notes.html)，里面提到：
 
 > By default, ResultSets are completely retrieved and stored in memory. In most cases this is the most efficient way to operate and, due to the design of the MySQL network protocol, is easier to implement. If you are working with ResultSets that have a large number of rows or large values and cannot allocate heap space in your JVM for the memory required, you can tell the driver to stream the results back one row at a time.
 >
