@@ -29,6 +29,14 @@ const sentencesNote = defineNoteConfig({
       '2019/',
       '2018/',
     ]
+  },
+  {
+    text: '书·影·音',
+    prefix: '/sentences/',
+    items: [
+      'xiaomi-thinking/',
+      'reply1994/'
+    ]
   }
   ]
 })
