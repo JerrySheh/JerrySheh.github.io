@@ -89,6 +89,12 @@ const dbNote = defineNoteConfig({
   sidebar: 'auto'
 })
 
+const interviewNote = defineNoteConfig({
+  dir: 'interview',
+  link: '/interview/',
+  sidebar: 'auto'
+})
+
 export const notes = defineNotesConfig({
   dir: '/notes/',
   link: '/',
@@ -103,6 +109,7 @@ export const notes = defineNotesConfig({
     dataStructreSystemNote,
     patternDesignSystemNote,
     gitNote,
-    dbNote
+    dbNote,
+    interviewNote
   ],
 })
