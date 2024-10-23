@@ -154,7 +154,7 @@ todo
 ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
 ```
 
-applicationContext 会去寻找 applicationContext.xml 配置文件，里面有许多 <bean> 的定义，遇到 <bean> 时就创建对象。
+applicationContext 会去寻找 applicationContext.xml 配置文件，里面有许多 `<bean>` 的定义，遇到 `<bean>` 时就创建对象。
 
 当我们给 bean 加上 `lazy-init="true"` 属性
 
