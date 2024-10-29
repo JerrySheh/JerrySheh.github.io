@@ -22,7 +22,7 @@ export const navbar = defineNavbarConfig([
     items: [
            { text: 'Java', link: '/java/' }, 
            { text: '计算机网络', link: '/networking/vhlkdsuw/' }, 
-           { text: '数据结构', link: '/data-structure/leu82fhp/' }, 
+           { text: '数据结构与算法', link: '/data-structure/leu82fhp/' }, 
            { text: '操作系统', link: '/computer-system/lbudvq6j/' }, 
            { text: '数据库', link: '/db/d7ls353u/' }, 
            { text: '信息安全', link: '/article/ibzm0tem/' }, 
