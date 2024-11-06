@@ -24,9 +24,9 @@ permalink: /git/
 
 ---
 
-# git使用流程
+## git使用流程
 
-## 初始化
+### 初始化
 
 于一个目录下，初始化git
 
@@ -34,7 +34,7 @@ permalink: /git/
 git init
 ```
 
-## add
+### add
 
 新建/修改文件后，把修改内容 add 到 git 上面
 
@@ -42,7 +42,7 @@ git init
 git add .
 ```
 
-### 三个 add 的区别
+#### 三个 add 的区别
 
 - `git add . `
  监控工作区的状态树，将所有变化提交到暂存区，包括 modified 以及 new ，但不包括被删除的文件
@@ -54,7 +54,7 @@ git add .
 上面两个功能的合集（git add --all的缩写）
 
 
-## commit 提交到仓库
+### commit 提交到仓库
 
 ```shell
 git commit -m "modified"
@@ -62,15 +62,15 @@ git commit -m "modified"
 
 ---
 
-# 关联和同步
+## 关联和同步
 
-## 关联远程仓库
+### 关联远程仓库
 
 ```
 git remote add origin git@github.com:JerrySheh/repository_name.git
 ```
 
-## 推送到远程
+### 推送到远程
 
 第一次推送，加 -u 参数
 
@@ -78,7 +78,7 @@ git remote add origin git@github.com:JerrySheh/repository_name.git
 git push origin branch_name
 ```
 
-## 同步
+### 同步
 
 如果远程已经有文件，需要先 pull
 
@@ -86,7 +86,7 @@ git push origin branch_name
 git pull origin master
 ```
 
-## 从远程仓库克隆
+### 从远程仓库克隆
 
 ```
 git clone git@github.com:jerrysheh/helloworld
@@ -94,7 +94,7 @@ git clone git@github.com:jerrysheh/helloworld
 
 ---
 
-## diff
+### diff
 
 `git diff  filepath` 工作区与暂存区比较
 
@@ -108,7 +108,7 @@ git clone git@github.com:jerrysheh/helloworld
 
 ---
 
-# git 分支管理
+## git 分支管理
 
 
 新建并切换到分支
@@ -131,7 +131,7 @@ git push origin -d branch_name
 
 ---
 
-# git 撤销
+## git 撤销
 
 查看更改日志，找到你想返回去的commit_id （一般第一条是你搞错了的，第二条就是上次你想返回去的id）
 
@@ -159,7 +159,7 @@ git push --force
 
 ---
 
-# 在新电脑配置git，并连接到githiub
+## 在新电脑配置git，并连接到githiub
 
 设置 git 的username 和 usermail
 
@@ -207,7 +207,7 @@ ERROR: Hi Jerrysheh! You’ve successfully authenticated, but GitHub does not pr
 
 ---
 
-# fork
+## fork
 
 一般如果要参与开源项目，都是先 fork 别人的项目到自己的github，然后通过 `git clone` 自己的仓库克隆到本地进行修改。修改完毕后，通过`pull request`向原作者提交合并申请。
 
@@ -268,7 +268,7 @@ $ git push -u origin master -f –强制提交
 
 ---
 
-# LF/CRLF
+## LF/CRLF
 
 LF will be replaced by CRLF
 
@@ -280,25 +280,25 @@ git config –global core.autocrlf false
 
 ---
 
-# 代理
+## 代理
 
 ```shell
-# 设置sock5代理
+## 设置sock5代理
 git config --global http.proxy 'socks5://127.0.0.1:1080'
 git config --global https.proxy 'socks5://127.0.0.1:1080'
 
-# 设置http代理
+## 设置http代理
 git config --global https.proxy http://127.0.0.1:1080
 git config --global https.proxy https://127.0.0.1:1080
 
-# 取消代理
+## 取消代理
 git config --global --unset http.proxy
 git config --global --unset https.proxy
 ```
 
 ---
 
-# IDEA git项目颜色含义
+## IDEA git项目颜色含义
 
 - 绿色： 创建了仓库没有的新文件，还未提交
 - 蓝色： 仓库已有的文件，被修改了，还未提交
@@ -309,7 +309,7 @@ git config --global --unset https.proxy
 
 ---
 
-# git stash 暂存
+## git stash 暂存
 
 有时候我们在本地写了一些代码，之后可能紧急要切换到另一个分支做一些修复，可以先将本地变更的代码“暂存”，稍后再在任意分支恢复。
 
