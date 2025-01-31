@@ -21,6 +21,7 @@ const sentencesNote = defineNoteConfig({
     text: '醍醐灌顶',
     prefix: '/sentences/',
     items: [
+      '2025/',
       '2024/',
       '2023/',
       '2022/',
