@@ -8,7 +8,7 @@ createTime: 2025/02/12 19:52:01
 permalink: /article/a16tm5fc/
 ---
 
-DeepSeek 火得一沓糊涂，公司周一已经部署了内网的 DeepSeek-R1，电梯里也都听到大家在各种讨论。看来 DeepSeek 已经掀起了一股狂热。但是等等，你们在说的 14B、32B、671B、满血、蒸馏，还有什么硅基流动，Qwen、O1、Ollama 都是些啥意思？我怎么一个字也听不懂，赶紧补补知识。
+DeepSeek 火得一塌糊涂，公司周一已经部署了内网的 DeepSeek-R1，电梯里也都听到大家在各种讨论。看来 DeepSeek 已经掀起了一股狂热。但是等等，你们在说的 14B、32B、671B、满血、蒸馏，还有什么硅基流动，Qwen、O1、Ollama 都是些啥意思？我怎么一个字也听不懂，赶紧补补知识。
 
 <!-- more -->
 
@@ -20,7 +20,7 @@ DeepSeek 火得一沓糊涂，公司周一已经部署了内网的 DeepSeek-R1�
 
 以 DeepSeek 为例，因为 DeepSeek 官网经常服务器繁忙，有些人就想通过第三方API去访问或者尝试本地部署。
 
-对于第三方API，很多人选择[硅基流动（SiliconFlow）](https://siliconflow.cn/zh-cn/)这个平台，在这上面购买了tokens之后就可以使用其API去访问，本质上等于通过API访问平台方帮你搭好的模型。硅基流动可以理解为是模型提供方，类似的平台还有各个AI公司官方，如 OpenAI API、Google Gemini API、DeepSeek API 等。
+对于第三方API，很多人选择[硅基流动（SiliconFlow）](https://siliconflow.cn/zh-cn/)这个平台，在这上面购买了tokens之后就可以使用其API去访问，本质上等于通过API访问平台方帮你搭好的模型。硅基流动可以理解为是模型提供方（服务商），类似的平台还有各个AI公司官方，如 OpenAI API、Google Gemini API、DeepSeek API 等，以及其他的服务商。购买服务后，通常他们会给你一个API KEY，需要配合客户端使用。
 
 有一些大模型开源（如DeepSeek-R1），我们可以免费下载到本地部署运行，而另一些不开源（如OpenAI的o1），这种就只能购买他们的服务或API。开源的通常可以到 github 上面找到开源项目，但是下载一般都会放在一个叫 [huggingface](huggingface.co) 的网站，可以说这个网站是 AI 界的 github 了。
 
@@ -28,7 +28,7 @@ DeepSeek 火得一沓糊涂，公司周一已经部署了内网的 DeepSeek-R1�
 
 而本地部署要如何部署呢？就得借助 [Ollama](ollama.com) 这样的开源工具应用，用来在本地运行和部署大语言模型，Ollama安装简单但交互简陋（命令行）。而 [LM Studio](https://lmstudio.ai/) 是另一个界面友好型的运行本地大模型的应用。
 
-无论是本地部署也好，API也好，我们都可以借助客户端工具去连接模型。ChatBox 和 Cherry-Studio 就是这样的工具，他们提供了友好的界面。
+无论是本地部署也好，API也好，我们都可以借助客户端工具去连接模型。[ChatBox](chatboxai.app) 和 [Cherry Studio](cherry-ai.com/) 就是这样的工具，他们提供了友好的界面。
 
 你可能在下载模型时看到 MoE 这样的字眼，这是指模型的架构，全称是Mixture of Experts（混合专家模型）。像 DeepSeek-R1 和 GPT-4 这样的模型就是 MoE 的架构，擅长推理和逻辑。与MoE相对应的概念是稠密（Dense）模型，可以理解为它是一个“通才”模型。
 
