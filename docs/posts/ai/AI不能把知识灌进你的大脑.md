@@ -2,7 +2,6 @@
 title: AI不能把知识灌进你的大脑
 categories:
   - 计算机
-  - 杂文
 tags:
   - 人工智能
 createTime: 2025/02/09 23:00:46
@@ -19,7 +18,7 @@ permalink: /article/v8obxz21/
 
 感兴趣的可以看看下面这篇文章，介绍了 DeepSeek R1 或 OpenAI o1 这样的基于思维链（Chain of Thought）的推理模型的特点。
 
-[如何更好的为 DeepSeek R1 或 OpenAI o1 这样的推理模型写提示词？](https://baoyu.io/translations/prompt-engineering-for-openais-o1-and-o3-mini-reasoning-models) 这是思维链（Chain of Thought）
+[如何更好的为 DeepSeek R1 或 OpenAI o1 这样的推理模型写提示词？](https://baoyu.io/translations/prompt-engineering-for-openais-o1-and-o3-mini-reasoning-models) 
 
 ## AI不能把知识灌进你的大脑
 
