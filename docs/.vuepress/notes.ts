@@ -36,7 +36,8 @@ const sentencesNote = defineNoteConfig({
     prefix: '/sentences/',
     items: [
       'xiaomi-thinking/',
-      'reply1994/'
+      'reply1994/',
+      'dreamed-in-chinese/'
     ]
   }
   ]

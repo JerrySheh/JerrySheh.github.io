@@ -14,7 +14,7 @@ permalink: /sentences/
 
 对我有所启发的内容
 
-点击左侧边栏进入
+[点击进入](/sentences/2025/)
 
 </font>
 </div>
