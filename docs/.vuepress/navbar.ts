@@ -29,6 +29,7 @@ export const navbar = defineNavbarConfig([
            { text: '设计模式', link: '/pattern-design/strategy/' }, 
            { text: '正则表达式', link: '/regular/' }, 
            { text: 'git', link: '/git/' }, 
+           { text: '面试题', link: '/interview/' },
          ]
   },
   { text: '安溥·與你握手', link: '/anpu/' },
