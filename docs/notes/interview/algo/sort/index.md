@@ -1,7 +1,7 @@
 ---
 title: 排序算法题思路
 createTime: 2022/04/16 22:36:50
-permalink: /interview/qhrhe98d/
+permalink: /interview/algo/sort/
 ---
 
 ## 1. 选择排序、冒泡排序、插入排序的区别

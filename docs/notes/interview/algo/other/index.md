@@ -2,7 +2,7 @@
 title: 其他算法题思路
 comments: false
 createTime: 2024/10/23 23:28:04
-permalink: /interview/oiugzsjm/
+permalink: /interview/algo/other/
 ---
 
 ## 1. 找出1到1000之间的素数

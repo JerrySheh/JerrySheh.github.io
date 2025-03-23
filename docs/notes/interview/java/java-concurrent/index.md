@@ -8,7 +8,22 @@ permalink: /interview/java/java-concurrent/
 
 1. 继承 Thread 类
 2. 实现 Runnable 方法（推荐）
-3. 实现 Callable 方法
+3. 实现 Callable 方法 + 结合 Future 和 线程池 （推荐）
+
+```java
+Thread myThread = new myThread();
+myThread.start();
+
+MyRunnable myRun = new MyRunnable();
+Thread thread = new Thread(myRun， "线程名字");
+thread.start();
+```
+
+## 你怎么理解线程安全？
+
+当多个线程访问某个对象时，不管运行时环境采用何种调度方式或者如何交替执行，并且调用方不需要任何额外的同步操作，调用这个对象的行为都能获得正确的结果，那么就称这个对象是线程安全的。
+
+——《Java并发编程实战》的作者Brain Goetz
 
 ## Runnable 和 Callable 创建线程有什么区别？
 
@@ -62,13 +77,14 @@ concurrentHashMap是线程安全的 hashmap 。在 jdk 1.7 采用分段锁保证
 
 不能。因为当我们去 `get(key)` 的时候，如果得到一个 null ，无法判断这个 key 究竟是没有做过映射，还是之前 `put(key)` 时 value 就是为 null。
 
-HashMap 允许 null 是单线程场景下的妥协，依赖开发者自行规避歧义。
+ConcurrentHashMap 禁止 null 是并发场景下的必然选择，通过严格约束保证安全性和代码清晰性。
 
 ### 那为什么 HashMap 的 key 可以为 null？
 
 因为 HashMap 不是为多线程设计的，可以用 `contains(key)` 来判断 key 是否做过映射。而 concurrentHashMap 因为支持并发，在调用 `m.contains(key)` 和 `m.get(key)` 时， m 的值可能被别的线程修改了。
 
-ConcurrentHashMap 禁止 null 是并发场景下的必然选择，通过严格约束保证安全性和代码清晰性。
+HashMap 允许 null 是单线程场景下的妥协，依赖开发者自行规避歧义。
+
 
 ## CopyOnWriteArrayList
 

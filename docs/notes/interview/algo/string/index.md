@@ -1,7 +1,7 @@
 ---
 title: 字符串
 createTime: 2018/10/19 21:13:51
-permalink: /interview/8d6n5uoo/
+permalink: /interview/algo/string/
 ---
 
 ## 1. 三步反转

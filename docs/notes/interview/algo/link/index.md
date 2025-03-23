@@ -2,7 +2,7 @@
 title: 链表题思路
 comments: false
 createTime: 2024/10/23 23:28:04
-permalink: /interview/ru4fi6m4/
+permalink: /interview/algo/link/
 ---
 
 链表操作的两个技巧：
