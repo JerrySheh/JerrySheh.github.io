@@ -38,7 +38,8 @@ const sentencesNote = defineNoteConfig({
       'xiaomi-thinking/',
       'reply1994/',
       'orebana/',
-      'dreamed-in-chinese/'
+      'dreamed-in-chinese/',
+      'All-the-Long-Nights/'
     ]
   }
   ]
