@@ -39,7 +39,8 @@ const sentencesNote = defineNoteConfig({
       'reply1994/',
       'orebana/',
       'dreamed-in-chinese/',
-      'All-the-Long-Nights/'
+      'All-the-Long-Nights/',
+      'mao-reference-archive/'
     ]
   }
   ]
