@@ -17,7 +17,7 @@ export default defineUserConfig({
     hostname: 'jerrysheh.com',
     notes,
     footer: {copyright: `
-        Copyright © 2017-2024 Jerry 
+        Copyright © 2017-2025 Jerry 
         访客人数：<span id="busuanzi_value_site_uv" </span>
       `},
     blog: {
