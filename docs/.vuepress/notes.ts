@@ -41,7 +41,8 @@ const sentencesNote = defineNoteConfig({
       'orebana/',
       'dreamed-in-chinese/',
       'All-the-Long-Nights/',
-      'mao-reference-archive/',
+      'mao-reference-archive-1/',
+      'mao-reference-archive-2/',
       'mafia-definitive-edition/'
     ]
   }
@@ -84,11 +85,11 @@ const patternDesignSystemNote = defineNoteConfig({
   sidebar: 'auto'
 })
 
-const gitNote = defineNoteConfig({
-  dir: 'git',
-  link: '/git/',
-  sidebar: 'auto'
-})
+// const gitNote = defineNoteConfig({
+//   dir: 'git',
+//   link: '/git/',
+//   sidebar: 'auto'
+// })
 
 const dbNote = defineNoteConfig({
   dir: 'db',
@@ -115,7 +116,7 @@ export const notes = defineNotesConfig({
     computerSystemNote,
     dataStructreSystemNote,
     patternDesignSystemNote,
-    gitNote,
+   // gitNote,
     dbNote,
     interviewNote
   ],
