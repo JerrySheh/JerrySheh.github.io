@@ -35,14 +35,17 @@ const sentencesNote = defineNoteConfig({
     text: '书·影·音',
     prefix: '/sentences/',
     items: [
-      'xiaomi-thinking/',
-      'leijun-talking-2025/',
-      'reply1994/',
-      'orebana/',
-      'dreamed-in-chinese/',
-      'All-the-Long-Nights/',
       'mao-reference-archive-1/',
       'mao-reference-archive-2/',
+      'xiaomi-thinking/',
+      'leijun-talking-2025/',
+      'dreamed-in-chinese/',
+      'me-and-ditan/',
+
+      'reply1994/',
+      'orebana/',
+      'All-the-Long-Nights/',
+
       'mafia-definitive-edition/'
     ]
   }
