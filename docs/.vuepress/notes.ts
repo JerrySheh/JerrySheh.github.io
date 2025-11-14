@@ -39,8 +39,10 @@ const sentencesNote = defineNoteConfig({
       'mao-reference-archive-2/',
       'xiaomi-thinking/',
       'leijun-talking-2025/',
-      'dreamed-in-chinese/',
+
+      'just-for-fun/',
       'me-and-ditan/',
+      'dreamed-in-chinese/',
 
       'reply1994/',
       'orebana/',
