@@ -32,7 +32,7 @@ const sentencesNote = defineNoteConfig({
     ]
   },
   {
-    text: '书·影·音',
+    text: '书·影·音·游',
     prefix: '/sentences/',
     items: [
       'mao-reference-archive-1/',
@@ -41,6 +41,7 @@ const sentencesNote = defineNoteConfig({
       'leijun-talking-2025/',
 
       'just-for-fun/',
+      'hackers-and-painters/',
       'me-and-ditan/',
       'dreamed-in-chinese/',
 
