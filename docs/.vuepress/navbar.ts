@@ -20,10 +20,11 @@ export const navbar = defineNavbarConfig([
   {
     text: '计算机',
     items: [
-           { text: 'Java', link: '/java/' }, 
+           { text: '计算机术语速查手册', link: '/computer-science-quick-reference/' }, 
+           { text: 'Java', link: '/java/kk3w1ne4/' }, 
            { text: '计算机网络', link: '/networking/vhlkdsuw/' }, 
            { text: '数据结构与算法', link: '/data-structure/leu82fhp/' }, 
-           { text: '操作系统', link: '/computer-system/lbudvq6j/' }, 
+           { text: '计算机系统', link: '/computer-system/lbudvq6j/' }, 
            { text: '数据库', link: '/db/d7ls353u/' }, 
            { text: '信息安全', link: '/article/ibzm0tem/' }, 
            { text: '设计模式', link: '/pattern-design/strategy/' }, 
@@ -33,10 +34,8 @@ export const navbar = defineNavbarConfig([
          ]
   },
   { text: '安溥·與你握手', link: '/anpu/' },
+  { text: '书·影·音·游', link: '/notes/' },
   { text: '醍醐灌顶', link: '/sentences/' },
   { text: '关于', link: '/about/' },
-  // {
-  //   text: '笔记',
-  //   items: [{ text: '示例', link: '/notes/demo/README.md' }]
-  // },
+
 ])

@@ -1,15 +1,12 @@
 import { defineThemeConfig } from 'vuepress-theme-plume'
 import { navbar } from './navbar'
-import { notes } from './notes'
+import { computerScienceNotes } from './collections'
 
 /**
  * @see https://theme-plume.vuejs.press/config/basic/
  */
 export default defineThemeConfig({
   logo: '/images/blog/ava.png',
-  // your git repo url
-  docsRepo: '',
-  docsDir: 'docs',
 
   appearance: true,
 
@@ -23,7 +20,6 @@ export default defineThemeConfig({
   },
 
   navbar,
-  notes,
   social: [
     { icon: 'github', link: 'https://github.com/jerrySheh' },
 
