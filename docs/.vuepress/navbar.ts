@@ -13,8 +13,9 @@ export const navbar = defineNavbarConfig([
   {
     text: 'crash course',
     items: [
-           { text: 'Computer Science', link: '/crash-course/computer-science/1/' }, 
-           { text: 'Economics', link: '/crash-course/economics/1/' }, 
+           { text: 'Computer Science（计算机科学）', link: '/crash-course/computer-science/1/' }, 
+           { text: 'Artificial Intelligence（人工智能）', link: '/crash-course/ai/1/' }, 
+           { text: 'Economics（经济学）', link: '/crash-course/economics/1/' }, 
          ]
   },
   {

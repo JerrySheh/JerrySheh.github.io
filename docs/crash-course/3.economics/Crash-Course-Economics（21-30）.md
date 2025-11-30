@@ -106,7 +106,7 @@ permalink: /crash-course/economics/3/
 
 沉没成本是已经花出去无法再收回的成本。**经济学家强调做未来决策时不应该考虑沉没成本（沉默成本不参与重大决策）**，我们应该把焦点放在未来的收益和成本上面。 
 
-![理解经济学](/images/crachcourseeco/understanding_economics.jpg)
+![理解经济学](/images/crashcourseeco/understanding_economics.jpg)
 
 
 ---
@@ -164,7 +164,7 @@ permalink: /crash-course/economics/3/
 
 经济学家用 **报酬矩阵** 来解释寡头和博弈论。最理想的情况在左上角，但是某些企业为了自己的利益最大化，调整价格，其他企业跟进决策（叫做占优策略），于是报酬落到非左上角的区间。即便企业之间有勾结，但也不能排除共识背后的做“小动作”的动机。所以勾结是不长久的，**只有当共识得到监督和严格执行时，才能维持下去**。
 
-![报酬矩阵](/images/crachcourseeco/payoff_matrix.png)
+![报酬矩阵](/images/crashcourseeco/payoff_matrix.png)
 
 总而言之，那些不与时俱进，慢于适应的人，会被市场淘汰，这就是博弈。虽说竞争总有输赢，但健康的竞争促进创新，最终使我们都更加受益。
 
