@@ -1,17 +1,16 @@
 ---
 title: Linux内核模块编程 HelloWorld
-comments: true
 categories: Linux
 tags:
   - Linux
 abbrlink: 75b0adbf
 createTime: 2018/03/07 13:03:26
-permalink: /article/19h8p8i9/
+permalink: /computer-system/19h8p8i9/
 ---
 
-# 微内核和宏内核
+## 微内核和宏内核
 
-## 微内核
+### 微内核
 
 内核中只有最基本的调度、内存管理。其他的比如驱动、文件系统等都是用户态的守护进程去实现的。比如Windows NT、OS X
 
@@ -19,7 +18,7 @@ permalink: /article/19h8p8i9/
 
 缺点是效率低。典型代表QNX，QNX的文件系统是跑在用户态的进程，称为resmgr的东西，是订阅发布机制，文件系统的错误只会导致这个守护进程挂掉。
 
-## 宏内核
+### 宏内核
 
 简单来说，就是把很多东西都集成进内核，例如Linux内核，除了最基本的进程、线程管理、内存管理外，文件系统，驱动，网络协议等等都在内核里面。优点是效率高。缺点是稳定性差，开发过程中的bug经常会导致整个系统挂掉。做驱动开发的应该经常有按电源键强行关机的经历。
 
@@ -27,7 +26,7 @@ permalink: /article/19h8p8i9/
 
 ---
 
-# 内核模块
+## 内核模块
 
 由于 Linux 内核是宏内核，集成性比较高，随着内核版本的迭代，内核变得非常大（Linux内核约50M），我们想定制自己的内核时，需要整个重新编译，比较繁琐。而且，定制内核时，有些功能我们是不需要的。
 
@@ -41,15 +40,15 @@ LKM主要用于：设备驱动、文件系统驱动和系统调用。
 
 ---
 
-# 编译LKM
+## 编译LKM
 
-## 安装C编译器和Linux内核头文件
+### 安装C编译器和Linux内核头文件
 
 ```
 sudo apt-get install build-essential linux-headers-$(uname -r)
 ```
 
-## Hello World内核模块代码（hello.c）
+### Hello World内核模块代码（hello.c）
 
 ```c
 #include <linux/module.h>     /* 模块头文件，必不可少 */
@@ -86,7 +85,7 @@ module_exit(hello_end);
 * **module_init** 定义了模块的入口函数，在模块加载 insmoded (插入模块)时执行
 * **module_exit** 定义了模块的退出函数，在模块卸载 rmmoded （移除模块）时执行
 
-## 创建Makefile
+### 创建Makefile
 
 ```
 obj-m = hello.o
@@ -94,10 +93,10 @@ all:
     make -C /lib/modules/$(shell uname -r)/build/ M=$(PWD) modules
 clean:
     make -C /lib/modules/$(shell uname -r)/build M=$(PWD) clean
-# make命令前是tab，不是空格
+## make命令前是tab，不是空格
 ```
 
-## 编译
+### 编译
 
 make命令
 
@@ -119,7 +118,7 @@ make[1]: Entering directory '/usr/src/linux-headers-4.13.0-31-generic'
 make[1]: Leaving directory '/usr/src/linux-headers-4.13.0-31-generic'
 ```
 
-## 查看
+### 查看
 
 使用`modinfo hello.ko`来查看模块信息
 
@@ -129,7 +128,7 @@ make[1]: Leaving directory '/usr/src/linux-headers-4.13.0-31-generic'
 
 使用`sudo rmmod hello`来卸载模块
 
-## 输出
+### 输出
 
 使用`tail /var/log/kern.log`来查看模块的输出
 
@@ -151,7 +150,7 @@ Mar  7 12:56:41 ubuntu kernel: [ 1170.100760] Hello World
 
 可以使用`tail -f /var/log/kern.lo`来动态监控内核的输出
 
-## 作为字符型驱动
+### 作为字符型驱动
 
 
 在 insmod 的时候把设备的主设备号打印出来。

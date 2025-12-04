@@ -6,7 +6,7 @@ tags:
   - Linux
 abbrlink: bbe22ae6
 createTime: 2017/11/21 08:10:47
-permalink: /article/q5gxq2x5/
+permalink: /computer-system/q5gxq2x5/
 ---
 
 假设我现在有3个文件，分别是：

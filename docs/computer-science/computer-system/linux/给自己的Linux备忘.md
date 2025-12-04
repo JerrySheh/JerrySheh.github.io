@@ -5,7 +5,7 @@ tags:
   - Linux
 abbrlink: ee3d8fa1
 createTime: 2017/09/24 14:28:00
-permalink: /article/1uzohr8f/
+permalink: /computer-system/1uzohr8f/
 ---
 
 Linux 学习任重而道远，此文记录了我在 Linux 学习中需要知道或反复查阅使用的命令、表达式等内容，持续更新。

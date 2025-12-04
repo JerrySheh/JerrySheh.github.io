@@ -6,14 +6,14 @@ tags:
   - linux
 abbrlink: 10e2f7a0
 createTime: 2018/04/11 13:26:40
-permalink: /article/ok9fv3qx/
+permalink: /computer-system/ok9fv3qx/
 ---
 
 由于课程需要，需要在 Linux 环境下开发 QT 程序，因此开一篇文章来记录QT的知识点。
 
 <!-- more -->
 
-# Ubuntu 16.04 QT安装
+## Ubuntu 16.04 QT安装
 
 由于实验室和课程安排都是基于 QT4，因此这里安装QT4
 
@@ -24,9 +24,9 @@ sudo apt install qtcreator
 
 ---
 
-# QT 基本操作
+## QT 基本操作
 
-## 屏幕自适应
+### 屏幕自适应
 
 先布局一个 layout，然后在全局框里，设置 layout
 
@@ -39,13 +39,13 @@ resize(screenRect.width(),screenRect.height());
 this->showMaximized();
 ```
 
-## 显示图片
+### 显示图片
 
 1. 布局一个 label
 2. 头文件添加 `#include <QPixmap>`
 3. 构造函数添加 `ui->label->setPixmap("0.png")`
 
-## 定时器
+### 定时器
 
 1. 主类声明一个指针 public: 下， `QTimer *display_timer;`
 2. 头文件添加 `#include <QTimer>`
@@ -76,17 +76,17 @@ void MainWindow::doChange(){
 
 ---
 
-# 实验室环境QT交叉编译
+## 实验室环境QT交叉编译
 
 将QT程序编译成实验室开发板 ARM-linux 下能执行的程序。
 
-## 将工程文件拷贝到编译目录
+### 将工程文件拷贝到编译目录
 
 ```
 cp myproject /usr/local/Trolltech/QtEmbedded-4.8.5-arm/examples/ -a
 ```
 
-## 执行 qmake
+### 执行 qmake
 
 这一步主要是生成 Makefile
 
@@ -96,7 +96,7 @@ cp myproject /usr/local/Trolltech/QtEmbedded-4.8.5-arm/examples/ -a
 qmake-arm
 ```
 
-## 执行 make
+### 执行 make
 
 ```
 make
@@ -106,7 +106,7 @@ make完成后，可执行文件就生成了。通过串口传输到ARM实验箱�
 
 串口连接过程略。
 
-## 串口:本地 -> ARM
+### 串口:本地 -> ARM
 
 ```
 rx myAPP
@@ -114,7 +114,7 @@ rx myAPP
 
 选择 传输 -> 发生 Xmodem
 
-## 解决ARM实验箱的坑
+### 解决ARM实验箱的坑
 
 - kill掉以下三个进程
 ```
@@ -126,7 +126,7 @@ rx myAPP
 - 初始化环境变量
 
 ```
-. setqt4env  # 不要漏了中间的空格
+. setqt4env  ## 不要漏了中间的空格
 ```
 
 - 运行

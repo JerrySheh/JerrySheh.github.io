@@ -6,7 +6,7 @@ tags:
   - Linux
 abbrlink: 264103f9
 createTime: 2017/11/28 09:15:30
-permalink: /article/vzxtnfr7/
+permalink: /computer-system/vzxtnfr7/
 ---
 
 
@@ -27,9 +27,9 @@ permalink: /article/vzxtnfr7/
 
 ---
 
-# makefile的四种规则写法
+## makefile的四种规则写法
 
-## 一、显式规则
+### 一、显式规则
 
 makefile的规范：
 
@@ -72,7 +72,7 @@ clean :
 
 ---
 
-## 二、常量替换类似于C语言的宏定义
+### 二、常量替换类似于C语言的宏定义
 
 为了方便，我们可以这样写makefile：
 
@@ -102,7 +102,7 @@ clean :
 
 ---
 
-## 三、隐式规则
+### 三、隐式规则
 
 
 还可以再精简：
@@ -127,7 +127,7 @@ clean :
 ---
 
 
-## 四、shell + 隐式规则
+### 四、shell + 隐式规则
 
 结合shell命令，使用函数完成makefile，使其能够自动寻找目录下h文件和c文件，同时把c文件替换成o文件共object常量使用。
 
@@ -161,7 +161,7 @@ clean:
 ---
 
 
-# gcc常用参数
+## gcc常用参数
 
 1. gcc  -c  main.c  -o  main.o   编译main.c,生成main.o目标文件
 2. gcc  test1.o  test2.o  -o  test  链接两个目标文件test1.o和test2.o生成可执行文件test
