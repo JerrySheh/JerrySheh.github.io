@@ -7,7 +7,7 @@ import busuanzi from 'busuanzi.pure.js'
 export default defineUserConfig({
   base: '/',
   lang: 'zh-CN',
-  title: 'Jerry',
+  title: 'Jerry的知识索引',
   description: '车顶上绑着飞机发动机',
 
 bundler: viteBundler({
@@ -73,7 +73,7 @@ bundler: viteBundler({
         dir: 'sentences',
         linkPrefix: '/sentences/',
         title: '醍醐灌顶',
-        sidebar: 'auto', 
+        sidebar: ['2025', '2024', '2023', '2022', '2021', '2020', '2019', '2018'],
       },
 
       {
