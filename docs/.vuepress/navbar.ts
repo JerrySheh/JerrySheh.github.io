@@ -21,22 +21,27 @@ export const navbar = defineNavbarConfig([
   {
     text: '计算机',
     items: [
-           { text: '计算机术语速查手册', link: '/computer-science-quick-reference/' }, 
-           { text: 'Java', link: '/java/kk3w1ne4/' }, 
-           { text: '计算机网络', link: '/networking/vhlkdsuw/' }, 
-           { text: '数据结构与算法', link: '/data-structure/leu82fhp/' }, 
-           { text: '计算机系统', link: '/computer-system/lbudvq6j/' }, 
-           { text: '数据库', link: '/db/d7ls353u/' }, 
-           { text: '信息安全', link: '/article/ibzm0tem/' }, 
-           { text: '设计模式', link: '/pattern-design/strategy/' }, 
-           { text: '正则表达式', link: '/regular/' }, 
-           { text: 'git', link: '/git/' }, 
-           { text: '面试题', link: '/interview/' },
-         ]
+      { text: '计算机术语速查手册', link: '/computer-science-quick-reference/' }, 
+      { text: 'Java', link: '/java/kk3w1ne4/' }, 
+      { text: '计算机网络', link: '/networking/vhlkdsuw/' }, 
+      { text: '数据结构与算法', link: '/data-structure/leu82fhp/' }, 
+      { text: '计算机系统', link: '/computer-system/lbudvq6j/' }, 
+      { text: '数据库', link: '/db/d7ls353u/' }, 
+      { text: '信息安全', link: '/article/ibzm0tem/' }, 
+      { text: '设计模式', link: '/pattern-design/strategy/' }, 
+      { text: '正则表达式', link: '/regular/' }, 
+      { text: 'git', link: '/git/' }, 
+      { text: '面试题', link: '/interview/' },
+    ]
   },
   { text: '安溥·與你握手', link: '/anpu/' },
   { text: '书·影·音·游', link: '/notes/' },
-  { text: '醍醐灌顶', link: '/sentences/' },
+  { text: '醍醐灌顶',
+    items: [
+      { text: '醍醐灌顶', link: '/sentences/' },
+      { text: '知识', link: '/knowledges/multidisciplinary-principles/' },
+    ] 
+  },
   { text: '关于', link: '/about/' },
 
 ])

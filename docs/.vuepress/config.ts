@@ -31,6 +31,10 @@ bundler: viteBundler({
         访客人数：<span id="busuanzi_value_site_uv" </span>
       `},
 
+    markdown: {
+      timeline: true, 
+    },
+
     collections: [
 
       ...computerScienceNotes,
@@ -66,6 +70,14 @@ bundler: viteBundler({
         linkPrefix: '/notes/',
         title: '书·影·音·游',
         sidebar: 'auto', 
+      },
+
+      {
+        type: 'doc', 
+        dir: 'knowledges',
+        linkPrefix: '/knowledges/',
+        title: '知识',
+        sidebar: 'auto',
       },
 
       {
