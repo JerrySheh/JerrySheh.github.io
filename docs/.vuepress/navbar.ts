@@ -42,6 +42,10 @@ export const navbar = defineNavbarConfig([
       { text: '知识', link: '/knowledges/multidisciplinary-principles/' },
     ] 
   },
-  { text: '关于', link: '/about/' },
+  { text: '工具',
+    items: [
+      { text: '字幕拼接大师', link: '/webapp/SubtitleJoiner' },
+    ] 
+  },  { text: '关于', link: '/about/' },
 
 ])

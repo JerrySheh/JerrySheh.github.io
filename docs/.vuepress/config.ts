@@ -33,6 +33,7 @@ bundler: viteBundler({
 
     markdown: {
       timeline: true, 
+      demo: true
     },
 
     collections: [
@@ -86,6 +87,13 @@ bundler: viteBundler({
         linkPrefix: '/sentences/',
         title: '醍醐灌顶',
         sidebar: ['2025', '2024', '2023', '2022', '2021', '2020', '2019', '2018'],
+      },
+
+      {
+        type: 'doc', 
+        dir: 'webapp',
+        linkPrefix: '/webapp/',
+        title: '工具',
       },
 
       {
