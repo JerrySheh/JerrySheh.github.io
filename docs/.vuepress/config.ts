@@ -27,9 +27,10 @@ bundler: viteBundler({
     hostname: 'jerrysheh.com',
 
     footer: {copyright: `
-        Copyright © 2017-2025 Jerry 
-        访客人数：<span id="busuanzi_value_site_uv" </span>
-      `},
+        Copyright © 2017-2026 Jerry 
+        访问次数：<span id="busuanzi_value_site_pv" </span>
+      `,
+ message: `访客人数：<span id="busuanzi_value_site_uv" </span>`},
 
     markdown: {
       timeline: true, 
