@@ -28,9 +28,9 @@ bundler: viteBundler({
 
     footer: {copyright: `
         Copyright © 2017-2026 Jerry 
-        访问次数：<span id="busuanzi_value_site_pv" </span>
-      `,
- message: `访客人数：<span id="busuanzi_value_site_uv" </span>`},
+        访客人数：<span id="busuanzi_value_site_uv" </span>
+      `
+    },
 
     markdown: {
       timeline: true, 
