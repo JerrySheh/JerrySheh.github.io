@@ -1,445 +1,709 @@
 <template>
-<div class="subtitle-joiner-container not-prose">
-<div class="tool-card">
-<header class="tool-header">
-<h2 class="tool-title">
-<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-main"><circle cx="6" cy="6" r="3"/><path d="M8.12 8.12 12 12"/><path d="M20 4 8.12 15.88"/><circle cx="6" cy="18" r="3"/><path d="M14.8 14.8 20 20"/></svg>
-字幕拼接大师 Pro
-</h2>
-<p class="tool-subtitle">Powered by Gemini 3 ，完全 vibe coding 开发。支持全景与字幕模式混合拼接。</p>
-</header>
+  <div class="subtitle-stitcher">
+    <div class="stitcher-header">
+      <h2>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-main"><circle cx="6" cy="6" r="3"/><path d="M8.12 8.12 12 12"/><path d="M20 4 8.12 15.88"/><circle cx="6" cy="18" r="3"/><path d="M14.8 14.8 20 20"/></svg>
+        影片字幕拼图大师 Pro
+      </h2>
+      <p>Powered by Gemini 3 ，完全 vibe coding 开发。支持全画面与字幕自由拼接。</p>
+    </div>
 
-  <div class="tool-body">
-    <!-- 左侧控制面板 -->
-    <div class="side-panel">
-      <div 
-        class="drop-zone" 
-        @click="triggerFileInput" 
-        @drop.prevent="handleDrop" 
-        @dragover.prevent
-      >
-        <input type="file" multiple accept="image/*" class="file-input" @change="handleFileUpload" ref="fileInputRef" />
-        <div class="upload-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg>
-        </div>
-        <p>点击或拖拽上传影片截图</p>
-      </div>
-
-      <div class="config-card">
-        <div class="config-header">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
-          <span>全局字幕占比</span>
-        </div>
-        <div class="range-wrapper">
-          <div class="range-info">
-            <span>调整截取比例</span>
-            <span class="range-value">{{ Math.round(globalRatio * 100) }}%</span>
-          </div>
-          <input type="range" min="0.05" max="0.5" step="0.01" v-model.number="globalRatio" class="custom-range" />
-        </div>
-      </div>
-
-      <div class="manage-card">
-        <div class="manage-header">
-          <span>图片队列 ({{ images.length }})</span>
-          <div class="header-actions">
-            <button @click="clearQueue" class="btn-clear">清空</button>
-            <!-- <button @click="generateStitch" class="btn-refresh">刷新</button> -->
+    <div class="stitcher-container">
+      <!-- 左侧：编辑区域 -->
+      <div class="editor-panel">
+        <!-- 拖拽上传区 -->
+        <div 
+          class="upload-zone"
+          @dragover.prevent="isDragging = true"
+          @dragleave.prevent="isDragging = false"
+          @drop.prevent="handleDrop"
+          @click="triggerFileInput"
+          :class="{ 'is-dragging': isDragging }"
+        >
+          <input 
+            type="file" 
+            ref="fileInput" 
+            multiple 
+            accept="image/*" 
+            @change="handleFileSelect" 
+            style="display: none"
+          >
+          <div class="upload-content">
+            <span class="upload-icon">➕</span>
+            <span>点击或拖拽图片到这里</span>
+            <span class="upload-hint">支持多选 (jpg, png, webp)</span>
           </div>
         </div>
-        <div class="image-stack">
-          <div v-for="(img, index) in images" :key="img.id" class="stack-item" :class="{ 'item-full': img.mode === 'full' }">
-            <div class="item-preview">
-              <img :src="img.src" class="preview-thumb" />
+
+        <!-- 图片列表 -->
+        <div class="image-list" v-if="images.length > 0">
+          <div class="list-actions">
+            <button class="btn btn-danger" @click="clearAll">清空所有</button>
+            <span class="info-text">共 {{ images.length }} 张图片</span>
+          </div>
+
+          <div v-for="(img, index) in images" :key="img.id" class="image-card">
+            <div class="card-header">
+              <span class="card-index">#{{ index + 1 }}</span>
+              <button class="btn-icon delete-btn" @click="removeImage(index)" title="移除">×</button>
             </div>
-            <div class="item-controls">
-              <div class="file-name-label" :title="img.name">{{ img.name }}</div>
-              <div class="mode-switcher">
-                <button @click="toggleMode(img.id)" :class="['mode-badge', img.mode]">
-                  {{ img.mode === 'full' ? '全景模式' : '字幕模式' }}
-                </button>
-                <div v-if="img.mode === 'subtitle'" class="local-height-ctrl">
-                  <button @click="adjustLocalHeight(img.id, -5)">-</button>
-                  <span class="val">{{ img.localHeight || Math.floor(img.height * globalRatio) }}px</span>
-                  <button @click="adjustLocalHeight(img.id, 5)">+</button>
+            
+            <div class="card-body">
+              <!-- 左侧缩略图 -->
+              <div class="thumbnail-wrapper">
+                <div class="preview-box">
+                  <img :src="img.url" alt="thumbnail" class="thumb-img">
+                  <!-- 可视化遮罩，模拟裁切效果 -->
+                  <div class="mask mask-top" :style="{ height: (img.cropTop / img.height * 100) + '%' }"></div>
+                  <div class="mask mask-bottom" :style="{ height: (img.cropBottom / img.height * 100) + '%' }"></div>
+                </div>
+              </div>
+
+              <!-- 右侧控制项 -->
+              <div class="controls">
+                <!-- 上边距控制 -->
+                <div class="control-group">
+                  <div class="label-row">
+                    <label>上边距裁剪 (px)</label>
+                  </div>
+                  <div class="input-row">
+                    <input 
+                      type="range" 
+                      v-model.number="img.cropTop" 
+                      :max="img.height - img.cropBottom - 10" 
+                      min="0"
+                      @input="debouncedDraw"
+                    >
+                    <input 
+                      type="number" 
+                      v-model.number="img.cropTop" 
+                      class="num-input"
+                      @input="debouncedDraw"
+                    >
+                  </div>
+                </div>
+
+                <!-- 下边距控制 -->
+                <div class="control-group">
+                  <div class="label-row">
+                    <label>下边距裁剪 (px)</label>
+                  </div>
+                  <div class="input-row">
+                    <input 
+                      type="range" 
+                      v-model.number="img.cropBottom" 
+                      :max="img.height - img.cropTop - 10" 
+                      min="0"
+                      @input="debouncedDraw"
+                    >
+                    <input 
+                      type="number" 
+                      v-model.number="img.cropBottom" 
+                      class="num-input"
+                      @input="debouncedDraw"
+                    >
+                  </div>
+                </div>
+
+                <!-- 底部操作按钮 -->
+                <div class="action-row">
+                  <button class="btn-text reset-btn" @click="resetImage(index)" title="重置为自动识别的初始值">
+                    ↺ 重置
+                  </button>
+                  
+                  <!-- 新增：复制首图边距按钮 -->
+                  <button v-if="index > 0" class="btn-text copy-first-btn" @click="copyFirstImageMargins(index)" title="复制第一张图片的参数，保留完整画面">
+                    ⬆ 复制首图边距
+                  </button>
+
+                  <button class="btn-text global-apply-btn" @click="applyToRest(index)" title="将当前图片的裁剪值应用到其他图片（智能跳过首图）">
+                    ⬇ 应用到全部图片
+                  </button>
                 </div>
               </div>
             </div>
-            <div class="order-btns">
-              <button @click="moveImage(index, -1)" :disabled="index === 0" title="上移">↑</button>
-              <button @click="moveImage(index, 1)" :disabled="index === images.length - 1" title="下移">↓</button>
-            </div>
-            <button @click="removeImage(img.id)" class="btn-del" title="移除">×</button>
           </div>
-          <div v-if="images.length === 0" class="empty-state">请先上传图片</div>
         </div>
       </div>
-    </div>
 
-    <!-- 右侧预览面板 -->
-    <div class="preview-panel">
-      <div class="canvas-wrapper">
-        <div v-if="!resultImage" class="canvas-empty">
-          <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" style="opacity: 0.2"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
-          <p>合成预览将在此显示</p>
+      <!-- 右侧：预览区域 -->
+      <div class="preview-panel">
+        <div class="preview-header">
+          <h3>效果预览</h3>
+          <button class="btn btn-primary" @click="downloadResult" :disabled="!previewUrl">
+            ⬇ 下载长图
+          </button>
         </div>
-        <template v-else>
-          <div class="action-bar">
-            <button @click="downloadResult" class="btn-download">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
-              下载高清长图
-            </button>
+        <div class="preview-content" :class="{ 'empty': !previewUrl }">
+          <img v-if="previewUrl" :src="previewUrl" alt="Stitched Result">
+          <div v-else class="empty-placeholder">
+            等待生成...
           </div>
-          <div class="scrollable-preview">
-            <div class="render-container">
-                <img :src="resultImage" class="final-render" />
-            </div>
-          </div>
-        </template>
+        </div>
       </div>
     </div>
   </div>
-  <canvas ref="canvasRef" style="display: none;"></canvas>
-</div>
-
-
-</div>
 </template>
 
 <script setup>
-import { ref, watch } from 'vue';
+import { ref, reactive, nextTick, onBeforeUnmount } from 'vue';
 
-const images = ref([]);
-const resultImage = ref(null);
-const globalRatio = ref(0.12);
-const canvasRef = ref(null);
-const fileInputRef = ref(null);
+// --- State ---
+const fileInput = ref(null);
+const isDragging = ref(false);
+const images = ref([]); // { id, url, width, height, cropTop, cropBottom, element, initialCropTop, initialCropBottom }
+const previewUrl = ref('');
+let canvas = null; // Off-screen canvas for processing
+let debounceTimer = null;
 
-const triggerFileInput = () => fileInputRef.value.click();
+// --- Methods ---
 
-const generateStitch = async () => {
-if (images.value.length === 0) {
-resultImage.value = null;
-return;
-}
-const canvas = canvasRef.value;
-if (!canvas) return;
-const ctx = canvas.getContext('2d');
-
-const imgElements = await Promise.all(images.value.map(imgData => {
-return new Promise((resolve) => {
-const img = new Image();
-img.onload = () => resolve({ element: img, mode: imgData.mode, localH: imgData.localHeight });
-img.src = imgData.src;
-});
-}));
-
-let totalHeight = 0;
-if (imgElements.length === 0) return;
-const maxWidth = imgElements[0].element.width;
-
-const layout = imgElements.map(item => {
-let h = item.mode === 'full' ? item.element.height : (item.localH || Math.floor(item.element.height * globalRatio.value));
-const y = totalHeight;
-totalHeight += h;
-return { ...item, y, h };
-});
-
-canvas.width = maxWidth;
-canvas.height = totalHeight;
-layout.forEach(item => {
-if (item.mode === 'full') {
-ctx.drawImage(item.element, 0, item.y);
-} else {
-const sourceY = item.element.height - item.h;
-ctx.drawImage(item.element, 0, sourceY, item.element.width, item.h, 0, item.y, maxWidth, item.h);
-}
-});
-resultImage.value = canvas.toDataURL('image/jpeg', 0.9);
+const triggerFileInput = () => {
+  fileInput.value.click();
 };
 
-const handleFileUpload = (e) => addFiles(Array.from(e.target.files));
-const handleDrop = (e) => addFiles(Array.from(e.dataTransfer.files));
-const addFiles = (files) => {
-files.filter(f => f.type.startsWith('image/')).forEach(file => {
-const reader = new FileReader();
-reader.onload = (e) => {
-const img = new Image();
-img.onload = () => {
-images.value.push({
-id: Math.random().toString(36).substr(2, 9),
-src: e.target.result,
-width: img.width,
-height: img.height,
-name: file.name,
-mode: images.value.length === 0 ? 'full' : 'subtitle'
-});
-};
-img.src = e.target.result;
-};
-reader.readAsDataURL(file);
-});
+const handleFileSelect = (e) => {
+  const files = Array.from(e.target.files);
+  processFiles(files);
+  e.target.value = ''; // Reset input
 };
 
-const removeImage = (id) => images.value = images.value.filter(i => i.id !== id);
-
-const clearQueue = () => {
-images.value = [];
-resultImage.value = null;
+const handleDrop = (e) => {
+  isDragging.value = false;
+  const files = Array.from(e.dataTransfer.files).filter(f => f.type.startsWith('image/'));
+  processFiles(files);
 };
 
-const toggleMode = (id) => {
-const img = images.value.find(i => i.id === id);
-if (img) img.mode = img.mode === 'full' ? 'subtitle' : 'full';
+// 核心：处理上传的文件，加载图片对象并自动识别黑边
+const processFiles = async (files) => {
+  if (!files.length) return;
+
+  for (const file of files) {
+    const url = URL.createObjectURL(file);
+    const imgElement = new Image();
+    imgElement.src = url;
+
+    await new Promise((resolve) => {
+      imgElement.onload = () => {
+        // 自动识别黑边逻辑
+        const margins = detectBlackBars(imgElement);
+        
+        let initialTop = margins.top;
+        if (images.value.length > 0) {
+           // 如果不是第一张，尝试激进一点，保留底部 35% 区域用于字幕
+           const safeSubtitleZone = Math.floor(imgElement.height * 0.35);
+           const aggressiveTop = imgElement.height - safeSubtitleZone;
+           // 取两者中较大的一个，保证不裁掉检测出的底部内容，但默认裁掉顶部场景
+           initialTop = Math.max(margins.top, aggressiveTop);
+        }
+
+        // 保存图片数据，增加 initialCropTop/Bottom 用于重置
+        images.value.push({
+          id: Date.now() + Math.random(),
+          url: url,
+          width: imgElement.width,
+          height: imgElement.height,
+          cropTop: initialTop,
+          cropBottom: margins.bottom,
+          initialCropTop: initialTop,
+          initialCropBottom: margins.bottom,
+          element: imgElement
+        });
+        resolve();
+      };
+    });
+  }
+  
+  generatePreview();
 };
-const moveImage = (index, delta) => {
-const target = index + delta;
-if (target >= 0 && target < images.value.length) {
-const arr = [...images.value];
-[arr[index], arr[target]] = [arr[target], arr[index]];
-images.value = arr;
-}
+
+// 简单的像素扫描算法，检测上下黑边
+const detectBlackBars = (img) => {
+  const c = document.createElement('canvas');
+  c.width = img.width;
+  c.height = img.height;
+  const ctx = c.getContext('2d');
+  ctx.drawImage(img, 0, 0);
+  
+  // 为了性能，只取中间一列像素进行扫描
+  const x = Math.floor(img.width / 2);
+  const imageData = ctx.getImageData(x, 0, 1, img.height).data;
+  
+  let top = 0;
+  let bottom = 0;
+  const threshold = 15; // 黑色阈值 (0-255), 允许一点点噪点
+
+  // 扫描上边距
+  for (let y = 0; y < img.height; y++) {
+    const r = imageData[y * 4];
+    const g = imageData[y * 4 + 1];
+    const b = imageData[y * 4 + 2];
+    if (r > threshold || g > threshold || b > threshold) {
+      top = y;
+      break;
+    }
+  }
+
+  // 扫描下边距
+  for (let y = img.height - 1; y >= 0; y--) {
+    const r = imageData[y * 4];
+    const g = imageData[y * 4 + 1];
+    const b = imageData[y * 4 + 2];
+    if (r > threshold || g > threshold || b > threshold) {
+      bottom = img.height - 1 - y;
+      break;
+    }
+  }
+
+  return { top, bottom };
 };
-const adjustLocalHeight = (id, delta) => {
-const img = images.value.find(i => i.id === id);
-if (img) {
-const cur = img.localHeight || Math.floor(img.height * globalRatio.value);
-img.localHeight = Math.max(10, cur + delta);
-}
+
+const removeImage = (index) => {
+  const img = images.value[index];
+  URL.revokeObjectURL(img.url);
+  images.value.splice(index, 1);
+  generatePreview();
 };
+
+const clearAll = () => {
+  images.value.forEach(img => URL.revokeObjectURL(img.url));
+  images.value = [];
+  previewUrl.value = '';
+};
+
+// 重置单个图片的裁剪值
+const resetImage = (index) => {
+  const img = images.value[index];
+  if (img) {
+    img.cropTop = img.initialCropTop;
+    img.cropBottom = img.initialCropBottom;
+    generatePreview();
+  }
+};
+
+// 新增功能：复制第一张图片的裁剪参数
+const copyFirstImageMargins = (index) => {
+  if (images.value.length > 0 && index > 0) {
+    const firstImg = images.value[0];
+    const targetImg = images.value[index];
+    
+    // 确保参数合法，不至于让图片高度变为负数
+    if (targetImg.height - firstImg.cropTop - firstImg.cropBottom > 10) {
+      targetImg.cropTop = firstImg.cropTop;
+      targetImg.cropBottom = firstImg.cropBottom;
+      generatePreview();
+    }
+  }
+};
+
+// 将当前图片的裁剪设置应用到除第一张图以外的所有图片
+const applyToRest = (sourceIndex) => {
+  const sourceImg = images.value[sourceIndex];
+  
+  images.value.forEach((img, idx) => {
+    // 跳过自己，并且跳过第一张图片（保留首图场景）
+    if (idx !== sourceIndex && idx !== 0) {
+      // 检查源配置在目标图片上是否合法（保留至少10px高度）
+      if (img.height - sourceImg.cropTop - sourceImg.cropBottom > 10) {
+        img.cropTop = sourceImg.cropTop;
+        img.cropBottom = sourceImg.cropBottom;
+      }
+    }
+  });
+  generatePreview();
+};
+
+const debouncedDraw = () => {
+  if (debounceTimer) clearTimeout(debounceTimer);
+  debounceTimer = setTimeout(generatePreview, 100);
+};
+
+// 核心：Canvas 绘图逻辑
+const generatePreview = () => {
+  if (images.value.length === 0) {
+    previewUrl.value = '';
+    return;
+  }
+
+  // 1. 计算最终画布尺寸
+  // 以第一张图片的宽度为基准宽度，其他图片等比缩放
+  const baseWidth = images.value[0].width;
+  let totalHeight = 0;
+
+  images.value.forEach(img => {
+    const scale = baseWidth / img.width;
+    const effectiveHeight = (img.height - img.cropTop - img.cropBottom) * scale;
+    // 只有当高度大于0才计入，避免负数
+    if (effectiveHeight > 0) {
+        totalHeight += effectiveHeight;
+    }
+  });
+
+  if (!canvas) canvas = document.createElement('canvas');
+  canvas.width = baseWidth;
+  canvas.height = totalHeight;
+  const ctx = canvas.getContext('2d');
+
+  // 2. 绘制背景（可选，防止透明）
+  ctx.fillStyle = '#000';
+  ctx.fillRect(0, 0, baseWidth, totalHeight);
+
+  // 3. 逐张绘制
+  let currentY = 0;
+  images.value.forEach(img => {
+    const sourceH = img.height - img.cropTop - img.cropBottom;
+    if (sourceH <= 0) return;
+
+    // 目标高度：保持宽高比
+    const scale = baseWidth / img.width;
+    const destH = sourceH * scale;
+
+    ctx.drawImage(
+      img.element,
+      0, img.cropTop, img.width, sourceH, // Source
+      0, currentY, baseWidth, destH       // Destination
+    );
+    currentY += destH;
+  });
+
+  // 4. 导出
+  previewUrl.value = canvas.toDataURL('image/jpeg', 0.9);
+};
+
 const downloadResult = () => {
-const a = document.createElement('a');
-a.download = `stitched_${Date.now()}.jpg`;
-a.href = resultImage.value;
-a.click();
+  if (!previewUrl.value) return;
+  const a = document.createElement('a');
+  a.href = previewUrl.value;
+  a.download = `subtitle-stitch-${Date.now()}.jpg`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
 };
 
-watch([globalRatio, () => images.value.map(i => `${i.mode}-${i.localHeight}`).join(',')], () => {
- generateStitch();
-}, { deep: true });
+// Cleanup
+onBeforeUnmount(() => {
+  images.value.forEach(img => URL.revokeObjectURL(img.url));
+});
+
 </script>
 
 <style scoped>
-.subtitle-joiner-container {
-margin: 2.5rem 0;
-color: var(--vp-c-text-1);
-display: flex;
-justify-content: center;
+/* 基础布局变量 
+  适配 VuePress 通常的主题色
+*/
+.subtitle-stitcher {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  color: #333;
 }
 
-.tool-card {
-background-color: var(--vp-c-bg-soft);
-border: 1px solid var(--vp-c-divider);
-border-radius: 1rem;
-padding: 1.5rem;
-box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-width: 100%;
-max-width: 1440px;
+.stitcher-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+.stitcher-header h2 {
+  margin-bottom: 8px;
+  color: #2c3e50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+.header-icon {
+  width: 32px;
+  height: 32px;
+  color: #42b983;
+}
+.stitcher-header p {
+  color: #666;
+  font-size: 0.9em;
 }
 
-.tool-header {
-margin-bottom: 2rem;
-border-bottom: 1px solid var(--vp-c-divider);
-padding-bottom: 1rem;
+.stitcher-container {
+  display: flex;
+  gap: 20px;
+  height: 80vh; /* 固定高度，内部滚动 */
+  min-height: 600px;
 }
 
-.tool-title {
-display: flex;
-align-items: center;
-gap: 0.75rem;
-font-size: 1.75rem;
-font-weight: 700;
-color: var(--vp-c-brand-1);
-margin: 0 !important;
-border: none !important;
+/* --- 左侧面板 --- */
+.editor-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  overflow-y: auto;
+  padding-right: 8px;
 }
 
-.icon-main { color: var(--vp-c-brand-1); }
-
-.tool-subtitle {
-margin: 0.25rem 0 0 0;
-font-size: 0.9rem;
-color: var(--vp-c-text-2);
+/* 滚动条美化 */
+.editor-panel::-webkit-scrollbar {
+  width: 6px;
+}
+.editor-panel::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 3px;
 }
 
-.tool-body {
-display: grid;
-grid-template-columns: 1fr;
-gap: 2rem;
+.upload-zone {
+  border: 2px dashed #cbd5e0;
+  border-radius: 8px;
+  padding: 30px;
+  text-align: center;
+  cursor: pointer;
+  background-color: #fff;
+  transition: all 0.3s ease;
+}
+.upload-zone:hover, .upload-zone.is-dragging {
+  border-color: #42b983; /* Vue Green */
+  background-color: #f0fdf4;
+}
+.upload-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: #718096;
+}
+.upload-icon {
+  font-size: 24px;
+}
+.upload-hint {
+  font-size: 12px;
+  color: #a0aec0;
 }
 
-@media (min-width: 1024px) {
-.tool-body { grid-template-columns: 380px 1fr; }
+.list-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 4px;
+}
+.info-text {
+  font-size: 12px;
+  color: #718096;
 }
 
-/* 左侧控制区 */
-.side-panel { display: flex; flex-direction: column; gap: 1.25rem; }
-
-.drop-zone {
-background: var(--vp-c-bg);
-border: 2px dashed var(--vp-c-brand-3);
-border-radius: 0.75rem;
-padding: 1.5rem;
-text-align: center;
-cursor: pointer;
-transition: all 0.2s ease;
+.image-card {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  border: 1px solid #e2e8f0;
+  overflow: hidden;
 }
-.drop-zone:hover { border-color: var(--vp-c-brand-1); background: var(--vp-c-bg-alt); }
-.file-input { display: none; }
-.upload-icon { margin-bottom: 0.5rem; color: var(--vp-c-brand-1); }
-.drop-zone p { margin: 0; font-size: 0.85rem; font-weight: 600; }
 
-.config-card {
-background: var(--vp-c-bg);
-padding: 1rem;
-border-radius: 0.75rem;
-border: 1px solid var(--vp-c-divider);
+.card-header {
+  background-color: #edf2f7;
+  padding: 8px 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+  font-weight: bold;
+  color: #4a5568;
 }
-.config-header { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem; font-size: 0.85rem; font-weight: bold; }
 
-.range-info { display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 0.75rem; }
-.range-value { color: var(--vp-c-brand-1); font-family: monospace; font-weight: bold; }
-.custom-range { width: 100%; cursor: pointer; height: 4px; accent-color: var(--vp-c-brand-1); }
-
-.manage-card {
-background: var(--vp-c-bg);
-border: 1px solid var(--vp-c-divider);
-border-radius: 0.75rem;
-display: flex;
-flex-direction: column;
-max-height: 600px;
+.card-body {
+  display: flex;
+  padding: 12px;
+  gap: 16px;
 }
-.manage-header {
-padding: 0.75rem 1rem;
-border-bottom: 1px solid var(--vp-c-divider);
-display: flex;
-justify-content: space-between;
-align-items: center;
-font-size: 0.85rem;
-font-weight: bold;
+
+.thumbnail-wrapper {
+  width: 140px; /* 稍微加宽一点 */
+  background-color: #000;
+  border-radius: 4px;
+  overflow: hidden;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center; /* 垂直居中 */
+  justify-content: center;
+  padding: 0;
 }
-.header-actions { display: flex; gap: 0.5rem; }
 
-.btn-refresh {
-font-size: 0.7rem;
-padding: 0.25rem 0.75rem;
-border-radius: 0.5rem;
-background: var(--vp-c-brand-3);
-color: var(--vp-c-brand-1);
-border: none;
-cursor: pointer;
+.preview-box {
+  position: relative;
+  width: 100%;
+  line-height: 0; /* 消除图片底部幽灵空白 */
 }
-.btn-clear {
-font-size: 0.7rem;
-padding: 0.25rem 0.75rem;
-border-radius: 0.5rem;
-background: var(--vp-c-bg-mute);
-color: var(--vp-c-danger-1);
-border: 1px solid var(--vp-c-danger-3);
-cursor: pointer;
+
+.thumb-img {
+  width: 100%;
+  height: auto;
+  display: block;
 }
-.btn-clear:hover { background: var(--vp-c-danger-3); }
 
-.image-stack { overflow-y: auto; padding: 0.75rem; display: flex; flex-direction: column; gap: 0.75rem; }
-.stack-item {
-display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem;
-background: var(--vp-c-bg-alt); border-radius: 0.5rem; border: 1px solid transparent;
+/* 可视化遮罩 */
+.mask {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  background-color: rgba(255, 0, 0, 0.5); /* 红色半透明表示被裁切区域 */
+  pointer-events: none;
+  transition: height 0.1s;
+  z-index: 10;
 }
-.item-full { border-color: var(--vp-c-brand-3); background: var(--vp-c-bg-soft); }
+.mask-top { top: 0; border-bottom: 1px dashed rgba(255,255,255,0.8); }
+.mask-bottom { bottom: 0; border-top: 1px dashed rgba(255,255,255,0.8); }
 
-.item-preview { flex-shrink: 0; width: 80px; height: 45px; background: #000; border-radius: 4px; overflow: hidden; display: flex; align-items: center; justify-content: center; }
-.preview-thumb { max-width: 100%; max-height: 100%; object-fit: contain; }
-
-.item-controls { flex: 1; min-width: 0; }
-.file-name-label {
-font-size: 0.7rem;
-color: var(--vp-c-text-2);
-margin-bottom: 0.4rem;
-white-space: nowrap;
-overflow: hidden;
-text-overflow: ellipsis;
+.controls {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 12px;
 }
-.mode-switcher { display: flex; flex-direction: column; gap: 4px; }
-.mode-badge {
-font-size: 0.7rem; font-weight: bold; padding: 0.15rem 0.5rem; border-radius: 0.25rem; border: none; cursor: pointer; width: fit-content;
+
+.control-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
-.mode-badge.full { background: var(--vp-c-brand-1); color: #fff; }
-.mode-badge.subtitle { background: var(--vp-c-bg-mute); color: var(--vp-c-text-1); }
 
-.local-height-ctrl {
-display: inline-flex; align-items: center; background: var(--vp-c-bg);
-border: 1px solid var(--vp-c-divider); border-radius: 4px; padding: 0 4px; width: fit-content;
+.label-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: #4a5568;
 }
-.local-height-ctrl button { background: none; border: none; padding: 0 5px; color: var(--vp-c-text-3); cursor: pointer; }
-.local-height-ctrl .val { font-size: 0.7rem; font-family: monospace; min-width: 35px; text-align: center; border-left: 1px solid var(--vp-c-divider); border-right: 1px solid var(--vp-c-divider); }
 
-.order-btns { display: flex; flex-direction: column; gap: 2px; }
-.order-btns button { background: none; border: none; padding: 2px; font-size: 0.75rem; cursor: pointer; color: var(--vp-c-text-3); }
-.order-btns button:disabled { opacity: 0.2; }
+.input-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.input-row input[type="range"] {
+  flex: 1;
+  cursor: pointer;
+}
+.num-input {
+  width: 50px;
+  padding: 4px;
+  border: 1px solid #cbd5e0;
+  border-radius: 4px;
+  font-size: 12px;
+  text-align: center;
+}
 
-.btn-del { background: none; border: none; font-size: 1.25rem; color: var(--vp-c-text-3); cursor: pointer; }
-.btn-del:hover { color: var(--vp-c-danger-1); }
+.action-row {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px; /* 稍微减少一点间距以容纳更多按钮 */
+  padding-top: 8px;
+  flex-wrap: wrap; /* 如果屏幕太小，允许按钮换行 */
+}
 
-.empty-state { text-align: center; padding: 2rem; font-size: 0.85rem; color: var(--vp-c-text-3); font-style: italic; }
-
-/* 右侧预览区 */
+/* --- 右侧面板 --- */
 .preview-panel {
-background: #121212;
-border-radius: 1rem;
-min-height: 600px;
-position: relative;
-display: flex;
-flex-direction: column;
+  flex: 1;
+  background-color: #fff;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
-.canvas-wrapper {
-flex: 1;
-display: flex;
-flex-direction: column;
-position: relative;
-overflow: hidden;
+.preview-header {
+  padding: 12px 16px;
+  border-bottom: 1px solid #e2e8f0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #fff;
+}
+.preview-header h3 {
+  margin: 0;
+  font-size: 16px;
 }
 
-.canvas-empty { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #444; }
-.canvas-empty p { margin-top: 1rem; font-size: 0.9rem; }
-
-.action-bar {
-position: absolute; top: 1.25rem; right: 1.25rem; z-index: 10;
+.preview-content {
+  flex: 1;
+  overflow: auto;
+  background-color: #2d3748; /* 暗色背景查看结果更好 */
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 20px;
 }
-.btn-download {
-background: var(--vp-c-brand-1);
-color: #fff;
-border: none;
-padding: 0.6rem 1.25rem;
-border-radius: 2rem;
-font-size: 0.85rem;
-font-weight: bold;
-display: flex; align-items: center; gap: 0.5rem;
-cursor: pointer;
-box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+.preview-content img {
+  max-width: 100%;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
 }
-
-.scrollable-preview {
-flex: 1;
-width: 100%;
-overflow-y: auto;
-overflow-x: hidden;
-padding: 2rem 1rem;
-display: block;
+.empty-placeholder {
+  color: #718096;
+  margin-top: 100px;
 }
 
-.render-container {
-display: flex;
-justify-content: center;
-width: 100%;
+/* --- 通用按钮 --- */
+.btn {
+  padding: 6px 12px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  transition: opacity 0.2s;
+}
+.btn:hover { opacity: 0.9; }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.btn-primary {
+  background-color: #42b983;
+  color: white;
+}
+.btn-danger {
+  background-color: #fc8181;
+  color: white;
+  font-size: 12px;
+}
+.btn-icon {
+  background: none;
+  border: none;
+  font-size: 18px;
+  color: #a0aec0;
+  cursor: pointer;
+}
+.btn-icon:hover { color: #e53e3e; }
+
+.btn-text {
+  background: none;
+  border: none;
+  color: #4299e1;
+  font-size: 11px;
+  cursor: pointer;
+  padding: 0;
+  text-decoration: underline;
+  white-space: nowrap; /* 防止按钮文字换行 */
+}
+.btn-text:hover {
+  color: #2b6cb0;
 }
 
-.final-render {
-max-width: 100%;
-height: auto;
-object-fit: contain;
-display: block;
-box-shadow: 0 10px 40px rgba(0,0,0,0.6);
-border-radius: 4px;
+.global-apply-btn {
+  font-weight: 500;
+  font-size: 12px;
+}
+.reset-btn {
+  color: #718096;
+}
+.copy-first-btn {
+  color: #805ad5; /* 使用紫色区分 */
+}
+
+/* 响应式适配 */
+@media (max-width: 768px) {
+  .stitcher-container {
+    flex-direction: column;
+    height: auto;
+  }
+  .editor-panel, .preview-panel {
+    width: 100%;
+    height: 500px;
+  }
 }
 </style>
