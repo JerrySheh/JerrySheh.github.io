@@ -12,7 +12,15 @@ permalink: /crash-course/computer-science/1/
 
 在 B站 发现了一门好课《Crash Course Computer Science》（计算机科学速成课），虽然讲“速成”有点急功近利的意思，但这门课从计算机的历史开始讲起，几乎涵盖了从布尔逻辑到二进制、从硬件到软件、从编译原理到操作系统、从计算机网络到信息安全等等计算机科学的知识，作为一种科普，扩充知识面还是相当不错的。
 
-- 课程地址：https://www.bilibili.com/video/av21376839/
+课程地址：
+- [Crash Course Computer Science（YouTube）](https://www.youtube.com/playlist?list=PL8dPuuaLjXtNlUrzyH5r6jN9ulIgZBpdo)
+- [计算机科学速成课（b站）](https://www.bilibili.com/video/av21376839/)
+
+全集笔记：
+- [Crash Course Computer Science（1-10）](/crash-course/computer-science/1/)
+- [Crash Course Computer Science（11-20）](/crash-course/computer-science/2/)
+- [Crash Course Computer Science（21-30）](/crash-course/computer-science/3/)
+- [Crash Course Computer Science（31-40）](/crash-course/computer-science/4/)
 
 <!-- more -->
 

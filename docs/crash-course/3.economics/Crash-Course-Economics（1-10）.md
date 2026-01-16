@@ -18,9 +18,14 @@ permalink: /crash-course/economics/1/
 课程地址：
 
 - [油管英文原版](https://www.youtube.com/watch?v=3ez10ADR_gM&list=PL1oDmcs0xTD-dJN1PL2N1urX0EKupBJCQ&index=1)
-- [网易云中文字幕](https://open.163.com/newview/movie/free?pid=MBGQ1VONR&mid=MBGQ259M4)
+- [网易云中文字幕](https://open.163.com/newview/movie/free?pid=MBGQ1VONR&mid=MBGQ259M4)（缺少第2集）
 
-> PS. 网易缺少了第二集，需要到 B站 或 Youtube 看
+全集笔记：
+
+- [Crash Course Economics（1-10）](/crash-course/economics/1/)
+- [Crash Course Economics（11-20）](/crash-course/economics/2/)
+- [Crash Course Economics（21-30）](/crash-course/economics/3/)
+- [Crash Course Economics（31-34）](/crash-course/economics/4/)
 
 ---
 
