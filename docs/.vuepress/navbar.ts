@@ -17,6 +17,7 @@ export const navbar = defineNavbarConfig([
            { text: 'Artificial Intelligence（人工智能）', link: '/crash-course/ai/1/' }, 
            { text: 'Economics（经济学）', link: '/crash-course/economics/1/' }, 
            { text: 'Psychology（心理学）', link: '/crash-course/psychology/1/' },
+           { text: 'Scientific Thinking（科学思维）', link: '/crash-course/scientific-thinking/1/' },
          ]
   },
   {
