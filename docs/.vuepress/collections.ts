@@ -53,7 +53,7 @@ const dbNote = defineCollection({
 const interviewNote = defineCollection({
   type: 'doc', 
   title: '面试题',
-  dir: 'interview',
+  dir: 'computer-science/interview',
   linkPrefix: '/interview/',
   sidebar: 'auto'
 })
