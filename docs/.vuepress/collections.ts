@@ -55,7 +55,8 @@ const interviewNote = defineCollection({
   title: '面试题',
   dir: 'computer-science/interview',
   linkPrefix: '/interview/',
-  sidebar: 'auto'
+  sidebar: 'auto',
+  sidebarCollapsed: true
 })
 
 export const computerScienceNotes = defineCollections(

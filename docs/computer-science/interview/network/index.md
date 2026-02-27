@@ -101,13 +101,7 @@ TIME_WAIT 是 TCP 连接在彻底关闭前，主动发起关闭的一方必须�
 
 ### 常见的 HTTP 状态码有哪些？
 
-- **200 OK**: 表示请求成功
-- **301 Moved Permanently**: 重定向转移
-- **400 Bad request**： 请求不能被服务器理解
-- **403 Forbidden**：服务器端有能力处理该请求，但是拒绝授权访问
-- **404 Not Found**： 请求的对象在服务器上找不到
-- **500 Internal Server Error**：服务器已收到请求，但服务器内部出错导致无法响应
-- **502 Bad Gateway**：网关从上游服务器中接收到的响应是无效的
+<!-- @include: ../../networking/2.计算机网络——应用层探究（以HTTP协议为例）.md#statusCode -->
 
 ### HTTPS 是如何保证数据安全的？
 
