@@ -45,7 +45,7 @@ bundler: viteBundler({
         type: 'post', 
         dir: 'blog',
         title: '博客' ,
-        pagination: 15,
+        pagination: 10,
         include: ['**/*.md'],
         exclude: ['.vuepress/', '**/README.md'],
       },
