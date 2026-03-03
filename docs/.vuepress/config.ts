@@ -7,7 +7,7 @@ import busuanzi from 'busuanzi.pure.js'
 export default defineUserConfig({
   base: '/',
   lang: 'zh-CN',
-  title: 'Jerry的知识索引',
+  title: 'Jerry｜知识索引',
   description: '车顶上绑着飞机发动机',
 
 bundler: viteBundler({
