@@ -56,6 +56,7 @@ bundler: viteBundler({
         linkPrefix: '/crash-course/',
         title: 'crash-course',
         sidebar: 'auto', 
+        sidebarCollapsed: true
       },
 
       {
