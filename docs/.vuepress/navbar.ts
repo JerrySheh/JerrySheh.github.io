@@ -28,7 +28,7 @@ export const navbar = defineNavbarConfig([
       { text: '计算机网络', link: '/networking/preview/' }, 
       { text: '数据结构与算法', link: '/data-structure/leu82fhp/' }, 
       { text: '计算机系统', link: '/computer-system/lbudvq6j/' }, 
-      { text: '数据库', link: '/db/d7ls353u/' }, 
+      { text: '数据库和缓存', link: '/db/d7ls353u/' }, 
       { text: '信息安全', link: '/article/ibzm0tem/' }, 
       { text: '设计模式', link: '/pattern-design/strategy/' }, 
       { text: '正则表达式', link: '/regular/' }, 
