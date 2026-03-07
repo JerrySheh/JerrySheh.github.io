@@ -103,13 +103,9 @@ BeanFactory 在启动的时候不会实例化Bean，getBean() 的时候才会实
 - **通信规范**：组件之间通过 HTTP 、JSON 进行轻量级通信
 - **底层透明**：一个服务的底层用什么技术实现并没有什么影响，不同的开发小组可以用不同的技术栈
 
----
-
 ## 13. 什么是REST
 
 REST（Representational State Transfer）省略了主语 Resource，翻译成中文是：资源表述性状态转移。简单地说，就是用 URI 来定位资源，用 http 方法（GET、POST、DELETE、PUT等动词）来表示行为，用 http 状态码来表示结果。
-
----
 
 ## 14. AOP底层怎么实现？两种代理有什么区别？
 
@@ -127,24 +123,19 @@ AOP底层实现是动态代理。
 
 ### AOP底层的两种代理和区别？
 
-- JDK动态代理：利用拦截器(实现InvocationHanlder)和反射机制，生成一个实现代理接口的匿名类，在调用具体方法前调用 InvokeHandler 来处理。
-- Cglib动态代理：运行时动态生成被代理类的子类， overwrite 父类方法调用（因此不能代理声明为final类型的类和方法）。将代理对象类的class文件加载进来，通过修改其字节码生成子类来处理。
+- **JDK动态代理**：利用拦截器(实现InvocationHanlder)和反射机制，生成一个实现代理接口的匿名类，在调用具体方法前调用 InvokeHandler 来处理。
+- **Cglib动态代理**：运行时动态生成被代理类的子类， overwrite 父类方法调用（因此不能代理声明为final类型的类和方法）。将代理对象类的class文件加载进来，通过修改其字节码生成子类来处理。
 
 JDK动态代理代理的是接口，Cglib代理的是类。
-
----
 
 ## 15. SpringMVC启动会加装几种容器？他们的关系是怎样的？
 
 todo
 
----
-
 ## 16. SpringMVC 如何知道要加装的 Spring 配置在哪里？
 
 todo
 
----
 
 ## 17. Spring 容器创建对象的时机
 
@@ -169,8 +160,6 @@ applicationContext 会去寻找 applicationContext.xml 配置文件，里面有�
 ```java
 Hello h = (Hello) context.getBean("hello");
 ```
-
----
 
 ## 18. AutoWired 自动装配如果有多个符合的bean
 
@@ -204,8 +193,6 @@ public class PersonService{
     @Qualifier("personMysqlDaoImpl")
     private PersonDao personDao;
 ```
-
----
 
 ## 19. @Transational 什么时候注解会失效？
 
@@ -265,3 +252,19 @@ public class Proxy$A {
      
 }
 ```
+
+## 20. Spring循环依赖怎么解决？
+
+循环依赖是两个或多个Bean互相持有对方的引用，形成了一个闭环。Bean A 中注入了 Bean B，同时 Bean B 中又注入了 Bean A。
+
+Spring 创建一个 Bean，要经过实例化和初始化两个步骤，秘诀就在于利用半成品对象。Spring 使用三级缓存解决循环依赖问题。
+
+- **一级缓存 (singletonObjects)**： 存放最终完整的“成品 Bean”。日常我们从 Spring 容器获取的都是这里的对象。
+- **二级缓存 (earlySingletonObjects)**： 存放“半成品 Bean”。这些 Bean 已经实例化，但还没完成属性注入。它的主要作用是保证如果存在代理对象（AOP），所有引用的地方都能拿到同一个早期的代理对象。
+- **三级缓存 (singletonFactories)**： 存放“Bean 工厂对象”（ObjectFactory）。它提供了一个钩子，用于在发生循环依赖时，按需生成早期的 Bean 引用（可能是原对象，也可能是 AOP 代理对象）。
+
+Spring 三级缓存是兜底，开发实践中，循环依赖通常被视为代码设计不良，职责划分不清，建议重构，引入第三个类。Spring Boot 2.6 开始，默认禁用了循环依赖的支持。如果无法立即重构，可以在其中一个注入点加上 @Lazy 注解来暂时避免。
+
+## 21. 为什么要用三级缓存解决循环依赖？二级行不行？
+
+不行。根本原因是为了处理 AOP（面向切面编程）。在 Spring AOP 中，AOP 代理对象的生成必须在初始化后，但循环依赖，B 注入 A 时，如果只有二级缓存，B拿到的是A的原始对象，而不是代理对象。
