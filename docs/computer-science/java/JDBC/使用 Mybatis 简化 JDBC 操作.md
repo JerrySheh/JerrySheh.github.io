@@ -24,9 +24,9 @@ permalink: /java/tge55qwy/
 
 ---
 
-# IDEA 实战
+## IDEA 实战
 
-## 创建数据库和表
+### 创建数据库和表
 
 使用 MYSQL ：
 - 创建数据库，库名: myball
@@ -35,7 +35,7 @@ permalink: /java/tge55qwy/
 
 ![SQL](/images/Webapp/mybatis1.png)
 
-## 新建工程
+### 新建工程
 
 使用 IDEA 新建一个 maven 工程，在 pom.xml 中写入依赖
 
@@ -59,7 +59,7 @@ pom.xml
 - mybatis依赖从[官方文档](http://www.mybatis.org/mybatis-3/zh/index.html)中找，版本信息从 [github](https://github.com/mybatis/mybatis-3/releases) 找
 - mysql依赖从 [mvn 仓库](http://mvnrepository.com/artifact/mysql/mysql-connector-java/8.0.9-rc)找
 
-## 准备实体类 Category
+### 准备实体类 Category
 
 这个类用来映射数据库信息为java对象（数据库 category_ 表 -> java 的 category对象）
 
@@ -74,7 +74,7 @@ public class Category {
 }
 ```
 
-## 创建配置文件 mybatis-config.xml
+### 创建配置文件 mybatis-config.xml
 
 在 src/main/java 目录下 创建 mybatis-config.xml，填入以下内容： （SpringBoot 免此配置）
 
@@ -108,7 +108,7 @@ public class Category {
 - `<typeAliases>` 写明包后，就会自动扫描这个包下面的类型
 - `<mappers>`是映射
 
-## 创建配置文件 Category.xml
+### 创建配置文件 Category.xml
 
 在包 com.jerrysheh.pojo 下创建 Category.xml
 
@@ -128,7 +128,7 @@ public class Category {
 - `namespace`指明哪个包
 - `resultType`指映射出来的java对象类型，因为在上一个配置文件已经在`<typeAliases>`写明包名，所以这里不用给出全名（com.jerrysheh.pojo.Category）
 
-## 测试类 Test
+### 测试类 Test
 
 Test.java
 ```java
@@ -157,7 +157,7 @@ public class Test {
 
 ---
 
-# 使用 mybatis 增删查改
+## 使用 mybatis 增删查改
 
 修改 Category.xml 文件，添加增删查改的SQL语句。
 
@@ -190,7 +190,7 @@ public class Test {
 </mapper>
 ```
 
-## 增
+### 增
 
 在测试类Test中通过session将对象映射为数据库信息，插入表
 
@@ -210,7 +210,7 @@ c.setName("category3");
 session.insert("addCategory",c);
 ```
 
-## 删
+### 删
 
 删除 id 号为 2 的category
 
@@ -223,7 +223,7 @@ c.setId(2);
 session.delete("deleteCategory", c);
 ```
 
-## 改
+### 改
 
 ```java
 // 通过session.selectOne取出一个Category对象
@@ -237,7 +237,7 @@ c.setName("修改了的Category名稱");
 session.update("updateCategory",c);
 ```
 
-## 查
+### 查
 
 ```java
 listAll(session);
@@ -256,7 +256,7 @@ private static void listAll(SqlSession session) {
 
 ---
 
-# 模糊查询
+## 模糊查询
 
 在 Category.xml 中添加模糊查询语句：
 
@@ -285,7 +285,7 @@ private static void listbyName(SqlSession session, String param) {
 
 ---
 
-# 多条件查询
+## 多条件查询
 
 在 Category.xml 中添加多条件查询语句：
 
@@ -317,9 +317,9 @@ private static void listbyIdAndName(SqlSession session, Map<String,Object> param
 
 ---
 
-# 动态SQL
+## 动态SQL
 
-## if
+### if
 
 我们前面提供了 listCategory 全部查询 和 listCategoryByName 模糊查询 两种方式。要写两个 SQL 语句。可以看到 `session.selectList()` 既能接受一个参数，也能接受两个参数。
 
@@ -366,6 +366,6 @@ Product.xml 修改后：
     </mapper>
 ```
 
-## 其他动态SQL语句
+### 其他动态SQL语句
 
 除了 if 以外，还有 where、choose、foreach、bind等动态SQL语句，具体用法可以到网上查找。

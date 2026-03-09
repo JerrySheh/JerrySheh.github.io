@@ -14,7 +14,7 @@ permalink: /java/rrof5w08/
 
 在聊 Servlet 之前，先讲讲什么是 Web服务器 和 应用服务器。
 
-# Web服务器
+## Web服务器
 
 无论何种 Web 资源，想被远程计算机访问，都必须有一个与之对应的网络通信程序，当用户来访问时，这个网络通信程序读取 Web 资源数据，并把数据发送给来访者。
 
@@ -28,7 +28,7 @@ Web服务器就是一个网络通信程序，它用于完成底层网络通迅�
 
 ---
 
-# 应用服务器 - Tomcat
+## 应用服务器 - Tomcat
 
 我们的 Web 应用要运行起来，是需要部署在应用服务器上而不是Web服务器。因为web服务器只负责资源映射，而程序业务逻辑需要另外的容器来处理。
 
@@ -40,9 +40,9 @@ Web服务器就是一个网络通信程序，它用于完成底层网络通迅�
 
 ---
 
-# Servlet
+## Servlet
 
-## Servlet 是什么
+### Servlet 是什么
 
 简而言之，Servlet 就是一个接口，它规定了一个后端逻辑初始化的时候做什么、业务逻辑是什么、销毁的时候做什么。
 
@@ -67,7 +67,7 @@ public interface Servlet {
 
 按照一种约定俗成的称呼习惯，通常我们也把实现了Servlet接口的java程序，称之为Servlet。
 
-## Servlet的运行过程
+### Servlet的运行过程
 
 Servlet程序由Web服务器调用，web服务器收到客户端的Servlet访问请求后：
 
@@ -83,7 +83,7 @@ Servlet程序由Web服务器调用，web服务器收到客户端的Servlet访问
 
 ![servlet](/images/Webapp/Servlet.png)
 
-# Servlet与普通Java类的区别　
+## Servlet与普通Java类的区别　
 
 Servlet是一个供其他Java程序（Servlet引擎）调用的Java类，它不能独立运行，它的运行完全由Servlet引擎来控制和调度。
 
@@ -95,11 +95,11 @@ Servlet是一个供其他Java程序（Servlet引擎）调用的Java类，它不�
 
 ---
 
-# 实战
+## 实战
 
-## 配置
+### 配置
 
-### 新建IDEA工程
+#### 新建IDEA工程
 
 1. 新建一个IDEA Maven工程
 2. 在 pom.xml 添加 servlet-api 依赖 （依赖到 [mvnrepository](http://mvnrepository.com/artifact/javax.servlet/javax.servlet-api/4.0.0) 或 [search.maven.org](https://search.maven.org/) 找）
@@ -113,7 +113,7 @@ Servlet是一个供其他Java程序（Servlet引擎）调用的Java类，它不�
 - [IntelliJ IDEA 构建maven，并用Maven创建一个web项目](https://www.cnblogs.com/Wenlawliety/p/6606614.html)
 - [IntelliJ idea 2017创建Web项目后web文件夹下没有WEB-INF的解决方法](http://blog.csdn.net/xwx617/article/details/79269939)
 
-## 后端：GET
+### 后端：GET
 
 src/main/java 下，new 一个 servlet
 
@@ -152,7 +152,7 @@ public class helloServlet extends HttpServlet {
 
 - `@WebServlet("/hello")`是一个注解，我们用这种方式来表示该 Servlet 的路径是 ./hello 。更原始的，我们可以在项目工程下找到 web.xml 文件，在这里面配置映射路径。（参考：[WEB PROJECT](http://how2j.cn/k/idea/idea-web-project/1352.html)）
 
-## 后端：POST
+### 后端：POST
 
 src/main/java 下，new 一个 servlet
 
@@ -184,7 +184,7 @@ public class postServlet extends HttpServlet {
 - `"字面量".equals(str)`是个好习惯
 - 用`PrintWriter`类来写html
 
-## 前端：HTML
+### 前端：HTML
 
 web目录下，new 一个 login.html
 
@@ -223,11 +223,11 @@ login.html
 
 ![login](/images/Webapp/login.png)
 
-## 跳转
+### 跳转
 
 登录成功或是失败后，分别会跳转到不同的页面。 跳转分为`服务端跳转`和`客户端跳转`。
 
-### 服务端跳转(forward)
+#### 服务端跳转(forward)
 
 forward 是服务器请求资源,服务器直接访问目标地址的URL,把那个URL的响应内容读取过来,然后把这些内容再发给浏览器.浏览器根本不知道服务器发送的内容从哪里来的,所以它的地址栏还是原来的地址。<font color="red"> 因此，用户看到的网址没有变化 </font>。 在这个过程中，控制权并没有转交给另一服务器对象。
 
@@ -235,7 +235,7 @@ forward 是服务器请求资源,服务器直接访问目标地址的URL,把那�
 request.getRequestDispatcher("success.html").forward(request, response);
 ```
 
-### 客户端跳转(redirect)
+#### 客户端跳转(redirect)
 
 redirect是服务端根据逻辑,发送一个状态码,告诉浏览器重新去请求那个地址.所以地址栏显示的是新的URL.
 
@@ -245,7 +245,7 @@ response.sendRedirect("fail.html");
 
 - 用户看到的网址变为 127.0.0.1:8080/fail.html
 
-## Web.xml
+### Web.xml
 
 在项目中有一个 Web.xml 文件，这个文件是一些配置参数。
 
@@ -286,7 +286,7 @@ this.pwd = request.getSession().getServletContext().getInitParameter("database_p
 
 ---
 
-# Request常用方法
+## Request常用方法
 
 获取信息
 
@@ -314,7 +314,7 @@ request.getParameterMap() | 用于遍历所有的参数，并返回Map类型。
 
 ---
 
-# respoonse 常用方法
+## respoonse 常用方法
 
 方法|释义
 ---|---
@@ -333,7 +333,7 @@ response.setHeader("pragma","no-cache");
 
 ---
 
-# Servlet的线程安全问题
+## Servlet的线程安全问题
 
 当多个客户端并发访问同一个Servlet时，web服务器会为每一个客户端的访问请求创建一个线程，并在这个线程上调用Servlet的service方法，因此service方法内如果访问了同一个资源的话，就有可能引发线程安全问题。
 
@@ -347,6 +347,6 @@ response.setHeader("pragma","no-cache");
 
 事实上，在Servlet API 2.4中，已经将`SingleThreadModel`标记为Deprecated（过时的）。  
 
-## 标记接口
+### 标记接口
 
 在Java中，把没有定义任何方法和常量的接口称之为标记接口，经常看到的一个最典型的标记接口就是"Serializable"，这个接口也是没有定义任何方法和常量的，标记接口在Java中有什么用呢？主要作用就是给某个对象打上一个标志，告诉JVM，这个对象可以做什么，比如实现了"Serializable"接口的类的对象就可以被序列化，还有一个"Cloneable"接口，这个也是一个标记接口，在默认情况下，Java中的对象是不允许被克隆的，就像现实生活中的人一样，不允许克隆，但是只要实现了"Cloneable"接口，那么对象就可以被克隆了。

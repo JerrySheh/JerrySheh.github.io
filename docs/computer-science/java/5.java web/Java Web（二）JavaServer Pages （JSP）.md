@@ -24,7 +24,7 @@ JSP 就是干这个事的！
 
 ---
 
-# JSP 如何转成 HTML
+## JSP 如何转成 HTML
 
 1. 把 hello.jsp 转译为hello_jsp.java
 2. hello_jsp.java继承了`HttpServlet`类，因此它是一个servlet
@@ -34,20 +34,20 @@ JSP 就是干这个事的！
 
 ---
 
-# JSP 的页面元素
+## JSP 的页面元素
 
-## 静态内容
+### 静态内容
 
 包括 HTML、CSS、JavaScript 等内容
 
-## 指令
+### 指令
 
 类似于下面 以 `<%@` 开头，以` %>` 结尾的
 ```html
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 ```
 
-## Scriptlet
+### Scriptlet
 
 类似于下面 以 `<%` 开头，以` %>` 结尾的
 ```
@@ -62,7 +62,7 @@ JSP 就是干这个事的！
 <%=new Date().toString()%>
 ```
 
-## 动作
+### 动作
 
 在jsp页面中包含另一个页面
 ```
@@ -76,7 +76,7 @@ JSP 就是干这个事的！
 
 ---
 
-# 会话跟踪
+## 会话跟踪
 
 会话跟踪是一种灵活、轻便的机制，它使Web上的状态编程变为可能。
 
@@ -91,11 +91,11 @@ HTTP是一种无状态协议，每当用户发出请求时，服务器就会做�
 
 ---
 
-# Cookie 和 Session
+## Cookie 和 Session
 
 关于 Cookie 和 Session 的概念，可参考 [HTTP之旅](/networking/7ic54ih1/)
 
-## setCookie
+### setCookie
 
 我们可以在web目录下创建一个文件 setCookie.jsp，然后用 Scriptlet`<%...%>` new一个 Cookie 对象。
 
@@ -119,7 +119,7 @@ HTTP是一种无状态协议，每当用户发出请求时，服务器就会做�
 
 访问：http://127.0.0.1/setCookie.jsp ，用Chrome F12工具可看到 cookie
 
-## getCookie
+### getCookie
 
 在web目录下创建文件getCookie.jsp，填入
 
@@ -136,7 +136,7 @@ HTTP是一种无状态协议，每当用户发出请求时，服务器就会做�
 
 然后访问 http://127.0.0.1/getCookie.jsp ，可以看到name:Gareen，这就是setCookie.jsp中设置的Cookie
 
-## setSession
+### setSession
 
 会话指的是从用户打开浏览器访问一个网站开始，无论在这个网站中访问了多少页面，点击了多少链接，都属于同一个会话。 直到该用户关闭浏览器为止，都属于同一个会话。
 
@@ -155,7 +155,7 @@ setSession.jsp
 
 - 用 `session.setAttribute("name", "wtf");` 来保存数据，其中第一个参数是键，第二个参数是值
 
-## getSession
+### getSession
 
 getSession.jsp
 
@@ -178,7 +178,7 @@ session中的name: wtf
 
 ---
 
-# 如果浏览器关闭了 Cookie
+## 如果浏览器关闭了 Cookie
 
 如果浏览器把cookie功能关闭，那么服务端就无法获取jsessionid,每一次访问，都会生成一个新的session对象。
 
@@ -209,7 +209,7 @@ getSession.jsp;jsessionid=22424AEA86ADBE89F335EEB649D997A8
 
 ---
 
-# 作用域
+## 作用域
 
 JSP 有 4 个作用域
 - **pageContext**： 只能在当前页面访问，在其他页面就不能访问了。
@@ -243,7 +243,7 @@ getContext.jsp从setContext.jsp获取了数据，由于是`pageContext`，所以
 
 ---
 
-# 隐式对象
+## 隐式对象
 
 JSP的隐式对象指的是不需要显示定义，直接就可以使用的对象。
 
@@ -262,7 +262,7 @@ JSP一共有9个隐式对象，分别是
 
 ---
 
-# JSTL
+## JSTL
 
 JSP Standard Tag Library 标准标签库
 
@@ -272,7 +272,7 @@ JSTL库用得比较多的有 core 和 fmt
 
 ---
 
-# EL表达式
+## EL表达式
 
 首先在 jsp 头标注isELIgnored="false"，因为不同版本的 Tomcat 对 EL 表达式默认开关不一样。
 
@@ -291,7 +291,7 @@ JSTL库用得比较多的有 core 和 fmt
 
 可见，JSTL输出要写成`<c:out value="${name}" /> `的代码，用 EL表达式只需要写`${name}`，非常方便。
 
-## JavaBean
+### JavaBean
 
 Java语言欠缺属性、事件、多重继承功能。所以，如果要在Java程序中实现一些面向对象编程的常见需求，只能手写大量胶水代码。Java Bean正是编写这套胶水代码的惯用模式或约定。这些约定包括getXxx、setXxx、isXxx、addXxxListener、XxxEvent等。遵守上述约定的类可以用于若干工具或库。
 

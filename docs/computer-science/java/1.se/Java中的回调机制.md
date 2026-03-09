@@ -11,6 +11,8 @@ createTime: 2018/06/09 09:39:26
 permalink: /java/pvndsk2g/
 ---
 
+## 前言
+
 什么是回调（CallBack）呢？有一个经典的打电话例子。
 
 > 有一天小王遇到一个很难的问题，问题是“1 + 1 = ?”，就打电话问小李，小李一下子也不知道，就跟小王说，等我办完手上的事情，就去想想答案，小王也不会傻傻的拿着电话去等小李的答案吧，于是小王就对小李说，我还要去逛街，你知道了答案就打我电话告诉我，于是挂了电话，自己办自己的事情，过了一个小时，小李打了小王的电话，告诉他答案是2
@@ -23,7 +25,7 @@ permalink: /java/pvndsk2g/
 
 ---
 
-# 异步回调
+## 异步回调
 
 首先定义一个回调接口
 
@@ -43,13 +45,13 @@ public interface Callback {
 
 ---
 
-# Android 中的回调
+## Android 中的回调
 
 在 Android 中，我们开启一个 AsyncTask 获取网络数据， 然后在 `onPostExecute()` 方法中进行视图绑定。
 
 由于 AsyncTask 可能造成的内存泄漏问题，因此我们一般都用静态内部类来规避这个问题。但是静态内部类又不能持有外部类的成员，因此我们可以用`回调函数(Callback Function)`来解决。
 
-## 定义回调接口
+### 定义回调接口
 
 首先定义一个回调接口
 
@@ -60,7 +62,7 @@ public interface OnDataFinishedListener {
 }
 ```
 
-## AsyncTask 内部类
+### AsyncTask 内部类
 
 在 AsyncTask 里面实例化，并添加一个方法用来传引用
 
@@ -84,7 +86,7 @@ protected void onPostExecute(String respResults) {
 }
 ```
 
-## 外部类
+### 外部类
 
 在外部类中调用内部类的`setOnDataFinishedListener()`方法，重写接口。
 

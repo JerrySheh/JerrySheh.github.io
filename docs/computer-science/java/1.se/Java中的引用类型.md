@@ -11,7 +11,7 @@ tags:
 permalink: /java/sih3pj82/
 ---
 
-# 什么是引用类型
+## 什么是引用类型
 
 
 `引用类型（reference type）`是一种基于类的数据类型。Java中，除去基本数据类型外，其它类型都是引用类型。包括Java提供的或者自己定义的class类。
@@ -40,7 +40,7 @@ Java中有四种引用：
 
 ---
 
-# 强引用（Strong Reference）
+## 强引用（Strong Reference）
 
 如果一个对象具有强引用，那垃圾回收器(GC)绝不会回收它。
 
@@ -52,7 +52,7 @@ Ball b1 = new Ball();
 
 当内存空间不足，Java虚拟机宁愿抛出OutOfMemoryError错误，使程序异常终止，也不会靠随意回收具有强引用的对象来解决内存不足的问题。如果不使用时，可以通过 `b1=null;`的方式来弱化引用，帮助GC回收对象。
 
-## ArrayList 中的强引用
+### ArrayList 中的强引用
 
 ```java
 private transient Object[] elementData;
@@ -69,7 +69,7 @@ public void clear() {
 
 ---
 
-# 软引用（Soft Reference）
+## 软引用（Soft Reference）
 
 如果一个对象只具有软引用，则内存空间足够，垃圾回收器就不会回收它；如果内存空间不足了，就会回收这些对象的内存。
 
@@ -109,7 +109,7 @@ if(sr.get()!=null){
 
 ---
 
-# 弱引用（Weak Reference）
+## 弱引用（Weak Reference）
 
 弱引用与软引用的区别在于：
 
@@ -130,7 +130,7 @@ SoftReference<StringBuilder> sbSoftRef = new SoftReference<>(sb);
 
 ---
 
-# 虚引用（Phantom Reference）
+## 虚引用（Phantom Reference）
 
 虚引用主要用来跟踪对象被垃圾回收器回收的活动。
 

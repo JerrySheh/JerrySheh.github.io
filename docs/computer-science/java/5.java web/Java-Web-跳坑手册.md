@@ -15,7 +15,7 @@ permalink: /java/xbqqhqgg/
 
 <!-- more -->
 
-# 从 Eclipse 导入工程到IDEA
+## 从 Eclipse 导入工程到IDEA
 
 0. IDEA 选择 import  ，选择项目下的 .project 文件
 1. 随便打开一个 Java 类，右上角出现 Setup SDK，选择你的JDK版本
@@ -30,7 +30,7 @@ permalink: /java/xbqqhqgg/
 
 ---
 
-# 增添字段报错
+## 增添字段报错
 
 新增数据库信息时，抛出 SQL Exception
 
@@ -44,7 +44,7 @@ Field 'id' doesn't have a default value
 
 ---
 
-# 重定向出错
+## 重定向出错
 
 更新数据库信息，抛出 java.lang.IllegalStateException
 
@@ -58,7 +58,7 @@ Cannot call sendRedirect() after the response has been committed
 
 ---
 
-# maven工程使用 java 8 新特性，IDEA 报错
+## maven工程使用 java 8 新特性，IDEA 报错
 
 使用了高版本java的新特性，结果报如下错误
 ```
@@ -96,7 +96,7 @@ pom.xml 添加如下代码，更改到 1.8 即可
 
 ---
 
-# IDEA导入SSM工程，404
+## IDEA导入SSM工程，404
 
 2018版本的IDEA导入SSM工程可能导致部署后出现404错误。
 
@@ -109,7 +109,7 @@ File -> Settings -> Build,Execution,Deployment -> Build Tools -> Maven -> Import
 ---
 
 
-# BeanFactory not initialized
+## BeanFactory not initialized
 
 从 github 获取其他人拷贝项目过来，Tomcat 无法运行，报错如下：
 
@@ -126,7 +126,7 @@ BeanFactory not initialized or already closed - call ‘refresh’ before access
 
 ---
 
-# SpringBoot集成JPA报错：No identifier specified for entity
+## SpringBoot集成JPA报错：No identifier specified for entity
 
 在 id 字段加 `@Id` 注解 和 `@GeneratedValue(strategy=GenerationType.IDENTITY)` 注解。
 

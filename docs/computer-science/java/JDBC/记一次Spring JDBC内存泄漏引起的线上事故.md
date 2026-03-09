@@ -5,7 +5,6 @@ categories:
   - JDBC
 tags:
   - Java
-abbrlink: 720e88bc
 createTime: 2021/03/28 20:25:00
 permalink: /java/wnh7knsu/
 ---

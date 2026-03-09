@@ -26,7 +26,7 @@ JSON 的优点：
 
 ---
 
-# JavaScript Json语法
+## JavaScript Json语法
 
 前面提到，JavaScript对象分为：
 - 内置对象(Number,String,Array,Date,Math)
@@ -34,7 +34,7 @@ JSON 的优点：
 
 JSON就属于自定义对象，只不过是以JSON这样的数据组织方式表达出来。
 
-## json对象
+### json对象
 
 定义一个JSON对象
 
@@ -55,7 +55,7 @@ document.write("person对象的name元素: " + person.age);
 ```
 
 
-## json数组
+### json数组
 
 一对`{}`括号表示一个json对象，一个json数组用`[]`括号表示。
 
@@ -78,7 +78,7 @@ document.write( "第4个英雄是:" +  heros[3].name);
 
 </script>
 ```
-## 字符串转json对象
+### 字符串转json对象
 
 JavaScript方式
 
@@ -101,7 +101,7 @@ var gareen = $.parseJSON(s3);
 
 ---
 
-# 从前端发送 Json 数据到后台
+## 从前端发送 Json 数据到后台
 
 可以使用 Ajax 提交 json 数据到后台
 
@@ -182,7 +182,7 @@ public class categoryController {
 
 ---
 
-# Java中使用 json 库
+## Java中使用 json 库
 
 Java中处理 json 格式的数据可以用 `orj.json` 包 或者 net.sf.json-lib 的 `json-lib` 包，但是提供的方法还是比较基础的。
 
@@ -194,7 +194,7 @@ Java中处理 json 格式的数据可以用 `orj.json` 包 或者 net.sf.json-li
 - 项目地址：[github](https://github.com/google/gson)
 
 
-## 基本数据类型（及包装类）和 Json 互转
+### 基本数据类型（及包装类）和 Json 互转
 
 ```java
 // Serialization
@@ -216,7 +216,7 @@ String str = gson.fromJson("\"abc\"", String.class);
 String[] anotherStr = gson.fromJson("[\"abc\"]", String[].class);
 ```
 
-## 对象和 Json 互转
+### 对象和 Json 互转
 
 ```java
 // 定义一个类
@@ -250,9 +250,9 @@ BagOfPrimitives obj2 = gson.fromJson(json, BagOfPrimitives.class);
 
 ---
 
-# 使用 Gson 解析嵌套的json对象
+## 使用 Gson 解析嵌套的json对象
 
-## 序列化（Serialization）
+### 序列化（Serialization）
 
 所谓序列化指的是将　Java 对象　映射成　json 数据。
 
@@ -326,7 +326,7 @@ Gson 中只能根据 "{}" 标志来创建一个新对象。
 
 
 
-## 反序列化（deserialization）
+### 反序列化（deserialization）
 
 反序列化就是把 **json 数据** 映射成 **java 对象**
 
@@ -405,13 +405,13 @@ Restaurant restaurantObject = gson.fromJson(restaurantJson, Restaurant.class);
 
 ---
 
-# 使用 IDEA / Android Studio 的 GsonFormat 插件
+## 使用 IDEA / Android Studio 的 GsonFormat 插件
 
 使用 GsonFormat 插件，可以快速根据 json内容 生成 javabean
 
 项目地址：https://github.com/zzz40500/GsonFormat
 
-## 使用方法
+### 使用方法
 
 1. 在 IDEA 中， file -> setting -> plugins -> 搜索 "GsonFormat" -> 安装并重启IDE
 2. 创建一个装 javabean 的包（必须），然后创建一个 javabean 类 (包名和类名可随意取)

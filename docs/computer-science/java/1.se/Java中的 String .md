@@ -11,7 +11,7 @@ createTime: 2018/02/05 00:27:20
 permalink: /java/wzx0vqqp/
 ---
 
-# String 的本质
+## String 的本质
 
 在 Java8 中，分析 java.lang.String 类的源码，可以发现 String 内部维护的是一个 char 数组。同时可以发现，String类被 `final` 修饰，即不可变的。
 
@@ -33,11 +33,11 @@ private final byte value[];
 
 <!-- more -->
 
-## 为什么要将 char[] 改成 byte[] ？
+### 为什么要将 char[] 改成 byte[] ？
 
 char 占用16位，即两字节。每个 byte 占用8位，即1字节。如果我们要存储字符A，则为0x00 0x41，用 char 的话，前面的一个字节空间浪费了。
 
-## 为什么要设计成不可变类 ？ 优缺点？
+### 为什么要设计成不可变类 ？ 优缺点？
 
 - **优点**：只读，所以 **多线程并发访问也不会有任何问题**。
 - **缺点**：每个不同的状态都要一个对象来代表，可能会造成性能上的问题。（所以 Java 标准类库还提供了一个可变版本，即 StringBuffer）
@@ -53,7 +53,7 @@ char 占用16位，即两字节。每个 byte 占用8位，即1字节。如果�
 
 ---
 
-# String str = new String("abc")创建了几个对象？
+## String str = new String("abc")创建了几个对象？
 
 答案是：最多创建2个，最少创建1个。
 
@@ -101,7 +101,7 @@ String类会先去字符串池寻找`abc`，发现`abc`不存在，于是创建`
 
 ---
 
-# String 的 intern 方法
+## String 的 intern 方法
 
 `String.intern()`是一个 native 方法。如果字符串常量池里面已经包含一个等于此 String 对象的字符串，则返回池中的这个字符串String对象，否则，先将该String对象包含的字符串添加进常量池，然后返回此String对象的引用。
 
@@ -125,7 +125,7 @@ public static void main(String[] args) {
 
 ---
 
-# String 的 “+” 号是怎么连接字符串的 ？
+## String 的 “+” 号是怎么连接字符串的 ？
 
 当我们在程序中输入：
 
@@ -155,9 +155,9 @@ public static void main(String[] args) {
 
 ---
 
-# String 的比较
+## String 的比较
 
-## == 和 equals 两种比较
+### == 和 equals 两种比较
 
 ```java
 String s1 = "AAA";
@@ -169,7 +169,7 @@ System.out.println(s1.equals(s2)); // 输出 true
 
 `==`比较的是引用的内存地址，而`equals`方法比较的是字符串的内容。
 
-## 探究 String 类 equals 方法源码
+### 探究 String 类 equals 方法源码
 
 ```java
 /**
@@ -232,7 +232,7 @@ char c[] = {'h', 'e', 'l', 'l', 'o'};
 
 引申，在 Java 9 中， String 的实现已经从 char[] 变成 byte[] 了。因此就更应该是 false 了。
 
-## 字符串比较的几点建议
+### 字符串比较的几点建议
 
 **建议一**：文字串和String对象比较的时候，好的习惯是把文字串放在前面，这样可以避免某些空指针异常。
 
@@ -258,9 +258,9 @@ myStr.equalsIgnoreCase("world");
 
 ---
 
-# String 的用法
+## String 的用法
 
-## 使用 join 连接字符串
+### 使用 join 连接字符串
 
 join并不是用来取代“+”连接符的，更多是用于分隔符拼接。（参考：[stackoverflow](https://stackoverflow.com/questions/31817290/string-join-vs-other-string-concatenation-operations)）
 
@@ -270,7 +270,7 @@ String name = String.join("-","hello","and","again");
 
 输出 hello-and-again 。 第一个参数是连接符，第二到n个参数是需要连接的字符串
 
-## 使用 substring 提取子串
+### 使用 substring 提取子串
 
 ```java
 String str = "Hello, World!";
@@ -279,7 +279,7 @@ String str2 = str.substring(7,12);
 
 提取出第 7（包括）到第12（不包括）位，即`World`这个单词。注意是从 0 开始的。
 
-## 使用 split 分割字符串
+### 使用 split 分割字符串
 
 
 ```java
@@ -288,7 +288,7 @@ String[] subs = str.split(" ");
 
 以空格为分隔符，将子字符串提取出来。**split的最终结果为一个字符串数组。**
 
-## 使用 format 格式化输出
+### 使用 format 格式化输出
 
 ```java
 String fs;
@@ -300,7 +300,7 @@ hello = String.format("Hello, %s. Next year you will be %d.",
                       name, age);
 ```
 
-## 使用 toString 将数字转为字符串
+### 使用 toString 将数字转为字符串
 
 ```java
 str = Integer.toString(n,2);
@@ -308,7 +308,7 @@ str = Integer.toString(n,2);
 
 `toString`接受2个参数，第一个参数是数字n，第二个参数是进制（默认为10进制，范围在[2,36]）。在这个例子中，如果n是42，则把42转为二进制字符串 “101010”。
 
-## 使用 parseInt 将字符串转化为数字
+### 使用 parseInt 将字符串转化为数字
 
 ```java
 n = Integer.parseInt(str，2)
@@ -316,7 +316,7 @@ n = Integer.parseInt(str，2)
 
 这实际上是`Integer`的方法而不是`String`的方法。这个例子将字符串 str 转化成二进制的 Integer 。
 
-## 使用 replace 和 replaceAll 取代
+### 使用 replace 和 replaceAll 取代
 
 ```java
 public String replace(char oldChar, char newChar)
@@ -328,7 +328,7 @@ public String replaceAll(String regex, String replacement)
 
 ---
 
-# String 和 Char[] 之间的转换
+## String 和 Char[] 之间的转换
 
 String的底层就是 Char数组（JDK1.9之后是 Byte 数组），转换方式如下：
 
@@ -343,7 +343,7 @@ String str2 = new String(cs);   // 方法二
 
 ---
 
-# StringBuffer 和 StringBuilder
+## StringBuffer 和 StringBuilder
 
 当需要对字符串进行修改，可以使用 StringBuffer 和 StringBuilder 类。
 
@@ -355,11 +355,11 @@ StringBuilder 类在 Java 5 中被提出，它和 StringBuffer 之间的最大�
 
 总结起来就是： **StringBuilder 比 StringBuffer 快，但涉及线程安全必须用StringBuffer。它们两者与 String 的不同点在于对象能被多次修改。**
 
-## StringBuffer 的用法
+### StringBuffer 的用法
 
 StringBuffer有跟String类似的方法：
 
-### 使用 append 追加字符串
+#### 使用 append 追加字符串
 
 ```java
 StringBuffer s = new StringBuffer("hello world，");
@@ -370,13 +370,13 @@ System.out.println(s);
 
 输出：` hello world，I am Jerry.`
 
-#### 扩展： String 的 “+” 和 StringBuffer的 append
+##### 扩展： String 的 “+” 和 StringBuffer的 append
 
 问: 有没有哪种情况用 + 做字符串连接比调用 StringBuffer / StringBuilder 对象的 append 方法性能更好？
 
 答：如果连接后得到的字符串在 **静态存储区中是早已存在的**，那么用+做字符串连接是优于 StringBuffer / StringBuilder 的 append 方法的。
 
-### 使用 reverse 进行反转
+#### 使用 reverse 进行反转
 
 
 ```java
@@ -387,7 +387,7 @@ System.out.println(s);
 
 输出：`olleh`
 
-### 使用 delete 删除字符串中间的字符
+#### 使用 delete 删除字符串中间的字符
 
 ```java
 public delete(int start, int end)
@@ -399,7 +399,7 @@ System.out.println(s);
 
 输出：`ho`
 
-### 使用 insert 插入
+#### 使用 insert 插入
 
 ```java
 StringBuffer s = new StringBuffer("hello");
@@ -409,7 +409,7 @@ System.out.println(s);
 
 输出：`“hangello”`
 
-### 使用 replace 取代
+#### 使用 replace 取代
 
 不举例了，给出原型:
 

@@ -12,7 +12,7 @@ permalink: /java/hahpb8zi/
 ---
 
 
-# 前言
+## 前言
 
 最近项目里需要跨数据库同步大批量数据（百万到千万级别），以前都是用 JDBC 来实现。在 JDBC 里，我们能灵活地使用流查询来批次摄取处理，避免OOM，但 JDBC 这玩意儿写多了，谁都会嫌它既啰嗦又繁琐（但性能真香）。于是这次决定用 Springboot + Mybatis 框架来试试。因为涉及到多个数据源和不同的数据库产品（Oracle、PostgreSQL、MySQL），所以在项目里使用了动态数据源。
 
@@ -28,7 +28,7 @@ permalink: /java/hahpb8zi/
 
 ---
 
-# JDBC 驱动的那些坑
+## JDBC 驱动的那些坑
 
 以前写 JDBC 时，通常是通过设置 `fetchsize` 来控制每次读取的数据量。`fetchsize` 并不是分页查询，而是数据库一次缓存到客户端的数量。所以在查询大量数据时，并不需要在SQL里手动写 `limit n offset m` 这样的分页语法。
 
@@ -47,7 +47,7 @@ while(rs.next()){
 
 但是，不同的数据库产品对 `fetchsize` 的支持不一样。像 Oracle 这种标准的商业数据库，对 `fetchsize` 的支持就比较好，无脑使用即可。而 MySQL 和 PostgreSQL 就没那么简单了。
 
-## MySQL 流查询
+### MySQL 流查询
 
 查阅 MySQL 的[官方文档](https://dev.mysql.com/doc/connector-j/en/connector-j-reference-implementation-notes.html)，里面提到：
 
@@ -67,7 +67,7 @@ stmt.setFetchSize(Integer.MIN_VALUE);
 
 MySQL 默认情况下，创建 `prepareStatement` 时，就已经是 `ResultSet.TYPE_FORWARD_ONLY` 和 `ResultSet.CONCUR_READ_ONLY` ，所以这两个参数可加可不加。
 
-## PostgreSQL 流查询
+### PostgreSQL 流查询
 
 PostgreSQL 默认情况下， `fetchsize`也是无效的。[官方文档](https://jdbc.postgresql.org/documentation/query/#fetchsize-example)里提到，要让 `fetchsize` 生效，**连接必须是非自动提交** 。即：
 
@@ -80,7 +80,7 @@ statement.setFetchSize(500);
 
 ---
 
-# MyBatis 流查询
+## MyBatis 流查询
 
 Mybatis 也是支持流数据查询的，主要是用了 `ResultHandler` 回调，对结果集的每一条进行处理，处理完即丢弃（释放内存），所以不会内存溢出。
 
@@ -123,7 +123,7 @@ transactionTemplate.execute( status -> {
 
 这下查询就搞定了！
 
-# MyBatis 批量插入
+## MyBatis 批量插入
 
 批量插入没什么好说的，就是在查询过程中，积累了1000条，统一提交插入，用的 mybatis 的 `<foreach>` 标签。
 

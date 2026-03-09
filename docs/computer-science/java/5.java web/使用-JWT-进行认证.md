@@ -11,7 +11,7 @@ createTime: 2018/08/25 11:30:31
 permalink: /java/dw96t2an/
 ---
 
-# 什么是 JWT ？
+## 什么是 JWT ？
 
 JWT 的全称是 JSON Web Token，是一种跨域认证解决方案。
 
@@ -36,7 +36,7 @@ JWT 的全称是 JSON Web Token，是一种跨域认证解决方案。
 
 ---
 
-# JWT 的原理
+## JWT 的原理
 
 用户提供用户名和密码，服务器认证通过以后，生成一个 JSON 对象，发回给用户，如：
 
@@ -52,7 +52,7 @@ JWT 的全称是 JSON Web Token，是一种跨域认证解决方案。
 
 ---
 
-# JWT 的组成结构
+## JWT 的组成结构
 
 为了防止数据篡改，我们不可能明文发送像上面那样的 json，而是进行了签名之后，以字符串的形式发送给前端，大概像这样：
 
@@ -94,13 +94,13 @@ eyJzdWIiOiAiMTIzNDU2Nzg5MCIsIm5hbWUiOiAiSmVycnkiLCJteUZpZWxkIjogInNvbWV0aGluZyBo
 
 注意，Base64URL是可以解密的，因此不要存储密码等敏感信息。
 
-## Base64 和 Base64URL 的区别
+### Base64 和 Base64URL 的区别
 
 JWT 作为一个令牌（token），有些场合可能会放到 URL（比如 api.example.com/?token=xxx）。Base64 有三个字符+、/和=，在 URL 里面有特殊含义，所以要被替换掉：=被省略、+替换成-，/替换成_ 。这就是 Base64URL 算法。
 
 ---
 
-# JWT 如何使用
+## JWT 如何使用
 
 服务器生成 JWT 之后，把加密字符串发回给客户端，客户端可以把它存储在 Cookie 里面，也可以储存在 localStorage。
 
@@ -114,11 +114,11 @@ JWT 作为一个令牌（token），有些场合可能会放到 URL（比如 api
 
 ---
 
-# SpringBoot 实战
+## SpringBoot 实战
 
 自己实现 JWT 并不难，但是秉着不要重复造轮子的原则，我们使用开源框架 [jjwt](https://github.com/jwtk/jjwt) 简化我们的步骤。
 
-## 引入 jjwt 的依赖
+### 引入 jjwt 的依赖
 
 pom.xml
 ```xml
@@ -141,7 +141,7 @@ pom.xml
 </dependency>
 ```
 
-## 创建 JwtUtil 类
+### 创建 JwtUtil 类
 
 ```java
 import io.jsonwebtoken.*;
@@ -219,7 +219,7 @@ public class JwtUtil
 2. **createJWT(String subject)**：用于创建一个JWT
 3. **parseJWT(String jwt)**：用于解密JWT
 
-### generalKey()
+#### generalKey()
 
 一般我们都是从服务器配置文件读取某个 Key 字符串，转换成 byte[] ，再转成 SecretKey，如下：
 
@@ -235,7 +235,7 @@ SecretKey key = Keys.secretKeyFor(SignatureAlgorithm.HS256); //or HS384 or HS512
 ```
 
 
-### createJWT(String subject)
+#### createJWT(String subject)
 
 创建 JWT 的过程，详细可看 [jjwt](https://github.com/jwtk/jjwt) github文档。
 
@@ -248,7 +248,7 @@ String jws = Jwts.builder()
         .compact();
 ```
 
-### parseJWT(String jwt)
+#### parseJWT(String jwt)
 
 解密 JWT 的过程，这里注意，需要抛出异常。因为一旦解密失败(例如失效或者无效)，jjwt会抛出`JwtException`，需要我们在 catch 块里处理。
 
@@ -267,7 +267,7 @@ try {
 }
 ```
 
-## 在 Service 层调用JwtUtil
+### 在 Service 层调用JwtUtil
 
 在 Servce 里面验证用户名和密码无误后，通过以下语句创建一个JWT（token）
 
@@ -277,9 +277,9 @@ String token = JwtUtil.createJWT(user.getUsername());
 
 之后把这个 JWT（token） 返回给前端
 
-## 前端
+### 前端
 
-### 保存 token
+#### 保存 token
 
 在 HTML5 中，localStorage 是一个客户端（浏览器）可以存储数据的地方。
 
@@ -289,7 +289,7 @@ String token = JwtUtil.createJWT(user.getUsername());
 localStorage.setItem("token", token);
 ```
 
-### 将 token 写入 header 中
+#### 将 token 写入 header 中
 
 之后发起一次 ajax 请求，把 token 放进 header 的 Authorization 字段里，例如，我这里是获取登录用户信息。
 
@@ -307,7 +307,7 @@ axios.get("/api/user/profile",{
 
 注意：每次发起 ajax 请求，必须在方法参数里手动带上 Authorization
 
-### 退出登录
+#### 退出登录
 
 退出登录非常简单，只需要把 token 从 localStorage 里面删除即可。
 
@@ -316,7 +316,7 @@ localStorage.removeItem("token");
 location.reload();
 ```
 
-### 在 Service 层验证 JWT
+#### 在 Service 层验证 JWT
 
 前端发回 JWT，Service进行校验
 
@@ -327,7 +327,7 @@ String subject =  JwtUtil.parseJWT(token);
 
 ---
 
-# 引申1：JWT 过期问题
+## 引申1：JWT 过期问题
 
 JWT 的一个特点就是无状态，给用户签发一个有效期为 30 分钟的 token，如果用户第29分钟还在浏览，下一分钟可能因为 token 失效而被迫重新登录。因此需要考虑刷新 JWT 问题。参考业界主流做法，AWS、Azure 和 Auth0 都是用 JWT 为载体，ID Token + Access Token + Refresh Token 的模式：
 
@@ -337,7 +337,7 @@ JWT 的一个特点就是无状态，给用户签发一个有效期为 30 分钟
 
 ---
 
-# 引申2：认证和鉴权
+## 引申2：认证和鉴权
 
 JWT 只是实现了 **认证（Authorization）** 功能，事实上，在现代面向服务的应用中，不同的角色有不同的权限（例如管理员和普通用户），如何 **鉴权（Authentication）** 呢？ 这就要交给 [shiro](http://shiro.apache.org/) 或者 [Spring security](https://spring.io/projects/spring-security) 等框架来做了。
 
