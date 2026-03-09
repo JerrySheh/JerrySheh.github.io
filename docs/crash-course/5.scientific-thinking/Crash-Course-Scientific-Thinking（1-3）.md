@@ -8,7 +8,7 @@ tags:
 
 课程地址：
 
-- [Youtube](https://www.youtube.com/watch?v=Y45KrixWRNg&list=PL8dPuuaLjXtN6j3y85b7xbJDC8LTgdRJG)
+- [Youtube](https://www.youtube.com/playlist?list=PL8dPuuaLjXtN6j3y85b7xbJDC8LTgdRJG)
 
 全集笔记：
 
