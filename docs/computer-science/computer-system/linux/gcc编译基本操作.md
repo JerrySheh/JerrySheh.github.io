@@ -22,7 +22,7 @@ permalink: /computer-system/q5gxq2x5/
 
 <!-- more -->
 
-# 一、gcc各参数的用途
+## 一、gcc各参数的用途
 
 * -shared ：指定生成动态链接库。
 * -static ：指定生成静态链接库。
@@ -40,9 +40,9 @@ permalink: /computer-system/q5gxq2x5/
 
 ---
 
-# 二、使用gcc把 mystrlen 编译成动态库 libmystrlen.so
+## 二、使用gcc把 mystrlen 编译成动态库 libmystrlen.so
 
-## 1. 把 mystrlen.c 编译成目标文件
+### 1. 把 mystrlen.c 编译成目标文件
 
 ```
 gcc -c mystrlen.c -o mystrlen.o
@@ -50,7 +50,7 @@ gcc -c mystrlen.c -o mystrlen.o
 
 在当前目录会生成 `mystrlen.o`文件
 
-## 2. 把目标文件编译成动态链接库
+### 2. 把目标文件编译成动态链接库
 
 ```
 gcc -shared -fPIC mystrlen.o -o libmystrlen.so
@@ -58,18 +58,19 @@ gcc -shared -fPIC mystrlen.o -o libmystrlen.so
 
 在当前目录会生成 `libmystrlen.so`文件
 
----
 
-# 三、使用gcc把 test.c 编译成可执行文件
 
-## 1.编译
+## 三、使用gcc把 test.c 编译成可执行文件
+
+### 1.编译
+
 ```
 gcc -L ./ test.c -lmystrlen -o test
 ```
 
 在当前目录会生成 `test`可执行文件
 
-## 2.运行
+### 2.运行
 
 ```
 ./test
@@ -90,11 +91,11 @@ data_3 pass [26]
 1. 我们的动态链接库文件名是`libmystrlen.so`，但在`-l`参数中，去掉lib和.so，只需要`mystrlen`就可以。 -l后面可以不用空格。
 2. 在gcc编译的时候，如果文件a依赖于文件b，那么编译的时候必须把a放前面，b放后面。 所以， 命令中`test.c`一定要放在`-lmystrlen`前面。
 
----
 
-# 三、可能出现的报错
 
-##  error while loading shared libraries
+## 三、可能出现的报错
+
+###  error while loading shared libraries
 
 ```
 jerrysheh@ubuntu:~/shiyan9$ ./test
@@ -104,13 +105,13 @@ jerrysheh@ubuntu:~/shiyan9$ ./test
 
 这是因为程序运行时找不到我们自己的动态链接库文件，解决办法很简单：
 
-### 1. 打开配置文件 /etc/ld.so.conf
+#### 1. 打开配置文件 /etc/ld.so.conf
 
 ```
 sudo vim /etc/ld.so.conf
 ```
 
-### 2. 在配置文件的最后追加一行你的库文件所在的路径即可
+#### 2. 在配置文件的最后追加一行你的库文件所在的路径即可
 编辑完后类似这样：
 ```
 include /etc/ld.so.conf.d/*.conf
@@ -118,19 +119,19 @@ include /etc/ld.so.conf.d/*.conf
 
 ```
 
-### 3. 刷新配置文件
+#### 3. 刷新配置文件
 
 ```
 sudo ldconfig
 ```
 
-### 4. 重新运行 test 程序
+#### 4. 重新运行 test 程序
 
 ```
 ./test
 ```
 
-## 找不到头文件
+### 找不到头文件
 
 如果头文件跟 .c 文件不在同一目录，使用 `-I` 参数，指定头文件的路径即可
 
