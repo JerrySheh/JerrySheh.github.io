@@ -5,7 +5,7 @@
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-main"><circle cx="6" cy="6" r="3"/><path d="M8.12 8.12 12 12"/><path d="M20 4 8.12 15.88"/><circle cx="6" cy="18" r="3"/><path d="M14.8 14.8 20 20"/></svg>
         影片字幕拼图大师 Pro
       </h2>
-      <p>Powered by Gemini 3 ，完全 vibe coding 开发。支持全画面与字幕自由拼接。</p>
+      <p>Powered by Gemini 3 ，完全 vibe coding 开发。自动识别字幕高度！</p>
     </div>
 
     <div class="stitcher-container">
@@ -137,7 +137,7 @@
         <div class="preview-content" :class="{ 'empty': !previewUrl }">
           <img v-if="previewUrl" :src="previewUrl" alt="Stitched Result">
           <div v-else class="empty-placeholder">
-            等待生成...
+            {{ isProcessing ? '自动识别字幕中...' : '等待生成...' }}
           </div>
         </div>
       </div>
@@ -151,10 +151,12 @@ import { ref, reactive, nextTick, onBeforeUnmount } from 'vue';
 // --- State ---
 const fileInput = ref(null);
 const isDragging = ref(false);
+const isProcessing = ref(false); // 控制“处理中”的状态显示
 const images = ref([]); // { id, url, width, height, cropTop, cropBottom, element, initialCropTop, initialCropBottom }
 const previewUrl = ref('');
 let canvas = null; // Off-screen canvas for processing
 let debounceTimer = null;
+let globalSubtitleRatio = null; // 记录最近一次可靠的字幕顶部比例
 
 // --- Methods ---
 
@@ -178,6 +180,9 @@ const handleDrop = (e) => {
 const processFiles = async (files) => {
   if (!files.length) return;
 
+  isProcessing.value = true;
+  const loadedImages = [];
+
   for (const file of files) {
     const url = URL.createObjectURL(file);
     const imgElement = new Image();
@@ -185,35 +190,74 @@ const processFiles = async (files) => {
 
     await new Promise((resolve) => {
       imgElement.onload = () => {
-        // 自动识别黑边逻辑
-        const margins = detectBlackBars(imgElement);
-        
-        let initialTop = margins.top;
-        if (images.value.length > 0) {
-           // 如果不是第一张，尝试激进一点，保留底部 35% 区域用于字幕
-           const safeSubtitleZone = Math.floor(imgElement.height * 0.35);
-           const aggressiveTop = imgElement.height - safeSubtitleZone;
-           // 取两者中较大的一个，保证不裁掉检测出的底部内容，但默认裁掉顶部场景
-           initialTop = Math.max(margins.top, aggressiveTop);
-        }
-
-        // 保存图片数据，增加 initialCropTop/Bottom 用于重置
-        images.value.push({
-          id: Date.now() + Math.random(),
-          url: url,
-          width: imgElement.width,
-          height: imgElement.height,
-          cropTop: initialTop,
-          cropBottom: margins.bottom,
-          initialCropTop: initialTop,
-          initialCropBottom: margins.bottom,
-          element: imgElement
-        });
+        loadedImages.push({ url, imgElement });
         resolve();
       };
     });
   }
+
+  // 1. 预扫描这一批图片，找出一个可靠的字幕位置（如果存在的话）
+  let batchSubtitleRatio = null;
+  for (const item of loadedImages) {
+    const margins = detectBlackBars(item.imgElement);
+    const result = detectSubtitleTop(item.imgElement, margins.bottom);
+    if (result.isReliable) {
+      batchSubtitleRatio = result.top / item.imgElement.height;
+      break; // 找到第一个可靠的就停止
+    }
+  }
+
+  if (batchSubtitleRatio !== null) {
+    globalSubtitleRatio = batchSubtitleRatio;
+  }
+
+  // 2. 依次处理图片并加入列表
+  for (const item of loadedImages) {
+    const imgElement = item.imgElement;
+    const margins = detectBlackBars(imgElement);
+    
+    let initialTop = margins.top;
+    
+    // 如果不是全局的第一张图片，就应用字幕裁剪
+    if (images.value.length > 0) {
+       let subtitleTop;
+       const result = detectSubtitleTop(imgElement, margins.bottom);
+       
+       if (result.isReliable) {
+         subtitleTop = result.top;
+         globalSubtitleRatio = result.top / imgElement.height; // 更新全局比例
+       } else if (globalSubtitleRatio !== null) {
+         // 如果当前图片不可靠（可能没有字幕），但之前有可靠的值，就复用它
+         subtitleTop = Math.floor(imgElement.height * globalSubtitleRatio);
+       } else {
+         subtitleTop = result.top; // 退回到默认情况
+       }
+       
+       // 取两者中较大的一个，保证至少裁掉上边的黑边
+       initialTop = Math.max(margins.top, subtitleTop);
+    } else {
+       // 第一张图，我们不裁剪顶部场景，但如果是可靠字幕，顺便记录下比例供后续参考
+       const result = detectSubtitleTop(imgElement, margins.bottom);
+       if (result.isReliable) {
+         globalSubtitleRatio = result.top / imgElement.height;
+       }
+    }
+
+    // 保存图片数据，增加 initialCropTop/Bottom 用于重置
+    images.value.push({
+      id: Date.now() + Math.random(),
+      url: item.url,
+      width: imgElement.width,
+      height: imgElement.height,
+      cropTop: initialTop,
+      cropBottom: margins.bottom,
+      initialCropTop: initialTop,
+      initialCropBottom: margins.bottom,
+      element: imgElement
+    });
+  }
   
+  isProcessing.value = false;
   generatePreview();
 };
 
@@ -258,6 +302,93 @@ const detectBlackBars = (img) => {
   return { top, bottom };
 };
 
+// 自动识别字幕区域的顶部边界
+const detectSubtitleTop = (img, bottomBarHeight) => {
+  const c = document.createElement('canvas');
+  // 字幕一般在下半部分，截取底部 40% 的区域进行分析
+  const searchRatio = 0.4;
+  const startY = Math.floor(img.height * (1 - searchRatio));
+  const endY = img.height - bottomBarHeight;
+  const searchHeight = endY - startY;
+  
+  // 如果剩余高度太小，使用默认值 (保留底部 35%)
+  if (searchHeight <= img.height * 0.05) return { top: Math.floor(img.height * 0.65), isReliable: false };
+
+  c.width = img.width;
+  c.height = searchHeight;
+  const ctx = c.getContext('2d');
+  // 将待分析区域绘制到 canvas
+  ctx.drawImage(img, 0, startY, img.width, searchHeight, 0, 0, img.width, searchHeight);
+  
+  const imageData = ctx.getImageData(0, 0, img.width, searchHeight);
+  const data = imageData.data;
+  
+  const rowEdges = new Array(searchHeight).fill(0);
+  
+  // 只扫描中间 60% 的区域，字幕通常居中，避开边缘的复杂背景
+  const startX = Math.floor(img.width * 0.2);
+  const endX = Math.floor(img.width * 0.8);
+  
+  for (let y = 0; y < searchHeight; y++) {
+    let rowEdgeSum = 0;
+    for (let x = startX; x < endX; x++) {
+      const idx = (y * img.width + x) * 4;
+      const prevIdx = (y * img.width + x - 1) * 4;
+      
+      const luma = 0.299 * data[idx] + 0.587 * data[idx+1] + 0.114 * data[idx+2];
+      const prevLuma = 0.299 * data[prevIdx] + 0.587 * data[prevIdx+1] + 0.114 * data[prevIdx+2];
+      
+      rowEdgeSum += Math.abs(luma - prevLuma);
+    }
+    rowEdges[y] = rowEdgeSum;
+  }
+  
+  // 使用滑动窗口平滑数据，窗口大小约为高度的 2% (大约半行字幕的高度)
+  const windowSize = Math.max(2, Math.floor(img.height * 0.02));
+  const windowSums = [];
+  let maxWindowSum = 0;
+  let maxWindowY = 0;
+  
+  for (let y = 0; y <= searchHeight - windowSize; y++) {
+    let sum = 0;
+    for (let i = 0; i < windowSize; i++) {
+      sum += rowEdges[y + i];
+    }
+    windowSums.push(sum);
+    // 寻找边缘强度最高的窗口（通常是字幕所在位置）
+    if (sum > maxWindowSum) {
+      maxWindowSum = sum;
+      maxWindowY = y;
+    }
+  }
+  
+  // 如果画面非常平滑，没有明显的字幕边缘，返回默认比例 35%
+  if (maxWindowSum < (endX - startX) * windowSize * 5) {
+    return { top: Math.floor(img.height * 0.65), isReliable: false };
+  }
+  
+  // 向上寻找字幕的顶部边界，即边缘强度下降到峰值的 25% 以下的位置
+  let topBoundaryY = maxWindowY;
+  const threshold = maxWindowSum * 0.25;
+  for (let y = maxWindowY; y >= 0; y--) {
+    if (windowSums[y] < threshold) {
+      topBoundaryY = y;
+      break;
+    }
+    topBoundaryY = y;
+  }
+  
+  // 加上一点 padding (图片高度的 1.5%)，避免贴得太紧
+  const padding = Math.floor(img.height * 0.015);
+  let finalTop = startY + topBoundaryY - padding;
+  
+  // 确保最终结果合理：保留至少 5% 的高度，最多保留 40%
+  const minTop = Math.floor(img.height * 0.6);
+  const maxTop = endY - Math.floor(img.height * 0.05);
+  
+  return { top: Math.floor(Math.max(minTop, Math.min(finalTop, maxTop))), isReliable: true };
+};
+
 const removeImage = (index) => {
   const img = images.value[index];
   URL.revokeObjectURL(img.url);
@@ -269,6 +400,7 @@ const clearAll = () => {
   images.value.forEach(img => URL.revokeObjectURL(img.url));
   images.value = [];
   previewUrl.value = '';
+  isProcessing.value = false;
 };
 
 // 重置单个图片的裁剪值
@@ -296,17 +428,24 @@ const copyFirstImageMargins = (index) => {
   }
 };
 
-// 将当前图片的裁剪设置应用到除第一张图以外的所有图片
+// 将当前图片的裁剪设置应用到其他图片（智能保留首图的顶部场景）
 const applyToRest = (sourceIndex) => {
   const sourceImg = images.value[sourceIndex];
   
   images.value.forEach((img, idx) => {
-    // 跳过自己，并且跳过第一张图片（保留首图场景）
-    if (idx !== sourceIndex && idx !== 0) {
-      // 检查源配置在目标图片上是否合法（保留至少10px高度）
-      if (img.height - sourceImg.cropTop - sourceImg.cropBottom > 10) {
-        img.cropTop = sourceImg.cropTop;
-        img.cropBottom = sourceImg.cropBottom;
+    // 跳过自己
+    if (idx !== sourceIndex) {
+      if (idx === 0) {
+        // 对于第一张图片，只应用底部裁剪（让其底边和其它图片一致），保留顶部的画面场景
+        if (img.height - img.cropTop - sourceImg.cropBottom > 10) {
+          img.cropBottom = sourceImg.cropBottom;
+        }
+      } else {
+        // 对于其他图片，同时应用顶部和底部裁剪
+        if (img.height - sourceImg.cropTop - sourceImg.cropBottom > 10) {
+          img.cropTop = sourceImg.cropTop;
+          img.cropBottom = sourceImg.cropBottom;
+        }
       }
     }
   });
