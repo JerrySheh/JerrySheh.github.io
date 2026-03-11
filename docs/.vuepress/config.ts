@@ -14,9 +14,9 @@ bundler: viteBundler({
     viteOptions: {
       resolve: {
         alias: {
-          // 将 fflate/browser 重定向到 fflate
-          // 这会让 Vite 使用支持 ESM 的主入口，而不是浏览器专用的 CJS 版本
-          'fflate/browser': 'fflate',
+          // // 将 fflate/browser 重定向到 fflate
+          // // 这会让 Vite 使用支持 ESM 的主入口，而不是浏览器专用的 CJS 版本
+          // 'fflate/browser': 'fflate',
         },
       },
     },
