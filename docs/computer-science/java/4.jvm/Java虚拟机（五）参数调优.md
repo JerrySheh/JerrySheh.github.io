@@ -24,7 +24,7 @@ Java虚拟机遇到 new 指令时，需要在堆内存上为新对象分配内�
 
 本地线程分配缓冲会在 Java 堆内存里预先分配一小块内存专门给某个线程用来分配空间，所以不同的线程分配内存是在不同的位置。这样就不会导致冲突。只有当 TLAB 用完并分配新的缓冲区时，才需要同步锁定。
 
-![pointer_move2](/images/Java/pointer_move.png)
+![pointer_move2](/images/Java/pointer_move2.png)
 
 在 Java 中，用以下参数来设定是否要开启TLAB
 
