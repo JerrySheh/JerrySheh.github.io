@@ -26,6 +26,7 @@
     "vuepress-theme-plume": "1.0.0-rc.178"
   },
   "dependencies": {
-    "busuanzi.pure.js": "^1.0.3"
+    "busuanzi.pure.js": "^1.0.3",
+    "qrcode": "^1.5.4"
   }
 }

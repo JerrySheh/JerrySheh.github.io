@@ -3,9 +3,9 @@
     <div class="stitcher-header">
       <h2>
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-main"><circle cx="6" cy="6" r="3"/><path d="M8.12 8.12 12 12"/><path d="M20 4 8.12 15.88"/><circle cx="6" cy="18" r="3"/><path d="M14.8 14.8 20 20"/></svg>
-        影片字幕拼图大师 Pro
+        电影字幕拼接
       </h2>
-      <p>Powered by Gemini 3 ，完全 vibe coding 开发。自动识别字幕高度！</p>
+      <p>Powered by Gemini 3 vibe coding</p>
     </div>
 
     <div class="stitcher-container">
@@ -764,7 +764,7 @@ onBeforeUnmount(() => {
 .preview-content {
   flex: 1;
   overflow: auto;
-  background-color: #2d3748; /* 暗色背景查看结果更好 */
+  background-color: #edf2f7; /* 浅色背景以适应浅色模式 */
   display: flex;
   justify-content: center;
   align-items: flex-start;
@@ -844,5 +844,117 @@ onBeforeUnmount(() => {
     width: 100%;
     height: 500px;
   }
+}
+
+/* --- Dark Mode --- */
+html.dark .subtitle-stitcher,
+html[data-theme='dark'] .subtitle-stitcher {
+  background-color: var(--vp-c-bg-soft, #1e1e20);
+  color: var(--vp-c-text-1, #e3e3e3);
+}
+
+html.dark .stitcher-header h2,
+html[data-theme='dark'] .stitcher-header h2 {
+  color: var(--vp-c-text-1, #e3e3e3);
+}
+
+html.dark .stitcher-header p,
+html[data-theme='dark'] .stitcher-header p {
+  color: var(--vp-c-text-2, #9e9e9e);
+}
+
+html.dark .upload-zone,
+html[data-theme='dark'] .upload-zone {
+  background-color: var(--vp-c-bg-mute, #252529);
+  border-color: var(--vp-c-border, #3a3a3c);
+}
+
+html.dark .upload-zone:hover, 
+html.dark .upload-zone.is-dragging,
+html[data-theme='dark'] .upload-zone:hover, 
+html[data-theme='dark'] .upload-zone.is-dragging {
+  background-color: rgba(66, 185, 131, 0.1);
+  border-color: #42b983;
+}
+
+html.dark .upload-content,
+html.dark .info-text,
+html.dark .empty-placeholder,
+html[data-theme='dark'] .upload-content,
+html[data-theme='dark'] .info-text,
+html[data-theme='dark'] .empty-placeholder {
+  color: var(--vp-c-text-2, #9e9e9e);
+}
+
+html.dark .image-card,
+html[data-theme='dark'] .image-card {
+  background-color: var(--vp-c-bg, #161618);
+  border-color: var(--vp-c-border, #2c2c2e);
+}
+
+html.dark .card-header,
+html[data-theme='dark'] .card-header {
+  background-color: var(--vp-c-bg-mute, #252529);
+  color: var(--vp-c-text-1, #e3e3e3);
+}
+
+html.dark .label-row,
+html[data-theme='dark'] .label-row {
+  color: var(--vp-c-text-2, #9e9e9e);
+}
+
+html.dark .num-input,
+html[data-theme='dark'] .num-input {
+  background-color: var(--vp-c-bg-mute, #252529);
+  border-color: var(--vp-c-border, #3a3a3c);
+  color: var(--vp-c-text-1, #e3e3e3);
+}
+
+html.dark .preview-panel,
+html.dark .preview-header,
+html[data-theme='dark'] .preview-panel,
+html[data-theme='dark'] .preview-header {
+  background-color: var(--vp-c-bg, #161618);
+  border-color: var(--vp-c-border, #2c2c2e);
+}
+
+html.dark .preview-header h3,
+html[data-theme='dark'] .preview-header h3 {
+  color: var(--vp-c-text-1, #e3e3e3);
+}
+
+html.dark .preview-content,
+html[data-theme='dark'] .preview-content {
+  background-color: #000000;
+}
+
+html.dark .reset-btn,
+html[data-theme='dark'] .reset-btn {
+  color: var(--vp-c-text-2, #9e9e9e);
+}
+
+html.dark .copy-first-btn,
+html[data-theme='dark'] .copy-first-btn {
+  color: #b794f4;
+}
+
+html.dark .btn-text,
+html[data-theme='dark'] .btn-text {
+  color: #63b3ed;
+}
+
+html.dark .btn-text:hover,
+html[data-theme='dark'] .btn-text:hover {
+  color: #90cdf4;
+}
+
+html.dark .btn-icon,
+html[data-theme='dark'] .btn-icon {
+  color: var(--vp-c-text-3, #7c7c7d);
+}
+
+html.dark .btn-icon:hover,
+html[data-theme='dark'] .btn-icon:hover {
+  color: #fc8181;
 }
 </style>
