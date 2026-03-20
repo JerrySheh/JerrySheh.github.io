@@ -5,4 +5,8 @@ permalink: /webapp/qrcode-generator
 pageLayout: page
 ---
 
-@[demo vue](/components/qrcode-generator.vue)
+<script setup>
+import QRCodeGenerator from '../../../../components/qrcode-generator.vue'
+</script>
+
+<QRCodeGenerator />

@@ -6,4 +6,8 @@ createTime: 2025/12/22 18:36:13
 ---
 
 
-@[demo vue](/components/subtitle-joiner.vue)
+<script setup>
+import SubtitleJoiner from '../../../../components/subtitle-joiner.vue'
+</script>
+
+<SubtitleJoiner />
