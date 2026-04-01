@@ -37,12 +37,13 @@ export const navbar = defineNavbarConfig([
     ]
   },
   { text: '安溥·與你握手', link: '/anpu/' },
-  { text: '书·影·音·游', link: '/notes/' },
+  { text: '书影音游', link: '/notes/' },
   {
     text: '醍醐灌顶',
     items: [
       { text: '醍醐灌顶', link: '/sentences/' },
       { text: '知识', link: '/knowledges/multidisciplinary-principles/' },
+      { text: '草台班子合集', link: '/knowledges/the-world-is-one-giant-ragtag-crew/' },
     ]
   },
   {
