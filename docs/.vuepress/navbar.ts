@@ -25,6 +25,7 @@ export const navbar = defineNavbarConfig([
     items: [
       { text: '计算机术语速查手册', link: '/computer-science-quick-reference/' },
       { text: 'Java', link: '/java/kk3w1ne4/' },
+      { text: '人工智能', link: '/blog/2026/intro-ai/' },
       { text: '计算机网络', link: '/networking/preview/' },
       { text: '数据结构与算法', link: '/data-structure/leu82fhp/' },
       { text: '计算机系统', link: '/computer-system/intro/' },
