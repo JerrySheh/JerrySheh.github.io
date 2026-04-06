@@ -18,10 +18,15 @@ permalink: /notes/
 Changelog：
 
 ::: timeline
+- [《怪诞行为学2：非理性的积极力量》](/notes/the-upside-of-irrationality/)
+  time=2026-04-05 type=success
+
+  非理性也有积极的一面。
+
 - [《怪诞行为学1：可预测的非理性》](/notes/predictably-irrational/)
   time=2026-03-28 type=success
 
-  人类决策中的非理性模式。
+  传统经济学假定人是理性的，然而现实中人们的决策往往是非理性的。但是这种非理性是可预测的。
 
 - [《我看见的世界：李飞飞自传》](/notes/the-worlds-i-see/)
   time=2025-12-13 type=success
