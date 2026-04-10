@@ -44,7 +44,7 @@ export const navbar = defineNavbarConfig([
     items: [
       { text: '醍醐灌顶', link: '/sentences/' },
       { text: '知识', link: '/knowledges/multidisciplinary-principles/' },
-      { text: '草台班子合集', link: '/knowledges/the-world-is-one-giant-ragtag-crew/' },
+      { text: '草台班子', link: '/knowledges/the-world-is-one-giant-ragtag-crew/' },
     ]
   },
   {
