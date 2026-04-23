@@ -128,16 +128,15 @@ AOP底层实现是动态代理。
 
 JDK动态代理代理的是接口，Cglib代理的是类。
 
-## 15. SpringMVC启动会加装几种容器？他们的关系是怎样的？
+## 15. SpringBoot 如何知道要加装的 Spring 配置在哪里？
 
-todo
+SpringBoot 主要通过核心注解 `@SpringBootApplication` 来实现自发现，这是一个复合注解，其内部包含了三个注解：
 
-## 16. SpringMVC 如何知道要加装的 Spring 配置在哪里？
+- `@ComponentScan`：扫描你自己写的配置类、Controller、Service、Repository 等组件
+- `@EnableAutoConfiguration`：扫描第三方依赖代码，如 Mybatis、Redis
+- `@SpringBootConfiguration`：表示当前项目是一个大的配置类，Spring Boot 底层的会去寻找 application.properties 或 application.yml 文件
 
-todo
-
-
-## 17. Spring 容器创建对象的时机
+## 16. Spring 容器创建对象的时机
 
 默认情况下，当我们启动 Spring applicationContext 时：
 
@@ -161,7 +160,7 @@ applicationContext 会去寻找 applicationContext.xml 配置文件，里面有�
 Hello h = (Hello) context.getBean("hello");
 ```
 
-## 18. AutoWired 自动装配如果有多个符合的bean
+## 17. AutoWired 自动装配如果有多个符合的bean
 
 在 Service 层自动注入一个 Dao，通常：
 ```java
@@ -194,7 +193,7 @@ public class PersonService{
     private PersonDao personDao;
 ```
 
-## 19. @Transational 什么时候注解会失效？
+## 18. @Transational 什么时候注解会失效？
 
 1. 数据库引擎本身不支持事务（如MySQL MyISAM）
 2. 类没有被 Spring 管理
@@ -253,7 +252,7 @@ public class Proxy$A {
 }
 ```
 
-## 20. Spring循环依赖怎么解决？
+## 19. Spring循环依赖怎么解决？
 
 循环依赖是两个或多个Bean互相持有对方的引用，形成了一个闭环。Bean A 中注入了 Bean B，同时 Bean B 中又注入了 Bean A。
 
@@ -265,6 +264,21 @@ Spring 创建一个 Bean，要经过实例化和初始化两个步骤，秘诀�
 
 Spring 三级缓存是兜底，开发实践中，循环依赖通常被视为代码设计不良，职责划分不清，建议重构，引入第三个类。Spring Boot 2.6 开始，默认禁用了循环依赖的支持。如果无法立即重构，可以在其中一个注入点加上 @Lazy 注解来暂时避免。
 
-## 21. 为什么要用三级缓存解决循环依赖？二级行不行？
+## 20. 为什么要用三级缓存解决循环依赖？二级行不行？
 
 不行。根本原因是为了处理 AOP（面向切面编程）。在 Spring AOP 中，AOP 代理对象的生成必须在初始化后，但循环依赖，B 注入 A 时，如果只有二级缓存，B拿到的是A的原始对象，而不是代理对象。
+
+## 21. 循环依赖发生时的 Bean 加载过程
+
+1. **实例化 A**： Spring 调用 A 的构造方法，创建出 A 的实例。此时 A 还是个“半成品”（只有壳子，没有属性）。
+2. **A 放入三级缓存**： Spring 将一个可以获取 A 早期引用的工厂方法（ObjectFactory）放入 三级缓存（singletonFactories） 中。
+3. **A 注入属性 B**： Spring 发现 A 需要注入 B，于是去缓存里找 B。找不到，开始创建 B。
+4. **实例化 B**： Spring 调用 B 的构造方法，创建出 B 的实例。
+5. **B 放入三级缓存**： 同样，将 B 的 ObjectFactory 放入三级缓存。
+6. **B 注入属性 A**： B 发现需要注入 A，开始查缓存：
+ - 查一级缓存：没有（A 还没完全建好）。
+ - 查二级缓存：没有。
+ - 查三级缓存：找到了 A 的 ObjectFactory。
+7. **执行三级缓存，提拔到二级**： B 调用 A 的 ObjectFactory，获取到了 A 的早期引用（如果 A 需要 AOP 增强，此时就会生成代理对象）。然后 Spring 将 A 的引用放入二级缓存，并从三级缓存中删除。
+8. **B 初始化完成**： B 成功拿到了 A 的引用（虽然 A 还是半成品，但内存地址已经确定），B 继续完成剩余的属性注入和初始化动作。完成后，B 被放入一级缓存。
+9. **A 初始化完成**： 流程回到 A 的属性注入，A 此时能从一级缓存中拿到完整的 B，完成属性注入。随后 A 也完成初始化，被放入一级缓存。
