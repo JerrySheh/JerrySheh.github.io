@@ -18,6 +18,11 @@ permalink: /notes/
 Changelog：
 
 ::: timeline
+- [《小狗钱钱》](/notes/a-dog-called-money/)
+  time=2026-04-27 type=success
+
+  不是去试试看，而是去切实行动。
+
 - [《怪诞行为学2：非理性的积极力量》](/notes/the-upside-of-irrationality/)
   time=2026-04-05 type=success
 
