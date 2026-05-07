@@ -18,6 +18,11 @@ permalink: /notes/
 Changelog：
 
 ::: timeline
+- [《小狗钱钱2》](/notes/kira-and-the-secret-of-the-white-stone/)
+  time=2026-04-29 type=success
+
+  养成优秀品格的7条准则。
+
 - [《小狗钱钱》](/notes/a-dog-called-money/)
   time=2026-04-27 type=success
 
