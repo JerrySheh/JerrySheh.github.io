@@ -18,6 +18,16 @@ permalink: /notes/
 Changelog：
 
 ::: timeline
+- [《说话的逻辑与技巧》](/knowledges/logical-thinking/)
+  time=2026-05-15 type=success
+
+  交谈、论辩的逻辑技巧以及常见的逻辑谬误。
+
+- [《富爸爸穷爸爸》](/notes/rich-dad-poor-dad/)
+  time=2026-05-13 type=success
+
+  富人不为钱工作，富人让钱为他工作。
+
 - [《小狗钱钱2》](/notes/kira-and-the-secret-of-the-white-stone/)
   time=2026-04-29 type=success
 
