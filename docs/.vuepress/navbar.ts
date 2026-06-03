@@ -43,8 +43,7 @@ export const navbar = defineNavbarConfig([
     text: '醍醐灌顶',
     items: [
       { text: '醍醐灌顶', link: '/sentences/' },
-      { text: '知识', link: '/knowledges/multidisciplinary-principles/' },
-      { text: '草台班子', link: '/knowledges/the-world-is-one-giant-ragtag-crew/' },
+      { text: '知识', link: '/knowledges/multidisciplinary-principles/' }
     ]
   },
   {
