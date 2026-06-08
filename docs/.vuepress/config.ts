@@ -4,6 +4,13 @@ import { plumeTheme } from 'vuepress-theme-plume'
 import { computerScienceNotes } from './collections'
 import busuanzi from 'busuanzi.pure.js'
 
+import path from 'path'
+import crypto from 'crypto'
+import { syncNotesToBlog } from './sync-blog'
+
+// 【Feature：笔记自动同步为博客】自动生成被标记为 blog: true 的笔记占位文件
+syncNotesToBlog(path.resolve(process.cwd(), 'docs'))
+
 export default defineUserConfig({
   base: '/',
   lang: 'zh-CN',
@@ -49,6 +56,17 @@ export default defineUserConfig({
         pagination: 10,
         include: ['**/*.md'],
         exclude: ['.vuepress/', '**/README.md'],
+        // 【Feature：笔记自动同步为博客】覆盖原分类 id 生成逻辑，确保自动生成的博客跟原生博客会被归为同一个分类（否则会出现两个同名分类）
+        categoriesTransform(categories) {
+          const filtered = categories.filter(c => c.name !== 'auto-generated')
+          const pathNames: string[] = []
+          return filtered.map(c => {
+            pathNames.push(c.name)
+            const md5 = crypto.createHash('md5').update(pathNames.join('-')).digest('hex')
+            c.id = md5.slice(0, 6)
+            return c
+          })
+        },
       },
 
       {

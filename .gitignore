@@ -10,3 +10,6 @@ fix_examples.py
 format_md.py
 recover.py
 test.py
+
+# 自动生成的博客 Stub 文件
+docs/blog/auto-generated/
