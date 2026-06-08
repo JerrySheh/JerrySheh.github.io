@@ -2,6 +2,8 @@
 title: 人工智能（AI）知识串讲
 createTime: 2026/02/28 16:32:46
 permalink: /blog/2026/intro-ai/
+tags: 
+  - 人工智能
 ---
 
 本篇博客已经整理成系列文章：

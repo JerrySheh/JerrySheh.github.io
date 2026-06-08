@@ -3,6 +3,8 @@ title: AI时代还有必要读书吗？
 createTime: 2026/04/12 21:14:47
 permalink: /blog/2026/should-we-read-in-the-age-of-ai/
 excerpt: 在真正读到那一句能让你醍醐灌顶的句子之前，你永远不会知道一本书带给你的真正价值是什么
+tags: 
+  - 人工智能
 ---
 
 ## Gemini 的推荐
