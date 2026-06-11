@@ -67,6 +67,46 @@ function formatFileDate(date: Date): string {
   return `${date.getFullYear()}/${pad(date.getMonth() + 1)}/${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`
 }
 
+// 简单鲁棒的 YAML frontmatter 行解析器，避免复杂的正则表达式提取失败
+function parseFrontmatter(text: string): Record<string, any> {
+  const result: Record<string, any> = {}
+  const lines = text.split(/\r?\n/)
+  let currentKey: string | null = null
+  let currentList: string[] = []
+
+  for (const line of lines) {
+    const trimmed = line.trim()
+    if (!trimmed) continue
+
+    // 检查是否为当前键下的列表项 (以 - 开头)
+    if (trimmed.startsWith('-') && currentKey) {
+      const val = trimmed.slice(1).trim().replace(/^["']|["']$/g, '')
+      currentList.push(val)
+      result[currentKey] = currentList
+      continue
+    }
+
+    const match = line.match(/^(\w+)\s*:\s*(.*)$/)
+    if (match) {
+      currentKey = match[1]
+      const rawValue = match[2].trim()
+      if (rawValue.startsWith('[') && rawValue.endsWith(']')) {
+        result[currentKey] = rawValue.slice(1, -1).split(',').map(s => s.trim().replace(/^["']|["']$/g, ''))
+        currentKey = null
+      } else if (rawValue) {
+        result[currentKey] = rawValue.replace(/^["']|["']$/g, '')
+        currentKey = null
+      } else {
+        currentList = []
+        result[currentKey] = currentList
+      }
+    } else {
+      currentKey = null
+    }
+  }
+  return result
+}
+
 export function syncNotesToBlog(docsDir: string) {
   const autoGenDir = path.join(docsDir, 'blog', 'auto-generated')
 
@@ -85,49 +125,59 @@ export function syncNotesToBlog(docsDir: string) {
     if (!match) continue
 
     const frontmatterText = match[1]
+    const frontmatter = parseFrontmatter(frontmatterText)
 
     // 检查元数据是否包含 blog: true 或 isBlog: true
-    const isBlogMatch = frontmatterText.match(/(?:^|\n)(isBlog|blog)\s*:\s*(true|yes|on)\b/)
-    if (!isBlogMatch) continue
-
-    // 提取主要属性
-    const titleMatch = frontmatterText.match(/(?:^|\n)title\s*:\s*(["']?)(.*?)\1\s*(?:\n|$)/)
-    const blogTitleMatch = frontmatterText.match(/(?:^|\n)blogTitle\s*:\s*(["']?)(.*?)\1\s*(?:\n|$)/)
-    const createTimeMatch = frontmatterText.match(/(?:^|\n)createTime\s*:\s*(["']?)(.*?)\1\s*(?:\n|$)/)
-    const tagsMatch = frontmatterText.match(/(?:^|\n)tags\s*:\s*(.*)/)
-    const categoriesMatch = frontmatterText.match(/(?:^|\n)categories\s*:\s*(.*)/)
-    const blogExcerptMatch = frontmatterText.match(/(?:^|\n)blogExcerpt\s*:\s*(["']?)(.*?)\1\s*(?:\n|$)/)
-    const blogCoverMatch = frontmatterText.match(/(?:^|\n)blogCover\s*:\s*(["']?)(.*?)\1\s*(?:\n|$)/)
+    const blog = frontmatter.blog || frontmatter.isBlog
+    const isBlog = blog === 'true' || blog === 'yes' || blog === 'on' || blog === true
+    if (!isBlog) continue
 
     // 如果指定了 blogTitle 则优先使用 blogTitle，否则使用 title
-    const title = blogTitleMatch ? blogTitleMatch[2] : (titleMatch ? titleMatch[2] : path.basename(file, '.md'))
-    const createTime = createTimeMatch ? createTimeMatch[2] : formatFileDate(fs.statSync(file).birthtime)
+    const title = frontmatter.blogTitle || frontmatter.title || path.basename(file, '.md')
+    const createTime = frontmatter.createTime || formatFileDate(fs.statSync(file).birthtime)
 
     // 从 createTime 中提取年份
-    const yearMatch = createTime.match(/^(\d{4})/)
+    const yearMatch = String(createTime).match(/^(\d{4})/)
     const year = yearMatch ? yearMatch[1] : new Date().getFullYear().toString()
 
     let stubFrontmatter = `title: "${title.replace(/"/g, '\\"')}"\ncreateTime: ${createTime}`
 
     // 提取或确定原始的 permalink 路径，供跳转使用
-    const originalPermalinkMatch = frontmatterText.match(/(?:^|\n)permalink\s*:\s*(["']?)(.*?)\1\s*(?:\n|$)/)
-    const originalPermalink = originalPermalinkMatch
-      ? originalPermalinkMatch[2]
-      : `/notes/${path.basename(file, '.md')}/` // 降级兜底
+    const originalPermalink = frontmatter.permalink || `/notes/${path.basename(file, '.md')}/` // 降级兜底
 
     // 确定 stub 博客占位路由，确保其不与笔记路由产生物理冲突
-    if (originalPermalinkMatch) {
-      const origLink = originalPermalinkMatch[2]
+    if (frontmatter.permalink) {
+      const origLink = frontmatter.permalink
       const cleanLinkName = origLink.replace(/^\/(notes|knowledges|sentences|crash-course)\//, '').replace(/\/$/, '')
       stubFrontmatter += `\npermalink: /blog/post/${cleanLinkName || path.basename(file, '.md')}/`
     } else {
       stubFrontmatter += `\npermalink: /blog/post/${path.basename(file, '.md')}/`
     }
 
-    if (tagsMatch) stubFrontmatter += `\ntags: ${tagsMatch[1]}`
-    if (categoriesMatch) stubFrontmatter += `\ncategories: ${categoriesMatch[1]}`
-    if (blogExcerptMatch) stubFrontmatter += `\nexcerpt: "${blogExcerptMatch[2].replace(/"/g, '\\"')}"`
-    if (blogCoverMatch) stubFrontmatter += `\ncover: "${blogCoverMatch[2].replace(/"/g, '\\"')}"`
+    const tags = frontmatter.tags
+    if (tags) {
+      if (Array.isArray(tags)) {
+        stubFrontmatter += `\ntags: [${tags.map(t => `"${String(t).replace(/"/g, '\\"')}"`).join(', ')}]`
+      } else {
+        stubFrontmatter += `\ntags: "${String(tags).replace(/"/g, '\\"')}"`
+      }
+    }
+
+    const categories = frontmatter.categories
+    if (categories) {
+      if (Array.isArray(categories)) {
+        stubFrontmatter += `\ncategories: [${categories.map(c => `"${String(c).replace(/"/g, '\\"')}"`).join(', ')}]`
+      } else {
+        stubFrontmatter += `\ncategories: "${String(categories).replace(/"/g, '\\"')}"`
+      }
+    }
+
+    if (frontmatter.blogExcerpt) {
+      stubFrontmatter += `\nexcerpt: "${frontmatter.blogExcerpt.replace(/"/g, '\\"')}"`
+    }
+    if (frontmatter.blogCover) {
+      stubFrontmatter += `\ncover: "${frontmatter.blogCover.replace(/"/g, '\\"')}"`
+    }
 
     stubFrontmatter += `\nautoGenerated: true`
 

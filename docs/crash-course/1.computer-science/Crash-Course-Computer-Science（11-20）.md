@@ -8,6 +8,7 @@ tags:
 abbrlink: 20575023
 createTime: 2019/08/08 23:11:15
 permalink: /crash-course/computer-science/2/
+blog: true
 ---
 
 ## P11 编程语言发展史

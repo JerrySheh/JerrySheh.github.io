@@ -8,6 +8,7 @@ tags:
 abbrlink: fa1d20fd
 createTime: 2021/09/27 21:32:00
 permalink: /crash-course/economics/3/
+blog: true
 ---
 
 ## P21 市场失灵

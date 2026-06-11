@@ -8,6 +8,7 @@ tags:
 abbrlink: aede5b18
 createTime: 2021/09/05 23:21:51
 permalink: /crash-course/economics/1/
+blog: true
 ---
 
 之前看过《Crash Course Computer Science》课程，觉得非常不错，后来发现 Crash Course 竟然是一个系列，涵盖了物理、工程、生物、经济、历史等各个学科，在 Youtube、B站、网易公开课都能免费看，这还不赶紧学起来？本次挑了经济学系列来学习，算是跨越我的专业和行业了，能收获到多少呢？我也很期待。

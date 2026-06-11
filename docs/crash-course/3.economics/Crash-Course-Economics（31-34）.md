@@ -8,6 +8,7 @@ tags:
 abbrlink: b9d5b734
 createTime: 2021/10/10 16:17:00
 permalink: /crash-course/economics/4/
+blog: true
 ---
 
 ## P31 税收

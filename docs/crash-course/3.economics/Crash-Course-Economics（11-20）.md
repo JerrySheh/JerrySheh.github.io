@@ -8,6 +8,7 @@ tags:
 abbrlink: 49f20eae
 createTime: 2021/09/15 22:22:30
 permalink: /crash-course/economics/2/
+blog: true
 ---
 
 ## P11 货币与金融

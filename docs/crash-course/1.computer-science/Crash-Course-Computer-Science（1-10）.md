@@ -8,6 +8,7 @@ abbrlink: 7a4edbf1
 tags:
   - 计算机科学
 permalink: /crash-course/computer-science/1/
+blog: true
 ---
 
 在 B站 发现了一门好课《Crash Course Computer Science》（计算机科学速成课），虽然讲“速成”有点急功近利的意思，但这门课从计算机的历史开始讲起，几乎涵盖了从布尔逻辑到二进制、从硬件到软件、从编译原理到操作系统、从计算机网络到信息安全等等计算机科学的知识，作为一种科普，扩充知识面还是相当不错的。

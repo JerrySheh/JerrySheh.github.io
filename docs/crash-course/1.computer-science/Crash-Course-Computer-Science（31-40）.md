@@ -8,6 +8,7 @@ tags:
 abbrlink: 5d95362f
 createTime: 2019/08/25 22:40:13
 permalink: /crash-course/computer-science/4/
+blog: true
 ---
 
 ## P31 计算机安全

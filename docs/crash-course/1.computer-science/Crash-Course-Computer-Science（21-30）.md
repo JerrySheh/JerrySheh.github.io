@@ -8,6 +8,7 @@ tags:
 abbrlink: 231feaa1
 createTime: 2019/08/19 21:00:55
 permalink: /crash-course/computer-science/3/
+blog: true
 ---
 
 ## P21 压缩
