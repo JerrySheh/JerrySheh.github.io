@@ -18,6 +18,16 @@ permalink: /notes/
 Changelog：
 
 ::: timeline
+- [《金钱心理学》](/notes/the-psychology-of-money/)
+  time=2026-06-18 type=success
+
+  储蓄、长期主义、复利效应、容错空间、乐观主义、时间自由。
+
+- [《穷查理宝典》](/notes/poor-charlie-almanack/)
+  time=2026-05-19 type=success
+
+  逆向思维、跨学科思维模型、普世智慧、价值投资 与 人类误判心理学。
+
 - [《说话的逻辑与技巧》](/knowledges/logical-thinking/)
   time=2026-05-15 type=success
 
