@@ -51,6 +51,7 @@ export const navbar = defineNavbarConfig([
     items: [
       { text: '电影字幕拼接', link: '/webapp/subtitle-joiner' },
       { text: '二维码生成助手', link: '/webapp/qrcode-generator' },
+      { text: '均价计算器', link: '/webapp/average-price-calculator' },
     ]
   }, { text: '关于', link: '/about/' },
 
