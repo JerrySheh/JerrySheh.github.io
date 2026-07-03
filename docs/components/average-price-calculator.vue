@@ -8,7 +8,14 @@
         </svg>
       </div>
       <h2>均价计算器</h2>
-      <p>输入多组单价与金额，自动计算加权均价</p>
+      <p>{{ mode === 'price-qty' ? '输入多组单价与数量，自动计算加权均价' : '输入多组单价与金额，自动计算加权均价' }}</p>
+      <div class="apc-mode-toggle">
+        <span class="apc-mode-label" :class="{ 'apc-mode-label-active': mode === 'price-qty' }">单价-数量</span>
+        <button class="apc-toggle-track" :class="{ 'apc-toggle-active': mode === 'price-amount' }" @click="toggleMode" title="切换输入模式">
+          <span class="apc-toggle-thumb"></span>
+        </button>
+        <span class="apc-mode-label" :class="{ 'apc-mode-label-active': mode === 'price-amount' }">单价-金额</span>
+      </div>
     </div>
 
     <!-- Input Rows -->
@@ -34,7 +41,22 @@
             <label :for="'price-' + row.id">单价 (Price)</label>
           </div>
 
-          <div class="apc-field">
+          <!-- 单价-数量模式: 第二个字段是数量 -->
+          <div class="apc-field" v-if="mode === 'price-qty'">
+            <input
+              :id="'qty-' + row.id"
+              v-model.number="row.quantity"
+              type="number"
+              min="0"
+              step="any"
+              placeholder=" "
+              @keydown.enter="addRow"
+            />
+            <label :for="'qty-' + row.id">数量 (Quantity)</label>
+          </div>
+
+          <!-- 单价-金额模式: 第二个字段是金额 -->
+          <div class="apc-field" v-else>
             <input
               :id="'amount-' + row.id"
               v-model.number="row.amount"
@@ -47,9 +69,10 @@
             <label :for="'amount-' + row.id">金额 (Amount)</label>
           </div>
 
-          <div class="apc-row-qty" v-if="row.price > 0 && row.amount > 0">
-            <span class="apc-row-qty-val">{{ (row.amount / row.price).toFixed(4) }}</span>
-            <span class="apc-row-qty-label">数量</span>
+          <!-- 计算出的衍生值 -->
+          <div class="apc-row-qty" v-if="getRowDerived(row).show">
+            <span class="apc-row-qty-val">{{ getRowDerived(row).value }}</span>
+            <span class="apc-row-qty-label">{{ getRowDerived(row).label }}</span>
           </div>
 
           <button
@@ -74,7 +97,24 @@
         <svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M17.65 6.35A7.958 7.958 0 0 0 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0 1 12 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
         清空重置
       </button>
+      <div class="apc-actions-sep"></div>
+      <button class="apc-btn apc-btn-icon" @click="exportJSON" :disabled="!hasValidData" title="导出 JSON">
+        <svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+      </button>
+      <button class="apc-btn apc-btn-icon" @click="triggerImport" title="导入 JSON">
+        <svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M9 16h6v-6h4l-7-7-7 7h4v6zm-4 2h14v2H5v-2z"/></svg>
+      </button>
+      <input ref="fileInput" type="file" accept=".json" style="display:none" @change="importJSON" />
     </div>
+
+    <!-- Toast -->
+    <Transition name="fade">
+      <div class="apc-toast" v-if="toast.show">
+        <svg v-if="toast.type === 'success'" viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>
+        <svg v-else viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+        {{ toast.message }}
+      </div>
+    </Transition>
 
     <!-- Result -->
     <Transition name="fade">
@@ -114,6 +154,7 @@
             <div class="apc-step-content">
               <span class="apc-step-label">前 {{ step.count }} 组</span>
               <span class="apc-step-price" :class="{ 'apc-step-price-last': i === cumulativeAverages.length - 1 }">{{ step.avg }}</span>
+              <span class="apc-step-qty-info">{{ step.cumQty }} 份</span>
               <span class="apc-step-delta" v-if="step.delta !== null" :class="step.delta > 0 ? 'apc-delta-up' : step.delta < 0 ? 'apc-delta-down' : 'apc-delta-flat'">
                 {{ step.delta > 0 ? '↑' : step.delta < 0 ? '↓' : '→' }} {{ Math.abs(step.delta).toFixed(4) }}
               </span>
@@ -126,20 +167,50 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, nextTick } from 'vue'
+
+// Mode: 'price-qty' (单价-数量, default) or 'price-amount' (单价-金额)
+const mode = ref('price-qty')
+const toggleMode = () => {
+  mode.value = mode.value === 'price-qty' ? 'price-amount' : 'price-qty'
+}
 
 let nextId = 1
-const createRow = () => ({ id: nextId++, price: null, amount: null })
+const createRow = () => ({ id: nextId++, price: null, amount: null, quantity: null })
 const rows = ref([createRow(), createRow()])
 
 const addRow = () => rows.value.push(createRow())
 const removeRow = (i) => { if (rows.value.length > 1) rows.value.splice(i, 1) }
 const resetAll = () => { nextId = 1; rows.value = [createRow(), createRow()] }
 
-const validRows = computed(() => rows.value.filter(r => r.price > 0 && r.amount > 0))
+// Helper: get amount and quantity for a row depending on mode
+const getRowAmount = (r) => {
+  if (mode.value === 'price-qty') return r.price > 0 && r.quantity > 0 ? r.price * r.quantity : 0
+  return r.amount > 0 ? r.amount : 0
+}
+const getRowQuantity = (r) => {
+  if (mode.value === 'price-qty') return r.quantity > 0 ? r.quantity : 0
+  return r.price > 0 && r.amount > 0 ? r.amount / r.price : 0
+}
+const isRowValid = (r) => {
+  if (mode.value === 'price-qty') return r.price > 0 && r.quantity > 0
+  return r.price > 0 && r.amount > 0
+}
+
+// Helper: get derived display value for a row
+const getRowDerived = (r) => {
+  if (!isRowValid(r)) return { show: false }
+  if (mode.value === 'price-qty') {
+    return { show: true, value: (r.price * r.quantity).toFixed(2), label: '金额' }
+  } else {
+    return { show: true, value: (r.amount / r.price).toFixed(4), label: '数量' }
+  }
+}
+
+const validRows = computed(() => rows.value.filter(r => isRowValid(r)))
 const hasValidData = computed(() => validRows.value.length > 0)
-const totalAmount = computed(() => validRows.value.reduce((s, r) => s + r.amount, 0))
-const totalQuantity = computed(() => validRows.value.reduce((s, r) => s + r.amount / r.price, 0))
+const totalAmount = computed(() => validRows.value.reduce((s, r) => s + getRowAmount(r), 0))
+const totalQuantity = computed(() => validRows.value.reduce((s, r) => s + getRowQuantity(r), 0))
 const averagePrice = computed(() => totalQuantity.value === 0 ? '--' : (totalAmount.value / totalQuantity.value).toFixed(4))
 
 // Cumulative averages: show running average after each successive valid row (starting from 2)
@@ -150,20 +221,82 @@ const cumulativeAverages = computed(() => {
   let sumAmt = 0
   let sumQty = 0
   for (let i = 0; i < vr.length; i++) {
-    sumAmt += vr[i].amount
-    sumQty += vr[i].amount / vr[i].price
+    sumAmt += getRowAmount(vr[i])
+    sumQty += getRowQuantity(vr[i])
     if (i >= 1) {
       const avg = sumAmt / sumQty
       const prevAvg = steps.length > 0 ? parseFloat(steps[steps.length - 1].avg) : null
       steps.push({
         count: i + 1,
         avg: avg.toFixed(4),
+        cumQty: sumQty.toFixed(4),
         delta: prevAvg !== null ? avg - prevAvg : null
       })
     }
   }
   return steps
 })
+
+// ====== Import / Export ======
+const fileInput = ref(null)
+const toast = ref({ show: false, message: '', type: 'success' })
+let toastTimer = null
+
+const showToast = (message, type = 'success') => {
+  if (toastTimer) clearTimeout(toastTimer)
+  toast.value = { show: true, message, type }
+  toastTimer = setTimeout(() => { toast.value.show = false }, 2500)
+}
+
+const exportJSON = () => {
+  const data = {
+    mode: mode.value,
+    rows: rows.value.map(r => ({ price: r.price, amount: r.amount, quantity: r.quantity }))
+  }
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' })
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement('a')
+  a.href = url
+  a.download = `avg-price-${new Date().toISOString().slice(0, 10)}.json`
+  a.click()
+  URL.revokeObjectURL(url)
+  showToast('数据已导出')
+}
+
+const triggerImport = () => {
+  fileInput.value?.click()
+}
+
+const importJSON = (e) => {
+  const file = e.target.files?.[0]
+  if (!file) return
+  const reader = new FileReader()
+  reader.onload = (ev) => {
+    try {
+      const data = JSON.parse(ev.target.result)
+      if (!data.rows || !Array.isArray(data.rows)) throw new Error('invalid')
+      // Restore mode
+      if (data.mode === 'price-qty' || data.mode === 'price-amount') {
+        mode.value = data.mode
+      }
+      // Restore rows
+      nextId = 1
+      rows.value = data.rows.map(r => ({
+        id: nextId++,
+        price: r.price ?? null,
+        amount: r.amount ?? null,
+        quantity: r.quantity ?? null
+      }))
+      if (rows.value.length === 0) rows.value = [createRow()]
+      showToast(`已导入 ${rows.value.length} 组数据`)
+    } catch {
+      showToast('导入失败：文件格式无效', 'error')
+    }
+  }
+  reader.readAsText(file)
+  // Reset input so same file can be re-imported
+  e.target.value = ''
+}
 </script>
 
 <style scoped>
@@ -238,6 +371,69 @@ const cumulativeAverages = computed(() => {
   color: var(--apc-on-surface-variant);
   line-height: 1.5;
 }
+
+/* ====== Mode Toggle ====== */
+.apc-mode-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 14px;
+  padding: 6px 16px;
+  background: var(--apc-surface-container);
+  border-radius: var(--apc-radius-full);
+  border: 1px solid var(--apc-outline-variant);
+}
+
+.apc-mode-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--apc-on-surface-variant);
+  transition: color 0.25s, font-weight 0.25s;
+  user-select: none;
+}
+
+.apc-mode-label-active {
+  color: var(--apc-primary);
+  font-weight: 600;
+}
+
+.apc-toggle-track {
+  position: relative;
+  width: 44px;
+  height: 24px;
+  border-radius: var(--apc-radius-full);
+  background: var(--apc-primary);
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: background 0.25s;
+  flex-shrink: 0;
+}
+
+.apc-toggle-track:hover {
+  filter: brightness(1.1);
+}
+
+.apc-toggle-track:active {
+  filter: brightness(0.95);
+}
+
+.apc-toggle-thumb {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 18px;
+  height: 18px;
+  border-radius: var(--apc-radius-full);
+  background: var(--apc-on-primary);
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+
+.apc-toggle-active .apc-toggle-thumb {
+  transform: translateX(20px);
+}
+
 
 /* ====== Rows ====== */
 .apc-rows {
@@ -427,6 +623,47 @@ const cumulativeAverages = computed(() => {
   background: var(--apc-outline-variant);
 }
 
+.apc-btn-icon {
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  justify-content: center;
+  background: var(--apc-surface-container-high);
+  color: var(--apc-on-surface-variant);
+}
+
+.apc-btn-icon:hover:not(:disabled) {
+  background: var(--apc-outline-variant);
+  color: var(--apc-primary);
+}
+
+.apc-btn-icon:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.apc-actions-sep {
+  width: 1px;
+  height: 24px;
+  background: var(--apc-outline-variant);
+  align-self: center;
+  margin: 0 4px;
+}
+
+.apc-toast {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: center;
+  padding: 10px 20px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--apc-on-surface);
+  background: var(--apc-surface-container-high);
+  border-left: 1px solid var(--apc-outline-variant);
+  border-right: 1px solid var(--apc-outline-variant);
+}
+
 /* ====== Result ====== */
 .apc-result {
   display: flex;
@@ -567,6 +804,17 @@ const cumulativeAverages = computed(() => {
   color: var(--apc-primary);
   font-size: 18px;
   font-weight: 700;
+}
+
+.apc-step-qty-info {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--apc-on-surface-variant);
+  font-variant-numeric: tabular-nums;
+  margin-left: auto;
+  padding: 2px 8px;
+  background: var(--apc-surface-container-high);
+  border-radius: var(--apc-radius-full);
 }
 
 .apc-step-delta {
