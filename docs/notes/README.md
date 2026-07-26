@@ -18,6 +18,11 @@ permalink: /notes/
 Changelog：
 
 ::: timeline
+- [《大道：段永平投资问答录》](/notes/duanyongping/)
+  time=2026-07-03 type=success
+
+  段永平问答实录。
+
 - [《金钱心理学》](/notes/the-psychology-of-money/)
   time=2026-06-18 type=success
 
