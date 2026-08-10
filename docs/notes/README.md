@@ -18,6 +18,11 @@ permalink: /notes/
 Changelog：
 
 ::: timeline
+- [《投资最重要的事》](/notes/the-most-important-thing/)
+  time=2026-08-09 type=success
+
+  第二层次思维、价格与价值、理解与控制风险、周期与钟摆意识、逆向投资、安全边际。
+
 - [《大道：段永平投资问答录》](/notes/duanyongping/)
   time=2026-07-03 type=success
 
